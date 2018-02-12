@@ -1,20 +1,29 @@
--- Database generated with pgModeler (PostgreSQL Database Modeler).
--- pgModeler  version: 0.9.1-alpha1
--- PostgreSQL version: 9.4
--- Project Site: pgmodeler.com.br
--- Model Author: ---
-
--- object: "user" | type: ROLE --
--- DROP ROLE IF EXISTS "user";
-CREATE ROLE "user" WITH 
-	SUPERUSER
-	CREATEDB
-	CREATEROLE
-	INHERIT
-	LOGIN
-	ENCRYPTED PASSWORD '********';
--- ddl-end --
-
+-- 3D City Database - The Open Source CityGML Database
+-- http://www.3dorg/
+-- 
+-- Copyright 2013 - 2018
+-- Chair of Geoinformatics
+-- Technical University of Munich, Germany
+-- https://www.gis.bgu.tum.de/
+-- 
+-- The 3D City Database is jointly developed with the following
+-- cooperation partners:
+-- 
+-- virtualcitySYSTEMS GmbH, Berlin <http://www.virtualcitysystems.de/>
+-- M.O.S.S. Computer Grafik Systeme GmbH, Taufkirchen <http://www.moss.de/>
+-- 
+-- Licensed under the Apache License, Version 2.0 (the "License");
+-- you may not use this file except in compliance with the License.
+-- You may obtain a copy of the License at
+-- 
+--     http://www.apache.org/licenses/LICENSE-2.0
+--     
+-- Unless required by applicable law or agreed to in writing, software
+-- distributed under the License is distributed on an "AS IS" BASIS,
+-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-- See the License for the specific language governing permissions and
+-- limitations under the License.
+--
 
 -- Database creation must be done outside an multicommand file.
 -- These commands were put in this file only for convenience.
@@ -25,19 +34,16 @@ CREATE ROLE "user" WITH
 -- 	LC_COLLATE = 'en_US.UTF-8'
 -- 	LC_CTYPE = 'en_US.UTF-8'
 -- 	TABLESPACE = pg_default
--- 	OWNER = "user"
 -- ;
 -- -- ddl-end --
 -- 
 
 -- object: citydb | type: SCHEMA --
 -- DROP SCHEMA IF EXISTS citydb CASCADE;
-CREATE SCHEMA citydb;
--- ddl-end --
-ALTER SCHEMA citydb OWNER TO "user";
+--CREATE SCHEMA citydb;
 -- ddl-end --
 
-SET search_path TO pg_catalog,public,citydb;
+--SET search_path TO pg_catalog,public,citydb;
 -- ddl-end --
 
 -- object: citydb.citymodel_seq | type: SEQUENCE --
@@ -51,8 +57,6 @@ CREATE SEQUENCE citydb.citymodel_seq
 	NO CYCLE
 	OWNED BY NONE;
 -- ddl-end --
-ALTER SEQUENCE citydb.citymodel_seq OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.cityobject_seq | type: SEQUENCE --
 -- DROP SEQUENCE IF EXISTS citydb.cityobject_seq CASCADE;
@@ -65,8 +69,6 @@ CREATE SEQUENCE citydb.cityobject_seq
 	NO CYCLE
 	OWNED BY NONE;
 -- ddl-end --
-ALTER SEQUENCE citydb.cityobject_seq OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.cityobject_member | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.cityobject_member CASCADE;
@@ -77,8 +79,6 @@ CREATE TABLE citydb.cityobject_member(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.cityobject_member OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.external_ref_seq | type: SEQUENCE --
@@ -92,8 +92,6 @@ CREATE SEQUENCE citydb.external_ref_seq
 	NO CYCLE
 	OWNED BY NONE;
 -- ddl-end --
-ALTER SEQUENCE citydb.external_ref_seq OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.generalization | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.generalization CASCADE;
@@ -104,8 +102,6 @@ CREATE TABLE citydb.generalization(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.generalization OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.surface_geometry_seq | type: SEQUENCE --
@@ -118,8 +114,6 @@ CREATE SEQUENCE citydb.surface_geometry_seq
 	CACHE 1
 	NO CYCLE
 	OWNED BY NONE;
--- ddl-end --
-ALTER SEQUENCE citydb.surface_geometry_seq OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.cityobjectgroup | type: TABLE --
@@ -134,14 +128,12 @@ CREATE TABLE citydb.cityobjectgroup(
 	usage character varying(1000),
 	usage_codespace character varying(4000),
 	brep_id integer,
-	other_geom geometry,
+	other_geom geometry(GEOMETRYZ),
 	parent_cityobject_id integer,
 	CONSTRAINT cityobjectgroup_pk PRIMARY KEY (id)
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.cityobjectgroup OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.group_to_cityobject | type: TABLE --
@@ -155,8 +147,6 @@ CREATE TABLE citydb.group_to_cityobject(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.group_to_cityobject OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.database_srs | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.database_srs CASCADE;
@@ -167,8 +157,6 @@ CREATE TABLE citydb.database_srs(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.database_srs OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.objectclass | type: TABLE --
@@ -186,8 +174,6 @@ CREATE TABLE citydb.objectclass(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.objectclass OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.implicit_geometry_seq | type: SEQUENCE --
 -- DROP SEQUENCE IF EXISTS citydb.implicit_geometry_seq CASCADE;
@@ -199,8 +185,6 @@ CREATE SEQUENCE citydb.implicit_geometry_seq
 	CACHE 1
 	NO CYCLE
 	OWNED BY NONE;
--- ddl-end --
-ALTER SEQUENCE citydb.implicit_geometry_seq OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.city_furniture | type: TABLE --
@@ -214,26 +198,26 @@ CREATE TABLE citydb.city_furniture(
 	function_codespace character varying(4000),
 	usage character varying(1000),
 	usage_codespace character varying(4000),
-	lod1_terrain_intersection geometry,
-	lod2_terrain_intersection geometry,
-	lod3_terrain_intersection geometry,
-	lod4_terrain_intersection geometry,
+	lod1_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod2_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod3_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod4_terrain_intersection geometry(MULTILINESTRINGZ),
 	lod1_brep_id integer,
 	lod2_brep_id integer,
 	lod3_brep_id integer,
 	lod4_brep_id integer,
-	lod1_other_geom geometry,
-	lod2_other_geom geometry,
-	lod3_other_geom geometry,
-	lod4_other_geom geometry,
+	lod1_other_geom geometry(GEOMETRYZ),
+	lod2_other_geom geometry(GEOMETRYZ),
+	lod3_other_geom geometry(GEOMETRYZ),
+	lod4_other_geom geometry(GEOMETRYZ),
 	lod1_implicit_rep_id integer,
 	lod2_implicit_rep_id integer,
 	lod3_implicit_rep_id integer,
 	lod4_implicit_rep_id integer,
-	lod1_implicit_ref_point geometry,
-	lod2_implicit_ref_point geometry,
-	lod3_implicit_ref_point geometry,
-	lod4_implicit_ref_point geometry,
+	lod1_implicit_ref_point geometry(POINTZ),
+	lod2_implicit_ref_point geometry(POINTZ),
+	lod3_implicit_ref_point geometry(POINTZ),
+	lod4_implicit_ref_point geometry(POINTZ),
 	lod1_implicit_transformation character varying(1000),
 	lod2_implicit_transformation character varying(1000),
 	lod3_implicit_transformation character varying(1000),
@@ -242,8 +226,6 @@ CREATE TABLE citydb.city_furniture(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.city_furniture OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.cityobject_genericatt_seq | type: SEQUENCE --
@@ -257,8 +239,6 @@ CREATE SEQUENCE citydb.cityobject_genericatt_seq
 	NO CYCLE
 	OWNED BY NONE;
 -- ddl-end --
-ALTER SEQUENCE citydb.cityobject_genericatt_seq OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.generic_cityobject | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.generic_cityobject CASCADE;
@@ -271,31 +251,31 @@ CREATE TABLE citydb.generic_cityobject(
 	function_codespace character varying(4000),
 	usage character varying(1000),
 	usage_codespace character varying(4000),
-	lod0_terrain_intersection geometry,
-	lod1_terrain_intersection geometry,
-	lod2_terrain_intersection geometry,
-	lod3_terrain_intersection geometry,
-	lod4_terrain_intersection geometry,
+	lod0_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod1_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod2_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod3_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod4_terrain_intersection geometry(MULTILINESTRINGZ),
 	lod0_brep_id integer,
 	lod1_brep_id integer,
 	lod2_brep_id integer,
 	lod3_brep_id integer,
 	lod4_brep_id integer,
-	lod0_other_geom geometry,
-	lod1_other_geom geometry,
-	lod2_other_geom geometry,
-	lod3_other_geom geometry,
-	lod4_other_geom geometry,
+	lod0_other_geom geometry(GEOMETRYZ),
+	lod1_other_geom geometry(GEOMETRYZ),
+	lod2_other_geom geometry(GEOMETRYZ),
+	lod3_other_geom geometry(GEOMETRYZ),
+	lod4_other_geom geometry(GEOMETRYZ),
 	lod0_implicit_rep_id integer,
 	lod1_implicit_rep_id integer,
 	lod2_implicit_rep_id integer,
 	lod3_implicit_rep_id integer,
 	lod4_implicit_rep_id integer,
-	lod0_implicit_ref_point geometry,
-	lod1_implicit_ref_point geometry,
-	lod2_implicit_ref_point geometry,
-	lod3_implicit_ref_point geometry,
-	lod4_implicit_ref_point geometry,
+	lod0_implicit_ref_point geometry(POINTZ),
+	lod1_implicit_ref_point geometry(POINTZ),
+	lod2_implicit_ref_point geometry(POINTZ),
+	lod3_implicit_ref_point geometry(POINTZ),
+	lod4_implicit_ref_point geometry(POINTZ),
 	lod0_implicit_transformation character varying(1000),
 	lod1_implicit_transformation character varying(1000),
 	lod2_implicit_transformation character varying(1000),
@@ -305,8 +285,6 @@ CREATE TABLE citydb.generic_cityobject(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.generic_cityobject OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.address_seq | type: SEQUENCE --
@@ -320,8 +298,6 @@ CREATE SEQUENCE citydb.address_seq
 	NO CYCLE
 	OWNED BY NONE;
 -- ddl-end --
-ALTER SEQUENCE citydb.address_seq OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.address_to_building | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.address_to_building CASCADE;
@@ -332,8 +308,6 @@ CREATE TABLE citydb.address_to_building(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.address_to_building OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.building | type: TABLE --
@@ -361,13 +335,13 @@ CREATE TABLE citydb.building(
 	storey_heights_ag_unit character varying(4000),
 	storey_heights_below_ground character varying(4000),
 	storey_heights_bg_unit character varying(4000),
-	lod1_terrain_intersection geometry,
-	lod2_terrain_intersection geometry,
-	lod3_terrain_intersection geometry,
-	lod4_terrain_intersection geometry,
-	lod2_multi_curve geometry,
-	lod3_multi_curve geometry,
-	lod4_multi_curve geometry,
+	lod1_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod2_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod3_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod4_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod2_multi_curve geometry(MULTILINESTRINGZ),
+	lod3_multi_curve geometry(MULTILINESTRINGZ),
+	lod4_multi_curve geometry(MULTILINESTRINGZ),
 	lod0_footprint_id integer,
 	lod0_roofprint_id integer,
 	lod1_multi_surface_id integer,
@@ -383,8 +357,6 @@ CREATE TABLE citydb.building(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.building OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.building_furniture | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.building_furniture CASCADE;
@@ -399,16 +371,14 @@ CREATE TABLE citydb.building_furniture(
 	usage_codespace character varying(4000),
 	room_id integer NOT NULL,
 	lod4_brep_id integer,
-	lod4_other_geom geometry,
+	lod4_other_geom geometry(GEOMETRYZ),
 	lod4_implicit_rep_id integer,
-	lod4_implicit_ref_point geometry,
+	lod4_implicit_ref_point geometry(POINTZ),
 	lod4_implicit_transformation character varying(1000),
 	CONSTRAINT building_furniture_pk PRIMARY KEY (id)
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.building_furniture OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.building_installation | type: TABLE --
@@ -427,15 +397,15 @@ CREATE TABLE citydb.building_installation(
 	lod2_brep_id integer,
 	lod3_brep_id integer,
 	lod4_brep_id integer,
-	lod2_other_geom geometry,
-	lod3_other_geom geometry,
-	lod4_other_geom geometry,
+	lod2_other_geom geometry(GEOMETRYZ),
+	lod3_other_geom geometry(GEOMETRYZ),
+	lod4_other_geom geometry(GEOMETRYZ),
 	lod2_implicit_rep_id integer,
 	lod3_implicit_rep_id integer,
 	lod4_implicit_rep_id integer,
-	lod2_implicit_ref_point geometry,
-	lod3_implicit_ref_point geometry,
-	lod4_implicit_ref_point geometry,
+	lod2_implicit_ref_point geometry(POINTZ),
+	lod3_implicit_ref_point geometry(POINTZ),
+	lod4_implicit_ref_point geometry(POINTZ),
 	lod2_implicit_transformation character varying(1000),
 	lod3_implicit_transformation character varying(1000),
 	lod4_implicit_transformation character varying(1000),
@@ -443,8 +413,6 @@ CREATE TABLE citydb.building_installation(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.building_installation OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.opening | type: TABLE --
@@ -457,16 +425,14 @@ CREATE TABLE citydb.opening(
 	lod4_multi_surface_id integer,
 	lod3_implicit_rep_id integer,
 	lod4_implicit_rep_id integer,
-	lod3_implicit_ref_point geometry,
-	lod4_implicit_ref_point geometry,
+	lod3_implicit_ref_point geometry(POINTZ),
+	lod4_implicit_ref_point geometry(POINTZ),
 	lod3_implicit_transformation character varying(1000),
 	lod4_implicit_transformation character varying(1000),
 	CONSTRAINT opening_pk PRIMARY KEY (id)
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.opening OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.opening_to_them_surface | type: TABLE --
@@ -478,8 +444,6 @@ CREATE TABLE citydb.opening_to_them_surface(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.opening_to_them_surface OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.room | type: TABLE --
@@ -501,8 +465,6 @@ CREATE TABLE citydb.room(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.room OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.thematic_surface | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.thematic_surface CASCADE;
@@ -520,8 +482,6 @@ CREATE TABLE citydb.thematic_surface(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.thematic_surface OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.appearance_seq | type: SEQUENCE --
 -- DROP SEQUENCE IF EXISTS citydb.appearance_seq CASCADE;
@@ -533,8 +493,6 @@ CREATE SEQUENCE citydb.appearance_seq
 	CACHE 1
 	NO CYCLE
 	OWNED BY NONE;
--- ddl-end --
-ALTER SEQUENCE citydb.appearance_seq OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.surface_data_seq | type: SEQUENCE --
@@ -548,8 +506,6 @@ CREATE SEQUENCE citydb.surface_data_seq
 	NO CYCLE
 	OWNED BY NONE;
 -- ddl-end --
-ALTER SEQUENCE citydb.surface_data_seq OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.textureparam | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.textureparam CASCADE;
@@ -558,14 +514,12 @@ CREATE TABLE citydb.textureparam(
 	objectclass_id integer NOT NULL,
 	is_texture_parametrization numeric,
 	world_to_texture character varying(1000),
-	texture_coordinates geometry,
+	texture_coordinates geometry(POLYGON),
 	surface_data_id integer NOT NULL,
 	CONSTRAINT textureparam_pk PRIMARY KEY (surface_geometry_id,surface_data_id)
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.textureparam OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.appear_to_surface_data | type: TABLE --
@@ -578,22 +532,18 @@ CREATE TABLE citydb.appear_to_surface_data(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.appear_to_surface_data OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.breakline_relief | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.breakline_relief CASCADE;
 CREATE TABLE citydb.breakline_relief(
 	id integer NOT NULL,
 	objectclass_id integer NOT NULL,
-	ridge_or_valley_lines geometry,
-	break_lines geometry,
+	ridge_or_valley_lines geometry(MULTILINESTRINGZ),
+	break_lines geometry(MULTILINESTRINGZ),
 	CONSTRAINT breakline_relief_pk PRIMARY KEY (id)
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.breakline_relief OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.masspoint_relief | type: TABLE --
@@ -601,13 +551,11 @@ ALTER TABLE citydb.breakline_relief OWNER TO "user";
 CREATE TABLE citydb.masspoint_relief(
 	id integer NOT NULL,
 	objectclass_id integer NOT NULL,
-	relief_points geometry,
+	relief_points geometry(MULTIPOINTZ),
 	CONSTRAINT masspoint_relief_pk PRIMARY KEY (id)
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.masspoint_relief OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.relief_component | type: TABLE --
@@ -616,14 +564,12 @@ CREATE TABLE citydb.relief_component(
 	id integer NOT NULL,
 	objectclass_id integer NOT NULL,
 	lod numeric,
-	extent geometry,
+	extent geometry(POLYGON),
 	CONSTRAINT relief_comp_lod_chk CHECK (((lod >= (0)::numeric) AND (lod < (5)::numeric))),
 	CONSTRAINT relief_component_pk PRIMARY KEY (id)
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.relief_component OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.relief_feat_to_rel_comp | type: TABLE --
@@ -635,8 +581,6 @@ CREATE TABLE citydb.relief_feat_to_rel_comp(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.relief_feat_to_rel_comp OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.relief_feature | type: TABLE --
@@ -651,8 +595,6 @@ CREATE TABLE citydb.relief_feature(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.relief_feature OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.tin_relief | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.tin_relief CASCADE;
@@ -661,16 +603,14 @@ CREATE TABLE citydb.tin_relief(
 	objectclass_id integer NOT NULL,
 	max_length double precision,
 	max_length_unit character varying(4000),
-	stop_lines geometry,
-	break_lines geometry,
-	control_points geometry,
+	stop_lines geometry(MULTILINESTRINGZ),
+	break_lines geometry(MULTILINESTRINGZ),
+	control_points geometry(MULTIPOINTZ),
 	surface_geometry_id integer,
 	CONSTRAINT tin_relief_pk PRIMARY KEY (id)
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.tin_relief OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.transportation_complex | type: TABLE --
@@ -684,7 +624,7 @@ CREATE TABLE citydb.transportation_complex(
 	function_codespace character varying(4000),
 	usage character varying(1000),
 	usage_codespace character varying(4000),
-	lod0_network geometry,
+	lod0_network geometry(GEOMETRYZ),
 	lod1_multi_surface_id integer,
 	lod2_multi_surface_id integer,
 	lod3_multi_surface_id integer,
@@ -693,8 +633,6 @@ CREATE TABLE citydb.transportation_complex(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.transportation_complex OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.traffic_area | type: TABLE --
@@ -719,8 +657,6 @@ CREATE TABLE citydb.traffic_area(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.traffic_area OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.land_use | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.land_use CASCADE;
@@ -742,8 +678,6 @@ CREATE TABLE citydb.land_use(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.land_use OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.plant_cover | type: TABLE --
@@ -772,8 +706,6 @@ CREATE TABLE citydb.plant_cover(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.plant_cover OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.solitary_vegetat_object | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.solitary_vegetat_object CASCADE;
@@ -798,18 +730,18 @@ CREATE TABLE citydb.solitary_vegetat_object(
 	lod2_brep_id integer,
 	lod3_brep_id integer,
 	lod4_brep_id integer,
-	lod1_other_geom geometry,
-	lod2_other_geom geometry,
-	lod3_other_geom geometry,
-	lod4_other_geom geometry,
+	lod1_other_geom geometry(GEOMETRYZ),
+	lod2_other_geom geometry(GEOMETRYZ),
+	lod3_other_geom geometry(GEOMETRYZ),
+	lod4_other_geom geometry(GEOMETRYZ),
 	lod1_implicit_rep_id integer,
 	lod2_implicit_rep_id integer,
 	lod3_implicit_rep_id integer,
 	lod4_implicit_rep_id integer,
-	lod1_implicit_ref_point geometry,
-	lod2_implicit_ref_point geometry,
-	lod3_implicit_ref_point geometry,
-	lod4_implicit_ref_point geometry,
+	lod1_implicit_ref_point geometry(POINTZ),
+	lod2_implicit_ref_point geometry(POINTZ),
+	lod3_implicit_ref_point geometry(POINTZ),
+	lod4_implicit_ref_point geometry(POINTZ),
 	lod1_implicit_transformation character varying(1000),
 	lod2_implicit_transformation character varying(1000),
 	lod3_implicit_transformation character varying(1000),
@@ -818,8 +750,6 @@ CREATE TABLE citydb.solitary_vegetat_object(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.solitary_vegetat_object OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.waterbody | type: TABLE --
@@ -833,8 +763,8 @@ CREATE TABLE citydb.waterbody(
 	function_codespace character varying(4000),
 	usage character varying(1000),
 	usage_codespace character varying(4000),
-	lod0_multi_curve geometry,
-	lod1_multi_curve geometry,
+	lod0_multi_curve geometry(MULTILINESTRINGZ),
+	lod1_multi_curve geometry(MULTILINESTRINGZ),
 	lod0_multi_surface_id integer,
 	lod1_multi_surface_id integer,
 	lod1_solid_id integer,
@@ -846,8 +776,6 @@ CREATE TABLE citydb.waterbody(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.waterbody OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.waterbod_to_waterbnd_srf | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.waterbod_to_waterbnd_srf CASCADE;
@@ -858,8 +786,6 @@ CREATE TABLE citydb.waterbod_to_waterbnd_srf(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.waterbod_to_waterbnd_srf OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.waterboundary_surface | type: TABLE --
@@ -877,8 +803,6 @@ CREATE TABLE citydb.waterboundary_surface(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.waterboundary_surface OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.raster_relief | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.raster_relief CASCADE;
@@ -891,8 +815,6 @@ CREATE TABLE citydb.raster_relief(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.raster_relief OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.tunnel | type: TABLE --
@@ -910,13 +832,13 @@ CREATE TABLE citydb.tunnel(
 	usage_codespace character varying(4000),
 	year_of_construction date,
 	year_of_demolition date,
-	lod1_terrain_intersection geometry,
-	lod2_terrain_intersection geometry,
-	lod3_terrain_intersection geometry,
-	lod4_terrain_intersection geometry,
-	lod2_multi_curve geometry,
-	lod3_multi_curve geometry,
-	lod4_multi_curve geometry,
+	lod1_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod2_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod3_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod4_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod2_multi_curve geometry(MULTILINESTRINGZ),
+	lod3_multi_curve geometry(MULTILINESTRINGZ),
+	lod4_multi_curve geometry(MULTILINESTRINGZ),
 	lod1_multi_surface_id integer,
 	lod2_multi_surface_id integer,
 	lod3_multi_surface_id integer,
@@ -930,8 +852,6 @@ CREATE TABLE citydb.tunnel(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.tunnel OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.tunnel_open_to_them_srf | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.tunnel_open_to_them_srf CASCADE;
@@ -942,8 +862,6 @@ CREATE TABLE citydb.tunnel_open_to_them_srf(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.tunnel_open_to_them_srf OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.tunnel_hollow_space | type: TABLE --
@@ -965,8 +883,6 @@ CREATE TABLE citydb.tunnel_hollow_space(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.tunnel_hollow_space OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.tunnel_thematic_surface | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.tunnel_thematic_surface CASCADE;
@@ -984,8 +900,6 @@ CREATE TABLE citydb.tunnel_thematic_surface(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.tunnel_thematic_surface OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.tex_image_seq | type: SEQUENCE --
 -- DROP SEQUENCE IF EXISTS citydb.tex_image_seq CASCADE;
@@ -998,8 +912,6 @@ CREATE SEQUENCE citydb.tex_image_seq
 	NO CYCLE
 	OWNED BY NONE;
 -- ddl-end --
-ALTER SEQUENCE citydb.tex_image_seq OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.tunnel_opening | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.tunnel_opening CASCADE;
@@ -1010,16 +922,14 @@ CREATE TABLE citydb.tunnel_opening(
 	lod4_multi_surface_id integer,
 	lod3_implicit_rep_id integer,
 	lod4_implicit_rep_id integer,
-	lod3_implicit_ref_point geometry,
-	lod4_implicit_ref_point geometry,
+	lod3_implicit_ref_point geometry(POINTZ),
+	lod4_implicit_ref_point geometry(POINTZ),
 	lod3_implicit_transformation character varying(1000),
 	lod4_implicit_transformation character varying(1000),
 	CONSTRAINT tunnel_opening_pk PRIMARY KEY (id)
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.tunnel_opening OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.tunnel_installation | type: TABLE --
@@ -1038,15 +948,15 @@ CREATE TABLE citydb.tunnel_installation(
 	lod2_brep_id integer,
 	lod3_brep_id integer,
 	lod4_brep_id integer,
-	lod2_other_geom geometry,
-	lod3_other_geom geometry,
-	lod4_other_geom geometry,
+	lod2_other_geom geometry(GEOMETRYZ),
+	lod3_other_geom geometry(GEOMETRYZ),
+	lod4_other_geom geometry(GEOMETRYZ),
 	lod2_implicit_rep_id integer,
 	lod3_implicit_rep_id integer,
 	lod4_implicit_rep_id integer,
-	lod2_implicit_ref_point geometry,
-	lod3_implicit_ref_point geometry,
-	lod4_implicit_ref_point geometry,
+	lod2_implicit_ref_point geometry(POINTZ),
+	lod3_implicit_ref_point geometry(POINTZ),
+	lod4_implicit_ref_point geometry(POINTZ),
 	lod2_implicit_transformation character varying(1000),
 	lod3_implicit_transformation character varying(1000),
 	lod4_implicit_transformation character varying(1000),
@@ -1054,8 +964,6 @@ CREATE TABLE citydb.tunnel_installation(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.tunnel_installation OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.tunnel_furniture | type: TABLE --
@@ -1071,16 +979,14 @@ CREATE TABLE citydb.tunnel_furniture(
 	usage_codespace character varying(4000),
 	tunnel_hollow_space_id integer NOT NULL,
 	lod4_brep_id integer,
-	lod4_other_geom geometry,
+	lod4_other_geom geometry(GEOMETRYZ),
 	lod4_implicit_rep_id integer,
-	lod4_implicit_ref_point geometry,
+	lod4_implicit_ref_point geometry(POINTZ),
 	lod4_implicit_transformation character varying(1000),
 	CONSTRAINT tunnel_furniture_pk PRIMARY KEY (id)
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.tunnel_furniture OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.bridge | type: TABLE --
@@ -1099,13 +1005,13 @@ CREATE TABLE citydb.bridge(
 	year_of_construction date,
 	year_of_demolition date,
 	is_movable numeric,
-	lod1_terrain_intersection geometry,
-	lod2_terrain_intersection geometry,
-	lod3_terrain_intersection geometry,
-	lod4_terrain_intersection geometry,
-	lod2_multi_curve geometry,
-	lod3_multi_curve geometry,
-	lod4_multi_curve geometry,
+	lod1_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod2_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod3_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod4_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod2_multi_curve geometry(MULTILINESTRINGZ),
+	lod3_multi_curve geometry(MULTILINESTRINGZ),
+	lod4_multi_curve geometry(MULTILINESTRINGZ),
 	lod1_multi_surface_id integer,
 	lod2_multi_surface_id integer,
 	lod3_multi_surface_id integer,
@@ -1118,8 +1024,6 @@ CREATE TABLE citydb.bridge(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.bridge OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.bridge_furniture | type: TABLE --
@@ -1135,16 +1039,14 @@ CREATE TABLE citydb.bridge_furniture(
 	usage_codespace character varying(4000),
 	bridge_room_id integer NOT NULL,
 	lod4_brep_id integer,
-	lod4_other_geom geometry,
+	lod4_other_geom geometry(GEOMETRYZ),
 	lod4_implicit_rep_id integer,
-	lod4_implicit_ref_point geometry,
+	lod4_implicit_ref_point geometry(POINTZ),
 	lod4_implicit_transformation character varying(1000),
 	CONSTRAINT bridge_furniture_pk PRIMARY KEY (id)
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.bridge_furniture OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.bridge_installation | type: TABLE --
@@ -1163,15 +1065,15 @@ CREATE TABLE citydb.bridge_installation(
 	lod2_brep_id integer,
 	lod3_brep_id integer,
 	lod4_brep_id integer,
-	lod2_other_geom geometry,
-	lod3_other_geom geometry,
-	lod4_other_geom geometry,
+	lod2_other_geom geometry(GEOMETRYZ),
+	lod3_other_geom geometry(GEOMETRYZ),
+	lod4_other_geom geometry(GEOMETRYZ),
 	lod2_implicit_rep_id integer,
 	lod3_implicit_rep_id integer,
 	lod4_implicit_rep_id integer,
-	lod2_implicit_ref_point geometry,
-	lod3_implicit_ref_point geometry,
-	lod4_implicit_ref_point geometry,
+	lod2_implicit_ref_point geometry(POINTZ),
+	lod3_implicit_ref_point geometry(POINTZ),
+	lod4_implicit_ref_point geometry(POINTZ),
 	lod2_implicit_transformation character varying(1000),
 	lod3_implicit_transformation character varying(1000),
 	lod4_implicit_transformation character varying(1000),
@@ -1179,8 +1081,6 @@ CREATE TABLE citydb.bridge_installation(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.bridge_installation OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.bridge_opening | type: TABLE --
@@ -1193,16 +1093,14 @@ CREATE TABLE citydb.bridge_opening(
 	lod4_multi_surface_id integer,
 	lod3_implicit_rep_id integer,
 	lod4_implicit_rep_id integer,
-	lod3_implicit_ref_point geometry,
-	lod4_implicit_ref_point geometry,
+	lod3_implicit_ref_point geometry(POINTZ),
+	lod4_implicit_ref_point geometry(POINTZ),
 	lod3_implicit_transformation character varying(1000),
 	lod4_implicit_transformation character varying(1000),
 	CONSTRAINT bridge_opening_pk PRIMARY KEY (id)
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.bridge_opening OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.bridge_open_to_them_srf | type: TABLE --
@@ -1214,8 +1112,6 @@ CREATE TABLE citydb.bridge_open_to_them_srf(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.bridge_open_to_them_srf OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.bridge_room | type: TABLE --
@@ -1237,8 +1133,6 @@ CREATE TABLE citydb.bridge_room(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.bridge_room OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.bridge_thematic_surface | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.bridge_thematic_surface CASCADE;
@@ -1257,8 +1151,6 @@ CREATE TABLE citydb.bridge_thematic_surface(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.bridge_thematic_surface OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.bridge_constr_element | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.bridge_constr_element CASCADE;
@@ -1272,26 +1164,26 @@ CREATE TABLE citydb.bridge_constr_element(
 	usage character varying(1000),
 	usage_codespace character varying(4000),
 	bridge_id integer NOT NULL,
-	lod1_terrain_intersection geometry,
-	lod2_terrain_intersection geometry,
-	lod3_terrain_intersection geometry,
-	lod4_terrain_intersection geometry,
+	lod1_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod2_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod3_terrain_intersection geometry(MULTILINESTRINGZ),
+	lod4_terrain_intersection geometry(MULTILINESTRINGZ),
 	lod1_brep_id integer,
 	lod2_brep_id integer,
 	lod3_brep_id integer,
 	lod4_brep_id integer,
-	lod1_other_geom geometry,
-	lod2_other_geom geometry,
-	lod3_other_geom geometry,
-	lod4_other_geom geometry,
+	lod1_other_geom geometry(GEOMETRYZ),
+	lod2_other_geom geometry(GEOMETRYZ),
+	lod3_other_geom geometry(GEOMETRYZ),
+	lod4_other_geom geometry(GEOMETRYZ),
 	lod1_implicit_rep_id integer,
 	lod2_implicit_rep_id integer,
 	lod3_implicit_rep_id integer,
 	lod4_implicit_rep_id integer,
-	lod1_implicit_ref_point geometry,
-	lod2_implicit_ref_point geometry,
-	lod3_implicit_ref_point geometry,
-	lod4_implicit_ref_point geometry,
+	lod1_implicit_ref_point geometry(POINTZ),
+	lod2_implicit_ref_point geometry(POINTZ),
+	lod3_implicit_ref_point geometry(POINTZ),
+	lod4_implicit_ref_point geometry(POINTZ),
 	lod1_implicit_transformation character varying(1000),
 	lod2_implicit_transformation character varying(1000),
 	lod3_implicit_transformation character varying(1000),
@@ -1300,8 +1192,6 @@ CREATE TABLE citydb.bridge_constr_element(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.bridge_constr_element OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.address_to_bridge | type: TABLE --
@@ -1313,8 +1203,6 @@ CREATE TABLE citydb.address_to_bridge(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.address_to_bridge OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.grid_coverage_seq | type: SEQUENCE --
@@ -1328,8 +1216,6 @@ CREATE SEQUENCE citydb.grid_coverage_seq
 	NO CYCLE
 	OWNED BY NONE;
 -- ddl-end --
-ALTER SEQUENCE citydb.grid_coverage_seq OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.cityobject | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.cityobject CASCADE;
@@ -1341,7 +1227,7 @@ CREATE TABLE citydb.cityobject(
 	name character varying(1000),
 	name_codespace character varying(4000),
 	description character varying(4000),
-	envelope geometry,
+	envelope geometry(POLYGONZ),
 	creation_date timestamp with time zone,
 	termination_date timestamp with time zone,
 	relative_to_terrain character varying(256),
@@ -1355,8 +1241,6 @@ CREATE TABLE citydb.cityobject(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.cityobject OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.appearance | type: TABLE --
@@ -1376,8 +1260,6 @@ CREATE TABLE citydb.appearance(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.appearance OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.implicit_geometry | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.implicit_geometry CASCADE;
@@ -1387,13 +1269,11 @@ CREATE TABLE citydb.implicit_geometry(
 	reference_to_library character varying(4000),
 	library_object bytea,
 	relative_brep_id integer,
-	relative_other_geom geometry,
+	relative_other_geom geometry(GEOMETRYZ),
 	CONSTRAINT implicit_geometry_pk PRIMARY KEY (id)
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.implicit_geometry OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.surface_geometry | type: TABLE --
@@ -1409,16 +1289,14 @@ CREATE TABLE citydb.surface_geometry(
 	is_triangulated numeric,
 	is_xlink numeric,
 	is_reverse numeric,
-	solid_geometry geometry,
-	geometry geometry,
-	implicit_geometry geometry,
+	solid_geometry geometry(POLYHEDRALSURFACEZ),
+	geometry geometry(POLYGONZ),
+	implicit_geometry geometry(POLYGONZ),
 	cityobject_id integer,
 	CONSTRAINT surface_geometry_pk PRIMARY KEY (id)
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.surface_geometry OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.address | type: TABLE --
@@ -1434,14 +1312,12 @@ CREATE TABLE citydb.address(
 	city character varying(256),
 	state character varying(256),
 	country character varying(256),
-	multi_point geometry,
+	multi_point geometry(MULTIPOINTZ),
 	xal_source text,
 	CONSTRAINT address_pk PRIMARY KEY (id)
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.address OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.surface_data | type: TABLE --
@@ -1468,13 +1344,11 @@ CREATE TABLE citydb.surface_data(
 	tex_border_color character varying(256),
 	gt_prefer_worldfile numeric,
 	gt_orientation character varying(256),
-	gt_reference_point geometry,
+	gt_reference_point geometry(POINT),
 	CONSTRAINT surface_data_pk PRIMARY KEY (id)
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.surface_data OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.citymodel | type: TABLE --
@@ -1486,7 +1360,7 @@ CREATE TABLE citydb.citymodel(
 	name character varying(1000),
 	name_codespace character varying(4000),
 	description character varying(4000),
-	envelope geometry,
+	envelope geometry(POLYGONZ),
 	creation_date timestamp with time zone,
 	termination_date timestamp with time zone,
 	last_modification_date timestamp with time zone,
@@ -1497,8 +1371,6 @@ CREATE TABLE citydb.citymodel(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.citymodel OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.cityobject_genericattrib | type: TABLE --
@@ -1517,15 +1389,13 @@ CREATE TABLE citydb.cityobject_genericattrib(
 	unit character varying(4000),
 	genattribset_codespace character varying(4000),
 	blobval bytea,
-	geomval geometry,
+	geomval geometry(GEOMETRYZ),
 	surface_geometry_id integer,
 	cityobject_id integer NOT NULL,
 	CONSTRAINT cityobj_genericattrib_pk PRIMARY KEY (id)
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.cityobject_genericattrib OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.external_reference | type: TABLE --
@@ -1541,8 +1411,6 @@ CREATE TABLE citydb.external_reference(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.external_reference OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.tex_image | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.tex_image CASCADE;
@@ -1557,8 +1425,6 @@ CREATE TABLE citydb.tex_image(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.tex_image OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.grid_coverage | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.grid_coverage CASCADE;
@@ -1569,8 +1435,6 @@ CREATE TABLE citydb.grid_coverage(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.grid_coverage OWNER TO "user";
 -- ddl-end --
 
 -- object: citydb.schema_seq | type: SEQUENCE --
@@ -1584,8 +1448,6 @@ CREATE SEQUENCE citydb.schema_seq
 	NO CYCLE
 	OWNED BY NONE;
 -- ddl-end --
-ALTER SEQUENCE citydb.schema_seq OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.ade_seq | type: SEQUENCE --
 -- DROP SEQUENCE IF EXISTS citydb.ade_seq CASCADE;
@@ -1597,8 +1459,6 @@ CREATE SEQUENCE citydb.ade_seq
 	CACHE 1
 	NO CYCLE
 	OWNED BY NONE;
--- ddl-end --
-ALTER SEQUENCE citydb.ade_seq OWNER TO "user";
 -- ddl-end --
 
 -- object: cityobject_member_fkx | type: INDEX --
@@ -3754,8 +3614,6 @@ CREATE TABLE citydb.schema(
 
 );
 -- ddl-end --
-ALTER TABLE citydb.schema OWNER TO "user";
--- ddl-end --
 
 -- object: citydb.schema_to_objectclass | type: TABLE --
 -- DROP TABLE IF EXISTS citydb.schema_to_objectclass CASCADE;
@@ -3766,8 +3624,6 @@ CREATE TABLE citydb.schema_to_objectclass(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.schema_to_objectclass OWNER TO "user";
 -- ddl-end --
 
 -- object: schema_to_objectclass_fkx2 | type: INDEX --
@@ -3799,8 +3655,6 @@ CREATE TABLE citydb.schema_referencing(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.schema_referencing OWNER TO "user";
 -- ddl-end --
 
 -- object: schema_referencing_fkx2 | type: INDEX --
@@ -3850,8 +3704,6 @@ CREATE TABLE citydb.ade(
 	 WITH (FILLFACTOR = 100)
 
 );
--- ddl-end --
-ALTER TABLE citydb.ade OWNER TO "user";
 -- ddl-end --
 
 -- object: address_point_spx | type: INDEX --

@@ -3,20 +3,9 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.1-alpha1" last-position="0,160" last-zoom="0.2"
+<dbmodel pgmodeler-ver="0.9.1-alpha1" last-position="0,0" last-zoom="0.2"
 	 default-schema="public" default-owner="postgres">
-<role name="user"
-      superuser="true"
-      createdb="true"
-      createrole="true"
-      inherit="true"
-      login="true"
-      encrypted="true"
-      password="********">
-</role>
-
 <database name="citydb_4" encoding="UTF8" lc-collate="en_US.UTF-8" lc-ctype="en_US.UTF-8">
-	<role name="&quot;user&quot;"/>
 	<tablespace name="pg_default"/>
 </database>
 
@@ -121,8 +110,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <schema name="public" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
 </schema>
 
-<schema name="citydb" rect-visible="true" fill-color="#e34714">
-	<role name="&quot;user&quot;"/>
+<schema name="citydb" rect-visible="true" fill-color="#f5f5f5">
 </schema>
 
 <sequence name="citymodel_seq"
@@ -130,7 +118,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 min-value="0" max-value="2147483647"
 	 cache="1" cycle="false">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 </sequence>
 
 <sequence name="cityobject_seq"
@@ -138,12 +125,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 min-value="0" max-value="2147483647"
 	 cache="1" cycle="false">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 </sequence>
 
 <table name="cityobject_member">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="core_module"/>
 	<position x="2080" y="800"/>
 	<column name="citymodel_id" not-null="true">
@@ -162,12 +147,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 min-value="0" max-value="2147483647"
 	 cache="1" cycle="false">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 </sequence>
 
 <table name="generalization">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="core_module"/>
 	<position x="2380" y="800"/>
 	<column name="cityobject_id" not-null="true">
@@ -186,14 +169,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 min-value="0" max-value="2147483647"
 	 cache="1" cycle="false">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 </sequence>
 
 <table name="cityobjectgroup">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="city_object_group_module"/>
-	<position x="2580" y="126"/>
+	<position x="2580" y="120"/>
 	<column name="id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -222,7 +203,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="parent_cityobject_id">
 		<type name="integer" length="0"/>
@@ -234,9 +215,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="group_to_cityobject">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="city_object_group_module"/>
-	<position x="2900" y="126"/>
+	<position x="2900" y="120"/>
 	<column name="cityobject_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -253,9 +233,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="database_srs">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="global"/>
-	<position x="300" y="186"/>
+	<position x="300" y="180"/>
 	<column name="srid" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -269,7 +248,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="objectclass">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="global"/>
 	<position x="3180" y="2000"/>
 	<column name="id" not-null="true">
@@ -303,12 +281,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 min-value="0" max-value="2147483647"
 	 cache="1" cycle="false">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 </sequence>
 
 <table name="city_furniture">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="city_furniture_module"/>
 	<position x="1280" y="2700"/>
 	<column name="id" not-null="true">
@@ -336,16 +312,16 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="character varying" length="4000"/>
 	</column>
 	<column name="lod1_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod1_brep_id">
 		<type name="integer" length="0"/>
@@ -360,16 +336,16 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod1_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod1_implicit_rep_id">
 		<type name="integer" length="0"/>
@@ -384,16 +360,16 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod1_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod1_implicit_transformation">
 		<type name="character varying" length="1000"/>
@@ -417,14 +393,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 min-value="0" max-value="2147483647"
 	 cache="1" cycle="false">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 </sequence>
 
 <table name="generic_cityobject">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="generics_module"/>
-	<position x="1220" y="146"/>
+	<position x="1220" y="140"/>
 	<column name="id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -450,19 +424,19 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="character varying" length="4000"/>
 	</column>
 	<column name="lod0_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod1_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod0_brep_id">
 		<type name="integer" length="0"/>
@@ -480,19 +454,19 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod0_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod1_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod0_implicit_rep_id">
 		<type name="integer" length="0"/>
@@ -510,19 +484,19 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod0_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod1_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod0_implicit_transformation">
 		<type name="character varying" length="1000"/>
@@ -549,12 +523,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 min-value="0" max-value="2147483647"
 	 cache="1" cycle="false">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 </sequence>
 
 <table name="address_to_building">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="buidling_module"/>
 	<position x="3980" y="4580"/>
 	<column name="building_id" not-null="true">
@@ -570,7 +542,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="building">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="buidling_module"/>
 	<position x="3560" y="4180"/>
 	<column name="id" not-null="true">
@@ -640,25 +611,25 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="character varying" length="4000"/>
 	</column>
 	<column name="lod1_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_multi_curve">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_multi_curve">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_multi_curve">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod0_footprint_id">
 		<type name="integer" length="0"/>
@@ -697,7 +668,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="building_furniture">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="buidling_module"/>
 	<position x="2460" y="4000"/>
 	<column name="id" not-null="true">
@@ -731,13 +701,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod4_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_implicit_rep_id">
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod4_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_implicit_transformation">
 		<type name="character varying" length="1000"/>
@@ -749,7 +719,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="building_installation">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="buidling_module"/>
 	<position x="2820" y="4000"/>
 	<column name="id" not-null="true">
@@ -792,13 +761,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod2_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_implicit_rep_id">
 		<type name="integer" length="0"/>
@@ -810,13 +779,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod2_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_implicit_transformation">
 		<type name="character varying" length="1000"/>
@@ -834,7 +803,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="opening">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="buidling_module"/>
 	<position x="3200" y="4000"/>
 	<column name="id" not-null="true">
@@ -859,10 +827,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod3_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_implicit_transformation">
 		<type name="character varying" length="1000"/>
@@ -877,7 +845,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="opening_to_them_surface">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="buidling_module"/>
 	<position x="3580" y="4000"/>
 	<column name="opening_id" not-null="true">
@@ -893,7 +860,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="room">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="buidling_module"/>
 	<position x="3920" y="4000"/>
 	<column name="id" not-null="true">
@@ -936,7 +902,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="thematic_surface">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="buidling_module"/>
 	<position x="3220" y="4580"/>
 	<column name="id" not-null="true">
@@ -973,7 +938,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 min-value="0" max-value="2147483647"
 	 cache="1" cycle="false">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 </sequence>
 
 <sequence name="surface_data_seq"
@@ -981,14 +945,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 min-value="0" max-value="2147483647"
 	 cache="1" cycle="false">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 </sequence>
 
 <table name="textureparam">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="appearance_module"/>
-	<position x="3740" y="686"/>
+	<position x="3740" y="680"/>
 	<column name="surface_geometry_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -1002,7 +964,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="character varying" length="1000"/>
 	</column>
 	<column name="texture_coordinates">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POLYGON" variation="0" srid="0"/>
 	</column>
 	<column name="surface_data_id" not-null="true">
 		<type name="integer" length="0"/>
@@ -1014,9 +976,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="appear_to_surface_data">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="appearance_module"/>
-	<position x="4120" y="686"/>
+	<position x="4120" y="680"/>
 	<column name="surface_data_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -1030,7 +991,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="breakline_relief">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="relief_module"/>
 	<position x="5640" y="1940"/>
 	<column name="id" not-null="true">
@@ -1040,10 +1000,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="ridge_or_valley_lines">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="break_lines">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<constraint name="breakline_relief_pk" type="pk-constr" factor="100" table="citydb.breakline_relief">
 		<columns names="id" ref-type="src-columns"/>
@@ -1052,7 +1012,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="masspoint_relief">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="relief_module"/>
 	<position x="5280" y="1960"/>
 	<column name="id" not-null="true">
@@ -1062,7 +1021,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="relief_points">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTIPOINT" variation="1" srid="0"/>
 	</column>
 	<constraint name="masspoint_relief_pk" type="pk-constr" factor="100" table="citydb.masspoint_relief">
 		<columns names="id" ref-type="src-columns"/>
@@ -1071,7 +1030,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="relief_component">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="relief_module"/>
 	<position x="5040" y="2220"/>
 	<column name="id" not-null="true">
@@ -1084,7 +1042,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="numeric" length="0"/>
 	</column>
 	<column name="extent">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POLYGON" variation="0" srid="0"/>
 	</column>
 	<constraint name="relief_comp_lod_chk" type="ck-constr" table="citydb.relief_component">
 			<expression><![CDATA[((lod >= (0)::numeric) AND (lod < (5)::numeric))]]></expression>
@@ -1096,7 +1054,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="relief_feat_to_rel_comp">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="relief_module"/>
 	<position x="5360" y="2220"/>
 	<column name="relief_component_id" not-null="true">
@@ -1112,7 +1069,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="relief_feature">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="relief_module"/>
 	<position x="5680" y="2220"/>
 	<column name="id" not-null="true">
@@ -1134,7 +1090,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="tin_relief">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="relief_module"/>
 	<position x="6000" y="2220"/>
 	<column name="id" not-null="true">
@@ -1150,13 +1105,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="character varying" length="4000"/>
 	</column>
 	<column name="stop_lines">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="break_lines">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="control_points">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTIPOINT" variation="1" srid="0"/>
 	</column>
 	<column name="surface_geometry_id">
 		<type name="integer" length="0"/>
@@ -1168,7 +1123,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="transportation_complex">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="transportation_module"/>
 	<position x="5780" y="2840"/>
 	<column name="id" not-null="true">
@@ -1196,7 +1150,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="character varying" length="4000"/>
 	</column>
 	<column name="lod0_network">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod1_multi_surface_id">
 		<type name="integer" length="0"/>
@@ -1217,7 +1171,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="traffic_area">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="transportation_module"/>
 	<position x="5240" y="2880"/>
 	<column name="id" not-null="true">
@@ -1269,7 +1222,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="land_use">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="land_use_module"/>
 	<position x="60" y="1660"/>
 	<column name="id" not-null="true">
@@ -1318,9 +1270,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="plant_cover">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="vegetation_module"/>
-	<position x="420" y="2006"/>
+	<position x="420" y="2000"/>
 	<column name="id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -1382,7 +1333,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="solitary_vegetat_object">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="vegetation_module"/>
 	<position x="780" y="2220"/>
 	<column name="id" not-null="true">
@@ -1446,16 +1396,16 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod1_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod1_implicit_rep_id">
 		<type name="integer" length="0"/>
@@ -1470,16 +1420,16 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod1_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod1_implicit_transformation">
 		<type name="character varying" length="1000"/>
@@ -1500,9 +1450,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="waterbody">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="waterbody_module"/>
-	<position x="160" y="806"/>
+	<position x="160" y="800"/>
 	<column name="id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -1528,10 +1477,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="character varying" length="4000"/>
 	</column>
 	<column name="lod0_multi_curve">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod1_multi_curve">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod0_multi_surface_id">
 		<type name="integer" length="0"/>
@@ -1558,9 +1507,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="waterbod_to_waterbnd_srf">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="waterbody_module"/>
-	<position x="460" y="846"/>
+	<position x="520" y="540"/>
 	<column name="waterboundary_surface_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -1574,9 +1522,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="waterboundary_surface">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="waterbody_module"/>
-	<position x="800" y="846"/>
+	<position x="800" y="840"/>
 	<column name="id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -1605,7 +1552,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="raster_relief">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="relief_module"/>
 	<position x="5660" y="2440"/>
 	<column name="id" not-null="true">
@@ -1627,7 +1573,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="tunnel">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="tunnel_module"/>
 	<position x="1460" y="4440"/>
 	<column name="id" not-null="true">
@@ -1667,25 +1612,25 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="date" length="0"/>
 	</column>
 	<column name="lod1_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_multi_curve">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_multi_curve">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_multi_curve">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod1_multi_surface_id">
 		<type name="integer" length="0"/>
@@ -1718,7 +1663,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="tunnel_open_to_them_srf">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="tunnel_module"/>
 	<position x="1800" y="4440"/>
 	<column name="tunnel_opening_id" not-null="true">
@@ -1734,7 +1678,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="tunnel_hollow_space">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="tunnel_module"/>
 	<position x="440" y="4200"/>
 	<column name="id" not-null="true">
@@ -1777,7 +1720,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="tunnel_thematic_surface">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="tunnel_module"/>
 	<position x="760" y="4200"/>
 	<column name="id" not-null="true">
@@ -1814,12 +1756,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 min-value="0" max-value="2147483647"
 	 cache="1" cycle="false">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 </sequence>
 
 <table name="tunnel_opening">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="tunnel_module"/>
 	<position x="1100" y="4200"/>
 	<column name="id" not-null="true">
@@ -1841,10 +1781,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod3_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_implicit_transformation">
 		<type name="character varying" length="1000"/>
@@ -1859,7 +1799,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="tunnel_installation">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="tunnel_module"/>
 	<position x="720" y="4700"/>
 	<column name="id" not-null="true">
@@ -1902,13 +1841,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod2_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_implicit_rep_id">
 		<type name="integer" length="0"/>
@@ -1920,13 +1859,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod2_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_implicit_transformation">
 		<type name="character varying" length="1000"/>
@@ -1944,7 +1883,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="tunnel_furniture">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="tunnel_module"/>
 	<position x="1100" y="4700"/>
 	<column name="id" not-null="true">
@@ -1978,13 +1916,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod4_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_implicit_rep_id">
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod4_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_implicit_transformation">
 		<type name="character varying" length="1000"/>
@@ -1996,7 +1934,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="bridge">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="bridge_module"/>
 	<position x="4720" y="3720"/>
 	<column name="id" not-null="true">
@@ -2039,25 +1976,25 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="numeric" length="0"/>
 	</column>
 	<column name="lod1_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_multi_curve">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_multi_curve">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_multi_curve">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod1_multi_surface_id">
 		<type name="integer" length="0"/>
@@ -2090,7 +2027,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="bridge_furniture">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="bridge_module"/>
 	<position x="5060" y="3720"/>
 	<column name="id" not-null="true">
@@ -2124,13 +2060,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod4_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_implicit_rep_id">
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod4_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_implicit_transformation">
 		<type name="character varying" length="1000"/>
@@ -2142,7 +2078,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="bridge_installation">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="bridge_module"/>
 	<position x="5440" y="3720"/>
 	<column name="id" not-null="true">
@@ -2185,13 +2120,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod2_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_implicit_rep_id">
 		<type name="integer" length="0"/>
@@ -2203,13 +2138,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod2_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_implicit_transformation">
 		<type name="character varying" length="1000"/>
@@ -2227,7 +2162,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="bridge_opening">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="bridge_module"/>
 	<position x="5820" y="3720"/>
 	<column name="id" not-null="true">
@@ -2252,10 +2186,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod3_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_implicit_transformation">
 		<type name="character varying" length="1000"/>
@@ -2270,7 +2204,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="bridge_open_to_them_srf">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="bridge_module"/>
 	<position x="6200" y="3720"/>
 	<column name="bridge_opening_id" not-null="true">
@@ -2286,7 +2219,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="bridge_room">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="bridge_module"/>
 	<position x="4720" y="4820"/>
 	<column name="id" not-null="true">
@@ -2329,7 +2261,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="bridge_thematic_surface">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="bridge_module"/>
 	<position x="5060" y="4820"/>
 	<column name="id" not-null="true">
@@ -2366,7 +2297,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="bridge_constr_element">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="bridge_module"/>
 	<position x="5400" y="4820"/>
 	<column name="id" not-null="true">
@@ -2397,16 +2327,16 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod1_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_terrain_intersection">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="1" srid="0"/>
 	</column>
 	<column name="lod1_brep_id">
 		<type name="integer" length="0"/>
@@ -2421,16 +2351,16 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod1_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="lod1_implicit_rep_id">
 		<type name="integer" length="0"/>
@@ -2445,16 +2375,16 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="lod1_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod2_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod3_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod4_implicit_ref_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="1" srid="0"/>
 	</column>
 	<column name="lod1_implicit_transformation">
 		<type name="character varying" length="1000"/>
@@ -2475,7 +2405,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="address_to_bridge">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="bridge_module"/>
 	<position x="5780" y="4820"/>
 	<column name="bridge_id" not-null="true">
@@ -2494,12 +2423,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 min-value="0" max-value="2147483647"
 	 cache="1" cycle="false">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 </sequence>
 
 <table name="cityobject">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="core_module"/>
 	<position x="2660" y="1160"/>
 	<column name="id" not-null="true" sequence="citydb.cityobject_seq">
@@ -2524,7 +2451,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="character varying" length="4000"/>
 	</column>
 	<column name="envelope">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POLYGON" variation="1" srid="0"/>
 	</column>
 	<column name="creation_date">
 		<type name="timestamp with time zone" length="0" with-timezone="true"/>
@@ -2560,7 +2487,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="appearance">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="appearance_module"/>
 	<position x="4440" y="340"/>
 	<column name="id" not-null="true" sequence="citydb.appearance_seq">
@@ -2597,7 +2523,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="implicit_geometry">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="core_module"/>
 	<position x="2120" y="1400"/>
 	<column name="id" not-null="true" sequence="citydb.implicit_geometry_seq">
@@ -2616,7 +2541,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer" length="0"/>
 	</column>
 	<column name="relative_other_geom">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<constraint name="implicit_geometry_pk" type="pk-constr" factor="100" table="citydb.implicit_geometry">
 		<columns names="id" ref-type="src-columns"/>
@@ -2625,7 +2550,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="surface_geometry">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="global"/>
 	<position x="4160" y="1420"/>
 	<column name="id" not-null="true" sequence="citydb.surface_geometry_seq">
@@ -2659,13 +2583,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="numeric" length="0"/>
 	</column>
 	<column name="solid_geometry">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POLYHEDRALSURFACE" variation="1" srid="0"/>
 	</column>
 	<column name="geometry">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POLYGON" variation="1" srid="0"/>
 	</column>
 	<column name="implicit_geometry">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POLYGON" variation="1" srid="0"/>
 	</column>
 	<column name="cityobject_id">
 		<type name="integer" length="0"/>
@@ -2677,7 +2601,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="address">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="global"/>
 	<position x="4320" y="5620"/>
 	<column name="id" not-null="true" sequence="citydb.address_seq">
@@ -2711,7 +2634,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="character varying" length="256"/>
 	</column>
 	<column name="multi_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="MULTIPOINT" variation="1" srid="0"/>
 	</column>
 	<column name="xal_source">
 		<type name="text" length="0"/>
@@ -2723,7 +2646,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="surface_data">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="appearance_module"/>
 	<position x="4840" y="200"/>
 	<column name="id" not-null="true" sequence="citydb.surface_data_seq">
@@ -2790,7 +2712,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="character varying" length="256"/>
 	</column>
 	<column name="gt_reference_point">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POINT" variation="0" srid="0"/>
 	</column>
 	<constraint name="surface_data_pk" type="pk-constr" factor="100" table="citydb.surface_data">
 		<columns names="id" ref-type="src-columns"/>
@@ -2799,7 +2721,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="citymodel">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="core_module"/>
 	<position x="2380" y="1780"/>
 	<column name="id" not-null="true" sequence="citydb.citymodel_seq">
@@ -2821,7 +2742,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="character varying" length="4000"/>
 	</column>
 	<column name="envelope">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="POLYGON" variation="1" srid="0"/>
 	</column>
 	<column name="creation_date">
 		<type name="timestamp with time zone" length="0" with-timezone="true"/>
@@ -2848,7 +2769,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="cityobject_genericattrib">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="generics_module"/>
 	<position x="1600" y="260"/>
 	<column name="id" not-null="true" sequence="citydb.cityobject_genericatt_seq">
@@ -2891,7 +2811,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="bytea" length="0"/>
 	</column>
 	<column name="geomval">
-		<type name="geometry" length="0"/>
+		<type name="geometry" length="0" spatial-type="GEOMETRY" variation="1" srid="0"/>
 	</column>
 	<column name="surface_geometry_id">
 		<type name="integer" length="0"/>
@@ -2906,7 +2826,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="external_reference">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="core_module"/>
 	<position x="2280" y="1100"/>
 	<column name="id" not-null="true" sequence="citydb.external_ref_seq">
@@ -2931,7 +2850,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="tex_image">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="appearance_module"/>
 	<position x="4580" y="780"/>
 	<column name="id" not-null="true" sequence="citydb.tex_image_seq">
@@ -2956,7 +2874,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="grid_coverage">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="global"/>
 	<position x="6100" y="1980"/>
 	<column name="id" not-null="true" sequence="citydb.grid_coverage_seq">
@@ -2975,7 +2892,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 min-value="0" max-value="2147483647"
 	 cache="1" cycle="false">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 </sequence>
 
 <sequence name="ade_seq"
@@ -2983,7 +2899,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 min-value="0" max-value="2147483647"
 	 cache="1" cycle="false">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 </sequence>
 
 <index name="cityobject_member_fkx" table="citydb.cityobject_member"
@@ -4710,7 +4625,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="schema">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="global"/>
 	<position x="5060" y="1200"/>
 	<column name="id" not-null="true" sequence="citydb.schema_seq">
@@ -4747,7 +4661,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="schema_to_objectclass">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="global"/>
 	<position x="5440" y="1200"/>
 	<column name="schema_id" not-null="true">
@@ -4779,7 +4692,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="schema_referencing">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="global"/>
 	<position x="5760" y="1200"/>
 	<column name="referencing_id" not-null="true">
@@ -4819,7 +4731,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="ade">
 	<schema name="citydb"/>
-	<role name="&quot;user&quot;"/>
 	<tag name="global"/>
 	<position x="6100" y="1200"/>
 	<column name="id" not-null="true" sequence="citydb.ade_seq">
@@ -7656,9 +7567,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="citydb.building"
 	 src-required="false" dst-required="false">
 	<line>
-		<position x="3916.91" y="4700.11"/>
-	<position x="3916.91" y="4156"/>
-	<position x="3782.61" y="4156"/>
+		<position x="3955.35" y="4700.11"/>
+	<position x="3955.35" y="4156"/>
+	<position x="3808.23" y="4156"/>
 	</line>
 </relationship>
 
@@ -8052,9 +7963,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="citydb.tunnel"
 	 src-required="false" dst-required="false">
 	<line>
-		<position x="1788.38" y="4844.51"/>
-	<position x="1788.38" y="4416"/>
-	<position x="1663.59" y="4416"/>
+		<position x="1826.82" y="4844.51"/>
+	<position x="1826.82" y="4416"/>
+	<position x="1689.21" y="4416"/>
 	</line>
 </relationship>
 
@@ -8213,9 +8124,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="citydb.bridge"
 	 src-required="false" dst-required="false">
 	<line>
-		<position x="5048.38" y="4138.11"/>
-	<position x="5048.38" y="3696"/>
-	<position x="4923.59" y="3696"/>
+		<position x="5086.82" y="4138.11"/>
+	<position x="5086.82" y="3696"/>
+	<position x="4949.21" y="3696"/>
 	</line>
 </relationship>
 
@@ -8434,9 +8345,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="citydb.surface_geometry"
 	 src-required="false" dst-required="false">
 	<line>
-		<position x="4459.85" y="1600.11"/>
-	<position x="4459.85" y="1396"/>
-	<position x="4344.57" y="1396"/>
+		<position x="4506.94" y="1600.11"/>
+	<position x="4506.94" y="1396"/>
+	<position x="4375.96" y="1396"/>
 	</line>
 </relationship>
 
