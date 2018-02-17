@@ -29,25 +29,23 @@
 * CONTENT
 *
 * FUNCTIONS:
-*   table_content(table_name TEXT, schema_name TEXT DEFAULT 'citydb') RETURNS INTEGER
-*   table_contents(schema_name TEXT DEFAULT 'citydb') RETURNS TEXT[]
+*   table_content(table_name TEXT) RETURNS INTEGER
+*   table_contents() RETURNS TEXT[]
 ******************************************************************/
 
 /*****************************************************************
 * table_content
 *
-* @param schema_name name of schema
 * @param table_name name of table
 * @RETURN INTEGER number of entries in table
 ******************************************************************/
 CREATE OR REPLACE FUNCTION citydb_pkg.table_content(
-  table_name TEXT,
-  schema_name TEXT DEFAULT 'citydb'
+  table_name TEXT
   ) RETURNS INTEGER AS $$
 DECLARE
   cnt INTEGER;  
 BEGIN
-  EXECUTE format('SELECT count(*) FROM %I.%I', $2, $1) INTO cnt;
+  EXECUTE format('SELECT count(*) FROM %I', $1) INTO cnt;
   RETURN cnt;
 END;
 $$
@@ -57,10 +55,9 @@ LANGUAGE plpgsql STABLE STRICT;
 /*****************************************************************
 * table_contents
 *
-* @param schema_name name of schema
 * @RETURN TEXT[] database report as text array
 ******************************************************************/
-CREATE OR REPLACE FUNCTION citydb_pkg.table_contents(schema_name TEXT DEFAULT 'citydb') RETURNS TEXT[] AS
+CREATE OR REPLACE FUNCTION citydb_pkg.table_contents() RETURNS TEXT[] AS
 $$
 SELECT 
   array_cat(
@@ -78,12 +75,11 @@ FROM (
       WHEN length(table_name) > 14 AND length(table_name) < 23 THEN E'\t\t'
       WHEN length(table_name) > 22 THEN E'\t'
     END
-    ) || citydb_pkg.table_content(table_name, $1) AS tab 
+    ) || citydb_pkg.table_content(table_name) AS tab 
   FROM
     information_schema.tables
   WHERE 
-    table_schema = $1
-    AND table_name != 'database_srs' 
+    table_name != 'database_srs' 
     AND table_name != 'objectclass'
     AND table_name != 'ade'
     AND table_name != 'schema'

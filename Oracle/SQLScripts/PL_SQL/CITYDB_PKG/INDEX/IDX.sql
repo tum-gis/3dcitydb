@@ -111,16 +111,16 @@ COMMIT;
 ******************************************************************/
 CREATE OR REPLACE PACKAGE citydb_idx AUTHID CURRENT_USER
 AS
-  FUNCTION index_status(idx INDEX_OBJ, schema_name VARCHAR2 := USER) RETURN VARCHAR2;
-  FUNCTION index_status(table_name VARCHAR2, column_name VARCHAR2, schema_name VARCHAR2 := USER) RETURN VARCHAR2;
-  FUNCTION status_spatial_indexes(schema_name VARCHAR2 := USER) RETURN STRARRAY;
-  FUNCTION status_normal_indexes(schema_name VARCHAR2 := USER) RETURN STRARRAY;
-  FUNCTION create_index(idx INDEX_OBJ, is_versioned BOOLEAN, schema_name VARCHAR2 := USER) RETURN VARCHAR2;
-  FUNCTION drop_index(idx INDEX_OBJ, is_versioned BOOLEAN, schema_name VARCHAR2 := USER) RETURN VARCHAR2;
-  FUNCTION create_spatial_indexes(schema_name VARCHAR2 := USER) RETURN STRARRAY;
-  FUNCTION drop_spatial_indexes(schema_name VARCHAR2 := USER) RETURN STRARRAY;
-  FUNCTION create_normal_indexes(schema_name VARCHAR2 := USER) RETURN STRARRAY;
-  FUNCTION drop_normal_indexes(schema_name VARCHAR2 := USER) RETURN STRARRAY;
+  FUNCTION index_status(idx INDEX_OBJ) RETURN VARCHAR2;
+  FUNCTION index_status(table_name VARCHAR2, column_name VARCHAR2) RETURN VARCHAR2;
+  FUNCTION status_spatial_indexes RETURN STRARRAY;
+  FUNCTION status_normal_indexes RETURN STRARRAY;
+  FUNCTION create_index(idx INDEX_OBJ, is_versioned BOOLEAN) RETURN VARCHAR2;
+  FUNCTION drop_index(idx INDEX_OBJ, is_versioned BOOLEAN) RETURN VARCHAR2;
+  FUNCTION create_spatial_indexes RETURN STRARRAY;
+  FUNCTION drop_spatial_indexes RETURN STRARRAY;
+  FUNCTION create_normal_indexes RETURN STRARRAY;
+  FUNCTION drop_normal_indexes RETURN STRARRAY;
   FUNCTION get_index(table_name VARCHAR2, column_name VARCHAR2) RETURN INDEX_OBJ;
 END citydb_idx;
 /
@@ -134,13 +134,11 @@ AS
   * index_status
   * 
   * @param idx index to retrieve status from
-  * @param schema_name target schema to retrieve status from
   * @return VARCHAR2 string representation of status, may include
   *                  'DROPPED', 'VALID', 'FAILED', 'INVALID'
   ******************************************************************/
   FUNCTION index_status(
-    idx INDEX_OBJ,
-    schema_name VARCHAR2 := USER
+    idx INDEX_OBJ
     ) RETURN VARCHAR2
   IS
     status VARCHAR2(20);
@@ -151,20 +149,18 @@ AS
       INTO
         status
       FROM
-        all_indexes
+        user_indexes
       WHERE
-        owner = upper(schema_name)
-        AND index_name = idx.index_name;
+        index_name = idx.index_name;
     ELSE
       SELECT
         upper(status)
       INTO
         status
       FROM
-        all_indexes
+        user_indexes
       WHERE
-        owner = upper(schema_name)
-        AND index_name = idx.index_name;
+        index_name = idx.index_name;
     END IF;
 
     RETURN status;
@@ -180,14 +176,12 @@ AS
   * 
   * @param table_name table_name of index to retrieve status from
   * @param column_name column_name of index to retrieve status from
-  * @param schema_name schema_name of index to retrieve status from
   * @return VARCHAR2 string representation of status, may include
   *                  'DROPPED', 'VALID', 'FAILED', 'INVALID'
   ******************************************************************/
   FUNCTION index_status(
     table_name VARCHAR2, 
-    column_name VARCHAR2,
-    schema_name VARCHAR2 := USER
+    column_name VARCHAR2
     ) RETURN VARCHAR2
   IS
     internal_table_name VARCHAR2(100);
@@ -197,7 +191,7 @@ AS
   BEGIN
     internal_table_name := table_name;
 
-    IF citydb_util.versioning_table(table_name, schema_name) = 'ON' THEN
+    IF citydb_util.versioning_table(table_name) = 'ON' THEN
       internal_table_name := table_name || '_LT';
     END IF;     
 
@@ -208,16 +202,15 @@ AS
       index_type,
       index_name
     FROM
-      all_indexes
+      user_indexes
     WHERE
-      owner = upper(schema_name)
-      AND index_name = (
+      index_name = (
         SELECT
           upper(index_name)
         FROM
-          all_ind_columns
-        WHERE index_owner = upper(schema_name)
-          AND table_name = upper(internal_table_name)
+          user_ind_columns
+        WHERE 
+          table_name = upper(internal_table_name)
           AND column_name = upper(column_name)
       );
 
@@ -227,20 +220,18 @@ AS
       INTO
         status
       FROM
-        all_indexes
+        user_indexes
       WHERE
-        owner = upper(schema_name)
-        AND index_name = index_name;
+        index_name = index_name;
     ELSE
       SELECT
         upper(status)
       INTO
         status
       FROM
-        all_indexes
+        user_indexes
       WHERE
-        owner = upper(schema_name)
-        AND index_name = index_name;
+        index_name = index_name;
     END IF;
 
     RETURN status;
@@ -316,20 +307,18 @@ AS
   * 
   * @param idx index to create
   * @param is_versioned TRUE if database table is version-enabled
-  * @param schema_name target schema where to create the index
   * @return VARCHAR2 sql error code, 0 for no errors
   ******************************************************************/
   FUNCTION create_index(
     idx INDEX_OBJ,
-    is_versioned BOOLEAN, 
-    schema_name VARCHAR2 := USER
+    is_versioned BOOLEAN
     ) RETURN VARCHAR2
   IS
     create_ddl VARCHAR2(1000);
     table_name VARCHAR2(100);
     sql_err_code VARCHAR2(20);
   BEGIN    
-    IF index_status(idx, schema_name) <> 'VALID' THEN
+    IF index_status(idx) <> 'VALID' THEN
       sql_err_code := drop_index(idx, is_versioned);
 
       BEGIN
@@ -342,15 +331,13 @@ AS
 
         create_ddl :=
           'CREATE INDEX '
-          || upper(schema_name) || '.' || idx.index_name
-          || ' ON ' || upper(schema_name) || '.' || table_name
+          || idx.index_name
+          || ' ON ' || table_name
           || ' (' || idx.attribute_name || ')';
 
         -- we cannot create spatial metadata for different users 
         IF idx.type = SPATIAL THEN
-          IF upper(schema_name) = USER THEN
-            create_spatial_metadata(idx, is_versioned);
-          END IF;
+          create_spatial_metadata(idx, is_versioned);
           create_ddl := create_ddl || ' INDEXTYPE is MDSYS.SPATIAL_INDEX';
         END IF;
 
@@ -384,18 +371,16 @@ AS
   * 
   * @param idx index to drop
   * @param is_versioned TRUE if database table is version-enabled
-  * @param schema_name target schema where to drop the index
   * @return VARCHAR2 sql error code, 0 for no errors
   ******************************************************************/
   FUNCTION drop_index(
     idx INDEX_OBJ, 
-    is_versioned BOOLEAN,
-    schema_name VARCHAR2 := USER
+    is_versioned BOOLEAN
     ) RETURN VARCHAR2
   IS
     index_name VARCHAR2(100);
   BEGIN
-    IF index_status(idx, schema_name) <> 'DROPPED' THEN
+    IF index_status(idx) <> 'DROPPED' THEN
       BEGIN
         index_name := idx.index_name;
 
@@ -404,7 +389,7 @@ AS
           index_name := index_name || '_LTS';
         END IF;
 
-        EXECUTE IMMEDIATE 'DROP INDEX ' || upper(schema_name) || '.' || index_name;
+        EXECUTE IMMEDIATE 'DROP INDEX ' || index_name;
 
         IF is_versioned THEN
           dbms_wm.COMMITDDL(idx.table_name);
@@ -430,12 +415,10 @@ AS
   * of same index type
   * 
   * @param type type of index, e.g. SPATIAL or NORMAL
-  * @param schema_name target schema for indexes to be created
   * @return STRARRAY array of log message strings
   ******************************************************************/
   FUNCTION create_indexes(
-    type SMALLINT, 
-    schema_name VARCHAR2 := USER
+    type SMALLINT
     ) RETURN STRARRAY
   IS
     log STRARRAY;
@@ -445,11 +428,10 @@ AS
 
     FOR rec IN (SELECT * FROM index_table) LOOP
       IF rec.obj.type = type THEN
-        sql_error_code := create_index(rec.obj, citydb_util.versioning_table(rec.obj.table_name, schema_name) = 'ON', schema_name);
+        sql_error_code := create_index(rec.obj, citydb_util.versioning_table(rec.obj.table_name) = 'ON');
         log.extend;
-        log(log.count) := index_status(rec.obj, schema_name)
+        log(log.count) := index_status(rec.obj)
           || ':' || rec.obj.index_name
-          || ':' || upper(schema_name)
           || ':' || rec.obj.table_name
           || ':' || rec.obj.attribute_name
           || ':' || sql_error_code;
@@ -465,10 +447,9 @@ AS
   * of same index type
   * 
   * @param type type of index, e.g. SPATIAL or NORMAL
-  * @param schema_name target schema for indexes to be dropped
   * @return STRARRAY array of log message strings
   ******************************************************************/
-  FUNCTION drop_indexes(type SMALLINT, schema_name VARCHAR2 := USER) RETURN STRARRAY
+  FUNCTION drop_indexes(type SMALLINT) RETURN STRARRAY
   IS
     log STRARRAY;
     sql_error_code VARCHAR2(20);
@@ -477,11 +458,10 @@ AS
     
     FOR rec IN (SELECT * FROM index_table) LOOP
       IF rec.obj.type = type THEN
-        sql_error_code := drop_index(rec.obj, citydb_util.versioning_table(rec.obj.table_name, schema_name) = 'ON', schema_name);
+        sql_error_code := drop_index(rec.obj, citydb_util.versioning_table(rec.obj.table_name) = 'ON');
         log.extend;
-        log(log.count) := index_status(rec.obj, schema_name)
+        log(log.count) := index_status(rec.obj)
           || ':' || rec.obj.index_name
-          || ':' || upper(schema_name)
           || ':' || rec.obj.table_name
           || ':' || rec.obj.attribute_name
           || ':' || sql_error_code;
@@ -493,11 +473,10 @@ AS
 
   /*****************************************************************
   * status_spatial_indexes
-  * 
-  * @param schema_name target schema of indexes to retrieve status from
+  *
   * @return STRARRAY array of log message strings
   ******************************************************************/
-  FUNCTION status_spatial_indexes(schema_name VARCHAR2 := USER) RETURN STRARRAY
+  FUNCTION status_spatial_indexes RETURN STRARRAY
   IS
     log STRARRAY;
     status VARCHAR2(20);
@@ -506,11 +485,10 @@ AS
 
     FOR rec IN (SELECT * FROM index_table) LOOP
       IF rec.obj.type = SPATIAL THEN
-        status := index_status(rec.obj, schema_name);
+        status := index_status(rec.obj);
         log.extend;
         log(log.count) := status
           || ':' || rec.obj.index_name
-          || ':' || upper(schema_name)
           || ':' || rec.obj.table_name
           || ':' || rec.obj.attribute_name;
       END IF;
@@ -521,11 +499,10 @@ AS
 
   /*****************************************************************
   * status_normal_indexes
-  * 
-  * @param schema_name target schema of indexes to retrieve status from
+  *
   * @return STRARRAY array of log message strings
   ******************************************************************/
-  FUNCTION status_normal_indexes(schema_name VARCHAR2 := USER) RETURN STRARRAY
+  FUNCTION status_normal_indexes RETURN STRARRAY
   IS
     log STRARRAY;
     status VARCHAR2(20);
@@ -534,11 +511,10 @@ AS
 
     FOR rec IN (SELECT * FROM index_table) LOOP
       IF rec.obj.type = NORMAL THEN
-        status := index_status(rec.obj, schema_name);
+        status := index_status(rec.obj);
         log.extend;
         log(log.count) := status
           || ':' || rec.obj.index_name
-          || ':' || upper(schema_name)
           || ':' || rec.obj.table_name
           || ':' || rec.obj.attribute_name;
       END IF;
@@ -550,63 +526,59 @@ AS
   /*****************************************************************
   * create_spatial_indexes
   * convenience method for invoking create_index on all spatial indexes 
-  * 
-  * @param schema_name target schema for indexes to be created
+  *
   * @return STRARRAY array of log message strings
   ******************************************************************/
-  FUNCTION create_spatial_indexes(schema_name VARCHAR2 := USER) RETURN STRARRAY
+  FUNCTION create_spatial_indexes RETURN STRARRAY
   IS
   BEGIN
     dbms_output.enable;
-    RETURN create_indexes(SPATIAL, schema_name);
+    RETURN create_indexes(SPATIAL);
   END;
 
   /*****************************************************************
   * drop_spatial_indexes
   * convenience method for invoking drop_index on all spatial indexes 
-  * 
-  * @param schema_name target schema for indexes to be dropped
+  *
   * @return STRARRAY array of log message strings
   ******************************************************************/
-  FUNCTION drop_spatial_indexes(schema_name VARCHAR2 := USER) RETURN STRARRAY
+  FUNCTION drop_spatial_indexes RETURN STRARRAY
   IS
   BEGIN
     dbms_output.enable;
-    RETURN drop_indexes(SPATIAL, schema_name);
+    RETURN drop_indexes(SPATIAL);
   END;
 
   /*****************************************************************
   * create_normal_indexes
   * convenience method for invoking create_index on all normal indexes 
-  * 
-  * @param schema_name target schema for indexes to be created
+  *
   * @return STRARRAY array of log message strings
   ******************************************************************/
-  FUNCTION create_normal_indexes(schema_name VARCHAR2 := USER) RETURN STRARRAY
+  FUNCTION create_normal_indexes RETURN STRARRAY
   IS
   BEGIN
     dbms_output.enable;
-    RETURN create_indexes(NORMAL, schema_name);
+    RETURN create_indexes(NORMAL);
   END;
 
   /*****************************************************************
   * drop_normal_indexes
   * convenience method for invoking drop_index on all normal indexes 
-  * 
-  * @param schema_name target schema for indexes to be dropped
+  *
   * @return STRARRAY array of log message strings
   ******************************************************************/
-  FUNCTION drop_normal_indexes(schema_name VARCHAR2 := USER) RETURN STRARRAY
+  FUNCTION drop_normal_indexes RETURN STRARRAY
   IS
   BEGIN
     dbms_output.enable;
-    RETURN drop_indexes(NORMAL, schema_name);
+    RETURN drop_indexes(NORMAL);
   END;
 
   /*****************************************************************
   * get_index
   * convenience method for getting an index object 
-  * given the schema.table and column it indexes
+  * given the table and column it indexes
   * 
   * @param table_name
   * @param column_name
