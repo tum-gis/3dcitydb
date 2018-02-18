@@ -162,7 +162,8 @@ BEGIN
     pg_attribute pga
     ON pga.attrelid=pgi.indexrelid
   WHERE
-    pgsui.indexrelname=($1).index_name;
+    pgsui.schemaname=current_schema()
+    AND pgsui.indexrelname=($1).index_name;
 
   IF is_valid is null THEN
     status := 'DROPPED';
@@ -211,7 +212,8 @@ BEGIN
     pg_attribute pga
     ON pga.attrelid=pgi.indexrelid
   WHERE
-    pgsui.relname = lower($1)
+    pgsui.schemaname = current_schema() 
+    AND pgsui.relname = lower($1)
     AND pga.attname = lower($2);
 
   IF is_valid is null THEN
@@ -261,8 +263,8 @@ BEGIN
         END IF;
       ELSE
         EXECUTE format(
-          'CREATE INDEX %I ON %I USING BTREE ('|| idx.attribute_name || ')',
-          idx.index_name, idx.table_name);
+          'CREATE INDEX %I ON %I USING BTREE ('|| ($1).attribute_name || ')',
+          ($1).index_name, ($1).table_name);
       END IF;
 
       EXCEPTION
@@ -289,7 +291,7 @@ CREATE OR REPLACE FUNCTION citydb_pkg.drop_index(
 DECLARE
   index_name TEXT;
 BEGIN
-  IF citydb_pkg.index_status($1, $2) <> 'DROPPED' THEN
+  IF citydb_pkg.index_status($1) <> 'DROPPED' THEN
     BEGIN
       EXECUTE format('DROP INDEX IF EXISTS %I',($1).index_name);
 
