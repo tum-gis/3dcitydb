@@ -79,7 +79,8 @@ FROM (
   FROM
     information_schema.tables
   WHERE 
-    table_name != 'database_srs' 
+    table_schema = current_schema()
+    AND table_name != 'database_srs' 
     AND table_name != 'objectclass'
     AND table_name != 'ade'
     AND table_name != 'schema'
