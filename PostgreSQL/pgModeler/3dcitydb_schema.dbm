@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.1-alpha1" last-position="0,0" last-zoom="0.2"
+<dbmodel pgmodeler-ver="0.9.1-alpha1" last-position="128,204" last-zoom="0.3"
 	 default-schema="public" default-owner="postgres">
 <database name="citydb_4" encoding="UTF8" lc-collate="en_US.UTF-8" lc-ctype="en_US.UTF-8">
 	<tablespace name="pg_default"/>
@@ -216,7 +216,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="group_to_cityobject">
 	<schema name="citydb"/>
 	<tag name="city_object_group_module"/>
-	<position x="2900" y="120"/>
+	<position x="3000" y="160"/>
 	<column name="cityobject_id" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
@@ -5695,7 +5695,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 </constraint>
 
 <constraint name="cityobject_member_fk1" type="fk-constr" comparison-type="MATCH SIMPLE"
-	 upd-action="CASCADE" del-action="NO ACTION" ref-table="citydb.citymodel" table="citydb.cityobject_member">
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="citydb.citymodel" table="citydb.cityobject_member">
 	<columns names="citymodel_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
@@ -5743,7 +5743,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 </constraint>
 
 <constraint name="group_to_cityobject_fk1" type="fk-constr" comparison-type="MATCH SIMPLE"
-	 upd-action="CASCADE" del-action="NO ACTION" ref-table="citydb.cityobjectgroup" table="citydb.group_to_cityobject">
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="citydb.cityobjectgroup" table="citydb.group_to_cityobject">
 	<columns names="cityobjectgroup_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>

@@ -4867,7 +4867,7 @@ ON DELETE CASCADE ON UPDATE CASCADE;
 -- ALTER TABLE citydb.cityobject_member DROP CONSTRAINT IF EXISTS cityobject_member_fk1 CASCADE;
 ALTER TABLE citydb.cityobject_member ADD CONSTRAINT cityobject_member_fk1 FOREIGN KEY (citymodel_id)
 REFERENCES citydb.citymodel (id) MATCH SIMPLE
-ON DELETE NO ACTION ON UPDATE CASCADE;
+ON DELETE CASCADE ON UPDATE CASCADE;
 -- ddl-end --
 
 -- object: general_generalizes_to_fk | type: CONSTRAINT --
@@ -4923,7 +4923,7 @@ ON DELETE CASCADE ON UPDATE CASCADE;
 -- ALTER TABLE citydb.group_to_cityobject DROP CONSTRAINT IF EXISTS group_to_cityobject_fk1 CASCADE;
 ALTER TABLE citydb.group_to_cityobject ADD CONSTRAINT group_to_cityobject_fk1 FOREIGN KEY (cityobjectgroup_id)
 REFERENCES citydb.cityobjectgroup (id) MATCH SIMPLE
-ON DELETE NO ACTION ON UPDATE CASCADE;
+ON DELETE CASCADE ON UPDATE CASCADE;
 -- ddl-end --
 
 -- object: objectclass_baseclass_fk | type: CONSTRAINT --
