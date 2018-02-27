@@ -27,24 +27,32 @@
 
 -- Database creation must be done outside an multicommand file.
 -- These commands were put in this file only for convenience.
--- -- object: citydb_4 | type: DATABASE --
--- -- DROP DATABASE IF EXISTS citydb_4;
--- CREATE DATABASE citydb_4
+-- -- object: "3DCityDB_v4" | type: DATABASE --
+-- -- DROP DATABASE IF EXISTS "3DCityDB_v4";
+-- CREATE DATABASE "3DCityDB_v4"
 -- 	ENCODING = 'UTF8'
--- 	LC_COLLATE = 'en_US.UTF-8'
--- 	LC_CTYPE = 'en_US.UTF-8'
 -- 	TABLESPACE = pg_default
+-- 	OWNER = postgres
 -- ;
 -- -- ddl-end --
 -- 
 
 -- object: citydb | type: SCHEMA --
 -- DROP SCHEMA IF EXISTS citydb CASCADE;
---CREATE SCHEMA citydb;
+-- CREATE SCHEMA citydb;
 -- ddl-end --
 
 --SET search_path TO pg_catalog,public,citydb;
 -- ddl-end --
+
+-- object: postgis | type: EXTENSION --
+-- DROP EXTENSION IF EXISTS postgis CASCADE;
+--CREATE EXTENSION postgis
+--      WITH SCHEMA public;
+-- ddl-end --
+--COMMENT ON EXTENSION postgis IS 'PostGIS geometry, geography, and raster spatial types and functions';
+-- ddl-end --
+
 
 -- object: citydb.citymodel_seq | type: SEQUENCE --
 -- DROP SEQUENCE IF EXISTS citydb.citymodel_seq CASCADE;
@@ -4909,7 +4917,7 @@ ON DELETE CASCADE ON UPDATE CASCADE;
 -- ALTER TABLE citydb.cityobjectgroup DROP CONSTRAINT IF EXISTS group_parent_cityobj_fk CASCADE;
 ALTER TABLE citydb.cityobjectgroup ADD CONSTRAINT group_parent_cityobj_fk FOREIGN KEY (parent_cityobject_id)
 REFERENCES citydb.cityobject (id) MATCH SIMPLE
-ON DELETE CASCADE ON UPDATE CASCADE;
+ON DELETE NO ACTION ON UPDATE CASCADE;
 -- ddl-end --
 
 -- object: group_to_cityobject_fk | type: CONSTRAINT --
