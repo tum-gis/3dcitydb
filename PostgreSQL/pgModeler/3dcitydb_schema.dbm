@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.1-alpha1" last-position="0,77" last-zoom="0.3"
+<dbmodel pgmodeler-ver="0.9.1-alpha1" last-position="0,0" last-zoom="0.3"
 	 default-schema="public" default-owner="postgres">
 <database name="citydb_4" encoding="UTF8" lc-collate="en_US.UTF-8" lc-ctype="en_US.UTF-8">
 	<tablespace name="pg_default"/>
@@ -5731,7 +5731,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 </constraint>
 
 <constraint name="group_parent_cityobj_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
-	 upd-action="CASCADE" del-action="NO ACTION" ref-table="citydb.cityobject" table="citydb.cityobjectgroup">
+	 upd-action="CASCADE" del-action="SET NULL" ref-table="citydb.cityobject" table="citydb.cityobjectgroup">
 	<columns names="parent_cityobject_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>

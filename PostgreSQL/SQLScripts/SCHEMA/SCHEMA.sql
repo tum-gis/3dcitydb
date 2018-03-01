@@ -53,7 +53,6 @@
 --COMMENT ON EXTENSION postgis IS 'PostGIS geometry, geography, and raster spatial types and functions';
 -- ddl-end --
 
-
 -- object: citydb.citymodel_seq | type: SEQUENCE --
 -- DROP SEQUENCE IF EXISTS citydb.citymodel_seq CASCADE;
 CREATE SEQUENCE citydb.citymodel_seq
@@ -4917,7 +4916,7 @@ ON DELETE CASCADE ON UPDATE CASCADE;
 -- ALTER TABLE citydb.cityobjectgroup DROP CONSTRAINT IF EXISTS group_parent_cityobj_fk CASCADE;
 ALTER TABLE citydb.cityobjectgroup ADD CONSTRAINT group_parent_cityobj_fk FOREIGN KEY (parent_cityobject_id)
 REFERENCES citydb.cityobject (id) MATCH SIMPLE
-ON DELETE NO ACTION ON UPDATE CASCADE;
+ON DELETE SET NULL ON UPDATE CASCADE;
 -- ddl-end --
 
 -- object: group_to_cityobject_fk | type: CONSTRAINT --
