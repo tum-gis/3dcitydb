@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.1-alpha1" last-position="0,0" last-zoom="0.3"
+<dbmodel pgmodeler-ver="0.9.1-alpha1" last-position="567,128" last-zoom="0.3"
 	 default-schema="public" default-owner="postgres">
 <database name="citydb_4" encoding="UTF8" lc-collate="en_US.UTF-8" lc-ctype="en_US.UTF-8">
 	<tablespace name="pg_default"/>
@@ -6253,7 +6253,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 </constraint>
 
 <constraint name="breakline_relief_comp_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
-	 upd-action="CASCADE" del-action="CASCADE" ref-table="citydb.relief_component" table="citydb.breakline_relief">
+	 upd-action="CASCADE" del-action="NO ACTION" ref-table="citydb.relief_component" table="citydb.breakline_relief">
 	<columns names="id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
@@ -6265,7 +6265,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 </constraint>
 
 <constraint name="masspoint_relief_comp_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
-	 upd-action="CASCADE" del-action="CASCADE" ref-table="citydb.relief_component" table="citydb.masspoint_relief">
+	 upd-action="CASCADE" del-action="NO ACTION" ref-table="citydb.relief_component" table="citydb.masspoint_relief">
 	<columns names="id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
@@ -6319,7 +6319,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 </constraint>
 
 <constraint name="tin_relief_comp_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
-	 upd-action="CASCADE" del-action="CASCADE" ref-table="citydb.relief_component" table="citydb.tin_relief">
+	 upd-action="CASCADE" del-action="NO ACTION" ref-table="citydb.relief_component" table="citydb.tin_relief">
 	<columns names="id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
@@ -6655,13 +6655,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 </constraint>
 
 <constraint name="raster_relief_coverage_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
-	 upd-action="CASCADE" del-action="NO ACTION" ref-table="citydb.grid_coverage" table="citydb.raster_relief">
+	 upd-action="CASCADE" del-action="SET NULL" ref-table="citydb.grid_coverage" table="citydb.raster_relief">
 	<columns names="coverage_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="raster_relief_comp_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
-	 upd-action="CASCADE" del-action="CASCADE" ref-table="citydb.relief_component" table="citydb.raster_relief">
+	 upd-action="CASCADE" del-action="NO ACTION" ref-table="citydb.relief_component" table="citydb.raster_relief">
 	<columns names="id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
@@ -7399,7 +7399,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 </constraint>
 
 <constraint name="genericattrib_cityobj_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
-	 upd-action="CASCADE" del-action="CASCADE" ref-table="citydb.cityobject" table="citydb.cityobject_genericattrib">
+	 upd-action="CASCADE" del-action="NO ACTION" ref-table="citydb.cityobject" table="citydb.cityobject_genericattrib">
 	<columns names="cityobject_id" ref-type="src-columns"/>
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
