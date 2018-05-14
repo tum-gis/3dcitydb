@@ -25,16 +25,13 @@
 -- limitations under the License.
 --
 
--- This script is called from CREATE_DB.bat
+-- This script is called from CREATE_DB.bat/CREATE_DB.sh
 \pset footer off
 SET client_min_messages TO WARNING;
 \set ON_ERROR_STOP ON
 
-\echo
-\prompt 'Please enter a valid SRID (e.g., 3068 for DHDN/Soldner Berlin): ' SRS_NO
-\prompt 'Please enter the corresponding SRSName to be used in GML exports (e.g., urn:ogc:def:crs,crs:EPSG::3068,crs:EPSG::5783): ' GMLSRSNAME
-
-\set SRSNO :SRS_NO
+\set SRSNO :srsno
+\set GMLSRSNAME :gmlsrsname
 
 --// check if the PostGIS extension is available
 SELECT postgis_version();
@@ -69,9 +66,9 @@ ALTER DATABASE :"DBNAME" SET search_path TO citydb, citydb_pkg, :current_path;
 --// checks if the chosen SRID is provided by the spatial_ref_sys table
 \echo
 \echo 'Checking spatial reference system ...'
-SELECT citydb_pkg.check_srid(:SRS_NO);
+SELECT citydb_pkg.check_srid(:SRSNO);
 
 \echo 'Setting spatial reference system of 3DCityDB instance ...'
-INSERT INTO citydb.DATABASE_SRS(SRID,GML_SRS_NAME) VALUES (:SRS_NO,:'GMLSRSNAME');
-SELECT citydb_pkg.change_schema_srid(:SRS_NO,:'GMLSRSNAME');
+INSERT INTO citydb.DATABASE_SRS(SRID,GML_SRS_NAME) VALUES (:SRSNO,:'GMLSRSNAME');
+SELECT citydb_pkg.change_schema_srid(:SRSNO,:'GMLSRSNAME');
 \echo 'Done'

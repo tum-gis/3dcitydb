@@ -29,33 +29,26 @@ SET SERVEROUTPUT ON
 SET FEEDBACK ON
 SET VER OFF
 
-prompt
-prompt
-accept SRSNO NUMBER DEFAULT 81989002 PROMPT 'Please enter a valid SRID (Berlin: 81989002): '
-prompt Please enter the corresponding SRSName to be used in GML exports
-accept GMLSRSNAME CHAR DEFAULT 'urn:ogc:def:crs,crs:EPSG:6.12:3068,crs:EPSG:6.12:5783' prompt '  (Berlin: urn:ogc:def:crs,crs:EPSG:6.12:3068,crs:EPSG:6.12:5783): '
-accept VERSIONING CHAR DEFAULT 'no' PROMPT 'Shall versioning be enabled (yes/no, default is no): '
-accept DBVERSION CHAR DEFAULT 'S' PROMPT 'Which database license are you using? (Oracle Spatial(S)/Oracle Locator(L), default is S): '
-prompt
-prompt
+-- parse arguments
+DEFINE SRSNO=&1;
+DEFINE GMLSRSNAME=&2;
+DEFINE VERSIONING=&3;
+DEFINE DBVERSION=&4;
 
 VARIABLE SRID NUMBER;
-VARIABLE CS_NAME VARCHAR2(256);
 VARIABLE BATCHFILE VARCHAR2(50);
-VARIABLE GEORASTER_SUPPORT NUMBER;
 
 WHENEVER SQLERROR CONTINUE;
 
 BEGIN
-  SELECT SRID,CS_NAME INTO :SRID,:CS_NAME FROM MDSYS.CS_SRS
-  WHERE SRID=&SRSNO;
+  SELECT SRID INTO :SRID FROM MDSYS.CS_SRS WHERE SRID=&SRSNO;
 
   IF (:SRID = &SRSNO) THEN
-	  IF NOT (upper('&DBVERSION')='L' or upper('&DBVERSION')='S') THEN
-        :BATCHFILE := 'UTIL/CREATE_DB/HINT_ON_MISTYPED_DBVERSION';
-	  ELSE
-	  	:BATCHFILE := 'CREATE_DB2';
-	  END IF;
+	IF NOT (upper('&DBVERSION')='L' or upper('&DBVERSION')='S') THEN
+      :BATCHFILE := 'UTIL/CREATE_DB/HINT_ON_MISTYPED_DBVERSION';
+	ELSE
+	  :BATCHFILE := 'CREATE_DB2';
+	END IF;
   ELSE 
   	:BATCHFILE := 'UTIL/CREATE_DB/HINT_ON_MISSING_SRS';
   END IF;
@@ -66,22 +59,11 @@ EXCEPTION
 END;
 /
 
--- Check for SDO_GEORASTER support
-BEGIN
-  :GEORASTER_SUPPORT := 0;
-  IF (upper('&DBVERSION')='S') THEN
-    SELECT COUNT(*) INTO :GEORASTER_SUPPORT FROM ALL_SYNONYMS
-	WHERE SYNONYM_NAME='SDO_GEORASTER';
-  END IF;
-
-  IF :GEORASTER_SUPPORT = 0 THEN 
-	dbms_output.put_line('NOTE: The data type SDO_GEORASTER is not available for this database. Raster relief tables will not be created.');
-  END IF;
-END;
-/
-
 -- Transfer the value from the bind variable to the substitution variable
-column mc new_value BATCHFILE2 print
-select :BATCHFILE mc from dual;
+column script new_value BATCHFILE2 print
+select :BATCHFILE script from dual;
 
-START &BATCHFILE2
+START &BATCHFILE2 &SRSNO &GMLSRSNAME &VERSIONING &DBVERSION
+
+QUIT;
+/

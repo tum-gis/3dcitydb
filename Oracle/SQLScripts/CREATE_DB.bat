@@ -1,18 +1,17 @@
 @echo off
 :: Shell script to create an instance of the 3D City Database
-:: on PostgreSQL/PostGIS
+:: on Oracle Spatial/Locator
 
 :: Provide your database details here -----------------------------------------
-set PGBIN=path_to_psql
-set PGHOST=your_host_address
-set PGPORT=5432
-set CITYDB=your_database
-set PGUSER=your_username
+set SQLPLUSBIN=path_to_sqlplus
+set HOST=your_host_address
+set PORT=1521
+set SID=your_SID_or_database_name
+set USERNAME=your_username
 ::-----------------------------------------------------------------------------
 
-:: add PGBIN to PATH
-set PATH=%PGBIN%;%PATH%
-
+:: add sqlplus to PATH
+set PATH=%SQLPLUSBIN%;%PATH%
 :: cd to path of the shell script
 cd /d %~dp0
 
@@ -101,9 +100,53 @@ set /p var="(default GMLSRSNAME=%GMLSRSNAME%): "
 
 if /i not "%var%"=="" set GMLSRSNAME=%var%
 
+:: Prompt for VERSIONING ------------------------------------------------------
+:versioning
+set var=
+echo.
+echo Shall versioning be enabled (yes/no)?
+set /p var="(default VERSIONING=no): "
+
+if /i not "%var%"=="" (
+  set VERSIONING=%var%
+) else (
+  set VERSIONING=no
+)
+
+set res=f
+if /i "%VERSIONING%"=="no" (set res=t)
+if /i "%VERSIONING%"=="yes" (set res=t)
+if "%res%"=="f" (
+  echo.
+  echo Illegal input! Enter yes or no.
+  goto versioning
+)
+
+:: Prompt for DBVERSION -------------------------------------------------------
+:dbversion
+set var=
+echo.
+echo Which database license are you using (Spatial=S/Locator=L)?
+set /p var="(default DBVERSION=S): "
+
+if /i not "%var%"=="" (
+  set DBVERSION=%var%
+) else (
+  set DBVERSION=S
+)
+
+set res=f
+if /i "%DBVERSION%"=="s" (set res=t)
+if /i "%DBVERSION%"=="l" (set res=t)
+if "%res%"=="f" (
+  echo.
+  echo Illegal input! Enter S or L.
+  goto dbversion
+)
+
 :: Run CREATE_DB.sql to create the 3D City Database instance ------------------
 echo.
-echo Connecting to the database "%PGUSER%@%PGHOST%:%PGPORT%/%CITYDB%" ...
-psql -d "%CITYDB%" -f "CREATE_DB.sql" -v srsno="%SRSNO%" -v gmlsrsname="%GMLSRSNAME%"
+echo Connecting to the database "%USERNAME%@%HOST%:%PORT%/%SID%" ...
+sqlplus "%USERNAME%@\"%HOST%:%PORT%/%SID%\"" @CREATE_DB.sql "%SRSNO%" "%GMLSRSNAME%" "%VERSIONING%" "%DBVERSION%"
 
 pause
