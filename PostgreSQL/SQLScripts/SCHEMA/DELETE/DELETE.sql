@@ -130,12 +130,12 @@
 /*
 ADDRESS
 */
-CREATE OR REPLACE FUNCTION delete_address(pids integer[])
+CREATE OR REPLACE FUNCTION citydb.delete_address(pids integer[])
   RETURNS SETOF integer AS
 $BODY$
   -- delete addresses
   DELETE FROM
-      address t
+      citydb.address t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -145,12 +145,12 @@ $BODY$
 $BODY$
 LANGUAGE sql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_address(pid integer)
+CREATE OR REPLACE FUNCTION citydb.delete_address(pid integer)
   RETURNS integer AS
 $BODY$
   -- delete address
   DELETE FROM
-    address
+    citydb.address
   WHERE
     id = $1
   RETURNING
@@ -162,12 +162,12 @@ LANGUAGE sql STRICT;
 /*
 EXTERNAL REFERENCE
 */
-CREATE OR REPLACE FUNCTION delete_external_reference(pids integer[])
+CREATE OR REPLACE FUNCTION citydb.delete_external_reference(pids integer[])
   RETURNS SETOF integer AS
 $BODY$
   -- delete external_references
   DELETE FROM
-      external_reference t
+      citydb.external_reference t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -177,12 +177,12 @@ $BODY$
 $BODY$
 LANGUAGE sql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_external_reference(pid integer)
+CREATE OR REPLACE FUNCTION citydb.delete_external_reference(pid integer)
   RETURNS integer AS
 $BODY$
   -- delete external_reference
   DELETE FROM
-    external_reference
+    citydb.external_reference
   WHERE
     id = $1
   RETURNING
@@ -194,7 +194,7 @@ LANGUAGE sql STRICT;
 /*
 GENERIC ATTRIBUTES
 */
-CREATE OR REPLACE FUNCTION delete_genericattrib(pids integer[])
+CREATE OR REPLACE FUNCTION citydb.delete_genericattrib(pids integer[])
   RETURNS SETOF integer AS
 $BODY$
 DECLARE
@@ -204,7 +204,7 @@ BEGIN
   -- delete cityobject_genericattribs
   WITH delete_objects AS (
     DELETE FROM
-      cityobject_genericattrib t
+      citydb.cityobject_genericattrib t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -225,11 +225,11 @@ BEGIN
   -- delete surface_geometry not being referenced any more
   IF -1 = ALL(surface_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_surface_geometry(array_agg(a.a_id))
+      citydb.delete_surface_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(surface_geometry_ids) AS a_id) a
     LEFT JOIN
-      cityobject_genericattrib n1
+      citydb.cityobject_genericattrib n1
       ON n1.surface_geometry_id = a.a_id
     WHERE
       n1.surface_geometry_id IS NULL;
@@ -241,7 +241,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_genericattrib(pid integer)
+CREATE OR REPLACE FUNCTION citydb.delete_genericattrib(pid integer)
   RETURNS integer AS
 $BODY$
 DECLARE
@@ -250,7 +250,7 @@ DECLARE
 BEGIN
   -- delete cityobject_genericattrib
   DELETE FROM
-    cityobject_genericattrib
+    citydb.cityobject_genericattrib
   WHERE
     id = $1
   RETURNING
@@ -263,11 +263,11 @@ BEGIN
   -- delete surface_geometry not being referenced any more
   IF surface_geometry_ref_id IS NOT NULL THEN
     PERFORM
-      delete_surface_geometry(a.a_id)
+      citydb.delete_surface_geometry(a.a_id)
     FROM
       (VALUES (surface_geometry_ref_id)) a(a_id)
     LEFT JOIN
-      cityobject_genericattrib n1
+      citydb.cityobject_genericattrib n1
       ON n1.surface_geometry_id = a.a_id
     WHERE
       n1.surface_geometry_id IS NULL;
@@ -285,12 +285,12 @@ LANGUAGE plpgsql STRICT;
 /*
 TEX IMAGES
 */
-CREATE OR REPLACE FUNCTION delete_tex_image(pids integer[])
+CREATE OR REPLACE FUNCTION citydb.delete_tex_image(pids integer[])
   RETURNS SETOF integer AS
 $BODY$
   -- delete tex_images
   DELETE FROM
-      tex_image t
+      citydb.tex_image t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -300,12 +300,12 @@ $BODY$
 $BODY$
 LANGUAGE sql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_tex_image(pid integer)
+CREATE OR REPLACE FUNCTION citydb.delete_tex_image(pid integer)
   RETURNS integer AS
 $BODY$
   -- delete tex_image
   DELETE FROM
-    tex_image
+    citydb.tex_image
   WHERE
     id = $1
   RETURNING
@@ -317,7 +317,7 @@ LANGUAGE sql STRICT;
 /*
 SURFACE DATA
 */
-CREATE OR REPLACE FUNCTION delete_surface_data(
+CREATE OR REPLACE FUNCTION citydb.delete_surface_data(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -334,7 +334,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      surface_data t,
+      citydb.surface_data t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -355,7 +355,7 @@ BEGIN
   -- delete surface_data
   WITH delete_objects AS (
     DELETE FROM
-      surface_data t
+      citydb.surface_data t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -377,11 +377,11 @@ BEGIN
   -- delete tex_image(s) not being referenced any more
   IF -1 = ALL(tex_image_ids) IS NOT NULL THEN
     DELETE FROM
-      tex_image m
+      citydb.tex_image m
     USING
       (SELECT DISTINCT unnest(tex_image_ids) AS a_id) a
     LEFT JOIN
-      surface_data n1
+      citydb.surface_data n1
       ON n1.tex_image_id = a.a_id
     WHERE
       m.id = a.a_id
@@ -394,7 +394,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_surface_data(
+CREATE OR REPLACE FUNCTION citydb.delete_surface_data(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -411,7 +411,7 @@ BEGIN
     INTO
       class_id
     FROM
-      surface_data
+      citydb.surface_data
     WHERE
       id = $1;
   ELSE
@@ -425,7 +425,7 @@ BEGIN
 
   -- delete surface_data
   DELETE FROM
-    surface_data
+    citydb.surface_data
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -439,11 +439,11 @@ BEGIN
   -- delete tex_image not being referenced any more
   IF tex_image_ref_id IS NOT NULL THEN
     DELETE FROM
-      tex_image m
+      citydb.tex_image m
     USING
       (VALUES (tex_image_ref_id)) a(a_id)
     LEFT JOIN
-      surface_data n1
+      citydb.surface_data n1
       ON n1.tex_image_id = a.a_id
     WHERE
       m.id = a.a_id
@@ -459,7 +459,7 @@ LANGUAGE plpgsql STRICT;
 /*
 APPEARANCE
 */
-CREATE OR REPLACE FUNCTION delete_appearance(pids integer[])
+CREATE OR REPLACE FUNCTION citydb.delete_appearance(pids integer[])
   RETURNS SETOF integer AS
 $BODY$
 DECLARE
@@ -469,7 +469,7 @@ BEGIN
   -- delete references to surface_data
   WITH delete_surface_data_refs AS (
     DELETE FROM
-      appear_to_surface_data t
+      citydb.appear_to_surface_data t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -487,14 +487,14 @@ BEGIN
   -- delete surface_data not being referenced any more
   IF -1 = ALL(surface_data_ids) IS NOT NULL THEN
     PERFORM
-      delete_surface_data(array_agg(a.a_id))
+      citydb.delete_surface_data(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(surface_data_ids) AS a_id) a
     LEFT JOIN
-      appear_to_surface_data n1
+      citydb.appear_to_surface_data n1
       ON n1.surface_data_id = a.a_id
     LEFT JOIN
-      textureparam n2
+      citydb.textureparam n2
       ON n2.surface_data_id = a.a_id
     WHERE
       n1.surface_data_id IS NULL
@@ -504,7 +504,7 @@ BEGIN
   -- delete appearances
   RETURN QUERY
     DELETE FROM
-      appearance t
+      citydb.appearance t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -515,7 +515,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_appearance(pid integer)
+CREATE OR REPLACE FUNCTION citydb.delete_appearance(pid integer)
   RETURNS integer AS
 $BODY$
 DECLARE
@@ -525,7 +525,7 @@ BEGIN
   -- delete references to surface_data
   WITH delete_surface_data_refs AS (
     DELETE FROM
-      appear_to_surface_data
+      citydb.appear_to_surface_data
     WHERE
       appearance_id = $1
     RETURNING
@@ -541,14 +541,14 @@ BEGIN
   -- delete surface_data not being referenced any more
   IF -1 = ALL(surface_data_ids) IS NOT NULL THEN
     PERFORM
-      delete_surface_data(array_agg(a.a_id))
+      citydb.delete_surface_data(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(surface_data_ids) AS a_id) a
     LEFT JOIN
-      appear_to_surface_data n1
+      citydb.appear_to_surface_data n1
       ON n1.surface_data_id = a.a_id
     LEFT JOIN
-      textureparam n2
+      citydb.textureparam n2
       ON n2.surface_data_id = a.a_id
     WHERE
       n1.surface_data_id IS NULL
@@ -557,7 +557,7 @@ BEGIN
 
   -- delete appearance
   DELETE FROM
-    appearance
+    citydb.appearance
   WHERE
     id = $1
   RETURNING
@@ -570,7 +570,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION cleanup_appearances(
+CREATE OR REPLACE FUNCTION citydb.cleanup_appearances(
   only_global int DEFAULT 1
   ) RETURNS SETOF int AS
 $$
@@ -584,11 +584,11 @@ BEGIN
   -- surface data which does not have a valid texture parameterization
   -- any more.
   PERFORM
-    delete_surface_data(array_agg(s.id))
+    citydb.delete_surface_data(array_agg(s.id))
   FROM
-    surface_data s 
+    citydb.surface_data s 
   LEFT OUTER JOIN
-    textureparam t
+    citydb.textureparam t
     ON s.id = t.surface_data_id 
   WHERE
     t.surface_data_id IS NULL;
@@ -599,16 +599,16 @@ BEGIN
       SELECT
         a.id
       FROM
-        appearance a 
+        citydb.appearance a 
       LEFT OUTER JOIN
-        appear_to_surface_data asd
+        citydb.appear_to_surface_data asd
         ON a.id=asd.appearance_id 
       WHERE
         a.cityobject_id IS NULL
         AND asd.appearance_id IS NULL
     LOOP
       DELETE FROM
-        appearance
+        citydb.appearance
       WHERE
         id = app_id
       RETURNING
@@ -623,15 +623,15 @@ BEGIN
       SELECT
         a.id
       FROM
-        appearance a 
+        citydb.appearance a 
       LEFT OUTER JOIN
-        appear_to_surface_data asd
+        citydb.appear_to_surface_data asd
         ON a.id=asd.appearance_id 
       WHERE
         asd.appearance_id IS NULL
     LOOP
       DELETE FROM
-        appearance
+        citydb.appearance
       WHERE
         id = app_id
       RETURNING
@@ -655,12 +655,12 @@ LANGUAGE plpgsql STRICT;
 /*
 SURFACE GEOMETRY
 */
-CREATE OR REPLACE FUNCTION delete_surface_geometry(pids integer[])
+CREATE OR REPLACE FUNCTION citydb.delete_surface_geometry(pids integer[])
   RETURNS SETOF integer AS
 $BODY$
   -- delete surface_geometry
   DELETE FROM
-      surface_geometry t
+      citydb.surface_geometry t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -670,12 +670,12 @@ $BODY$
 $BODY$
 LANGUAGE sql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_surface_geometry(pid integer)
+CREATE OR REPLACE FUNCTION citydb.delete_surface_geometry(pid integer)
   RETURNS integer AS
 $BODY$
   -- delete surface_geometry
   DELETE FROM
-    surface_geometry
+    citydb.surface_geometry
   WHERE
     id = $1
   RETURNING
@@ -687,7 +687,7 @@ LANGUAGE sql STRICT;
 /*
 IMPLICIT GEOMETRY
 */
-CREATE OR REPLACE FUNCTION delete_implicit_geometry(pids integer[])
+CREATE OR REPLACE FUNCTION citydb.delete_implicit_geometry(pids integer[])
   RETURNS SETOF integer AS
 $BODY$
 DECLARE
@@ -697,7 +697,7 @@ BEGIN
   -- delete implicit_geometry
   WITH delete_objects AS (
     DELETE FROM
-      implicit_geometry t
+      citydb.implicit_geometry t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -718,11 +718,11 @@ BEGIN
   -- delete surface_geometry not being referenced any more
   IF -1 = ALL(surface_geometry_ids) IS NOT NULL THEN
     DELETE FROM
-      surface_geometry m
+      citydb.surface_geometry m
     USING
       (SELECT DISTINCT unnest(surface_geometry_ids) AS a_id) a
     LEFT JOIN
-      implicit_geometry n1
+      citydb.implicit_geometry n1
       ON n1.relative_brep_id = a.a_id
     WHERE
       m.id = a.a_id
@@ -735,7 +735,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_implicit_geometry(pid integer)
+CREATE OR REPLACE FUNCTION citydb.delete_implicit_geometry(pid integer)
   RETURNS integer AS
 $BODY$
 DECLARE
@@ -744,7 +744,7 @@ DECLARE
 BEGIN
   -- delete implicit_geometry
   DELETE FROM
-    implicit_geometry
+    citydb.implicit_geometry
   WHERE
     id = $1
   RETURNING
@@ -757,11 +757,11 @@ BEGIN
   -- delete surface_geometry not being referenced any more
   IF surface_geometry_ref_id IS NOT NULL THEN
     DELETE FROM
-      surface_geometry m
+      citydb.surface_geometry m
     USING
       (VALUES (surface_geometry_ref_id)) a(a_id)
     LEFT JOIN
-      implicit_geometry n1
+      citydb.implicit_geometry n1
       ON n1.relative_brep_id = a.a_id
     WHERE
       m.id = a.a_id
@@ -777,12 +777,12 @@ LANGUAGE plpgsql STRICT;
 /*
 GRID COVERAGE
 */
-CREATE OR REPLACE FUNCTION delete_grid_coverage(pids integer[])
+CREATE OR REPLACE FUNCTION citydb.delete_grid_coverage(pids integer[])
   RETURNS SETOF integer AS
 $BODY$
   -- delete grid_coverages
   DELETE FROM
-      grid_coverage t
+      citydb.grid_coverage t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -792,12 +792,12 @@ $BODY$
 $BODY$
 LANGUAGE sql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_grid_coverage(pid integer)
+CREATE OR REPLACE FUNCTION citydb.delete_grid_coverage(pid integer)
   RETURNS integer AS
 $BODY$
   -- delete grid_coverage
   DELETE FROM
-    grid_coverage
+    citydb.grid_coverage
   WHERE
     id = $1
   RETURNING
@@ -809,7 +809,7 @@ LANGUAGE sql STRICT;
 /***********************
 * CITYOBJECT INTERNALS
 ***********************/
-CREATE OR REPLACE FUNCTION delete_cityobject_post(
+CREATE OR REPLACE FUNCTION citydb.delete_cityobject_post(
     pids integer[],
     objclass_ids integer[])
   RETURNS SETOF integer AS
@@ -822,18 +822,18 @@ BEGIN
 
   -- delete appearances
   PERFORM
-    delete_appearance(array_agg(t.id))
+    citydb.delete_appearance(array_agg(t.id))
   FROM
-    appearance t,
+    citydb.appearance t,
     unnest($1) a(a_id)
   WHERE
     t.cityobject_id = a.a_id;
 
   -- delete cityobject_genericattribs
   PERFORM
-    delete_genericattrib(array_agg(t.id))
+    citydb.delete_genericattrib(array_agg(t.id))
   FROM
-    cityobject_genericattrib t,
+    citydb.cityobject_genericattrib t,
     unnest($1) a(a_id)
   WHERE
     t.cityobject_id = a.a_id;
@@ -841,7 +841,7 @@ BEGIN
   -- delete cityobjects
   RETURN QUERY
     DELETE FROM
-      cityobject t
+      citydb.cityobject t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -853,7 +853,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_cityobject_post(
+CREATE OR REPLACE FUNCTION citydb.delete_cityobject_post(
     pid integer,
     objclass_id integer)
   RETURNS integer AS
@@ -866,23 +866,23 @@ BEGIN
 
   -- delete appearances
   PERFORM
-    delete_appearance(array_agg(id))
+    citydb.delete_appearance(array_agg(id))
   FROM
-    appearance
+    citydb.appearance
   WHERE
     cityobject_id = $1;
 
   -- delete cityobject_genericattribs
   PERFORM
-    delete_genericattrib(array_agg(id))
+    citydb.delete_genericattrib(array_agg(id))
   FROM
-    cityobject_genericattrib
+    citydb.cityobject_genericattrib
   WHERE
     cityobject_id = $1;
 
   -- delete cityobject
   DELETE FROM
-    cityobject
+    citydb.cityobject
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -900,7 +900,7 @@ LANGUAGE plpgsql STRICT;
 /*
 CITY MODEL
 */
-CREATE OR REPLACE FUNCTION delete_citymodel(pids integer[])
+CREATE OR REPLACE FUNCTION citydb.delete_citymodel(pids integer[])
   RETURNS SETOF integer AS
 $BODY$
 DECLARE
@@ -908,9 +908,9 @@ DECLARE
 BEGIN
   -- delete appearances
   PERFORM
-    delete_appearance(array_agg(t.id))
+    citydb.delete_appearance(array_agg(t.id))
   FROM
-    appearance t,
+    citydb.appearance t,
     unnest($1) a(a_id)
   WHERE
     t.citymodel_id = a.a_id;
@@ -918,7 +918,7 @@ BEGIN
   -- delete citymodels
   RETURN QUERY
     DELETE FROM
-      citymodel t
+      citydb.citymodel t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -929,7 +929,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_citymodel(pid integer)
+CREATE OR REPLACE FUNCTION citydb.delete_citymodel(pid integer)
   RETURNS integer AS
 $BODY$
 DECLARE
@@ -937,15 +937,15 @@ DECLARE
 BEGIN
   -- delete appearances
   PERFORM
-    delete_appearance(array_agg(id))
+    citydb.delete_appearance(array_agg(id))
   FROM
-    appearance
+    citydb.appearance
   WHERE
     citymodel_id = $1;
 
   -- delete citymodel
   DELETE FROM
-    citymodel
+    citydb.citymodel
   WHERE
     id = $1
   RETURNING
@@ -965,7 +965,7 @@ LANGUAGE plpgsql STRICT;
 /*
 BRIDGE FURNITURE
 */
-CREATE OR REPLACE FUNCTION delete_bridge_furniture(
+CREATE OR REPLACE FUNCTION citydb.delete_bridge_furniture(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -982,7 +982,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      bridge_furniture t,
+      citydb.bridge_furniture t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -1003,7 +1003,7 @@ BEGIN
   -- delete bridge_furnitures
   WITH delete_objects AS (
     DELETE FROM
-      bridge_furniture t
+      citydb.bridge_furniture t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -1025,18 +1025,18 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      bridge_furniture n1
+      citydb.bridge_furniture n1
       ON n1.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod4_implicit_rep_id IS NULL;
   END IF;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -1044,7 +1044,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_bridge_furniture(
+CREATE OR REPLACE FUNCTION citydb.delete_bridge_furniture(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -1061,7 +1061,7 @@ BEGIN
     INTO
       class_id
     FROM
-      bridge_furniture
+      citydb.bridge_furniture
     WHERE
       id = $1;
   ELSE
@@ -1075,7 +1075,7 @@ BEGIN
 
   -- delete bridge_furniture
   DELETE FROM
-    bridge_furniture
+    citydb.bridge_furniture
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -1089,18 +1089,18 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF implicit_geometry_ref_id IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(a.a_id)
+      citydb.delete_implicit_geometry(a.a_id)
     FROM
       (VALUES (implicit_geometry_ref_id)) a(a_id)
     LEFT JOIN
-      bridge_furniture n1
+      citydb.bridge_furniture n1
       ON n1.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod4_implicit_rep_id IS NULL;
   END IF;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -1111,7 +1111,7 @@ LANGUAGE plpgsql STRICT;
 /*
 BRIDGE OPENING
 */
-CREATE OR REPLACE FUNCTION delete_bridge_opening(
+CREATE OR REPLACE FUNCTION citydb.delete_bridge_opening(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -1129,7 +1129,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      bridge_opening t,
+      citydb.bridge_opening t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -1150,7 +1150,7 @@ BEGIN
   -- delete bridge_openings
   WITH delete_objects AS (
     DELETE FROM
-      bridge_opening t
+      citydb.bridge_opening t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -1177,14 +1177,14 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      bridge_opening n1
+      citydb.bridge_opening n1
       ON n1.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      bridge_opening n2
+      citydb.bridge_opening n2
       ON n2.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod3_implicit_rep_id IS NULL
@@ -1194,20 +1194,20 @@ BEGIN
   -- delete address(es) not being referenced any more
   IF -1 = ALL(address_ids) IS NOT NULL THEN
     DELETE FROM
-      address m
+      citydb.address m
     USING
       (SELECT DISTINCT unnest(address_ids) AS a_id) a
     LEFT JOIN
-      bridge_opening n1
+      citydb.bridge_opening n1
       ON n1.address_id = a.a_id
     LEFT JOIN
-      address_to_bridge n2
+      citydb.address_to_bridge n2
       ON n2.address_id = a.a_id
     LEFT JOIN
-      address_to_building n3
+      citydb.address_to_building n3
       ON n3.address_id = a.a_id
     LEFT JOIN
-      opening n4
+      citydb.opening n4
       ON n4.address_id = a.a_id
     WHERE
       m.id = a.a_id
@@ -1218,7 +1218,7 @@ BEGIN
   END IF;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -1226,7 +1226,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_bridge_opening(
+CREATE OR REPLACE FUNCTION citydb.delete_bridge_opening(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -1244,7 +1244,7 @@ BEGIN
     INTO
       class_id
     FROM
-      bridge_opening
+      citydb.bridge_opening
     WHERE
       id = $1;
   ELSE
@@ -1258,7 +1258,7 @@ BEGIN
 
   -- delete bridge_opening
   DELETE FROM
-    bridge_opening
+    citydb.bridge_opening
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -1277,14 +1277,14 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      bridge_opening n1
+      citydb.bridge_opening n1
       ON n1.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      bridge_opening n2
+      citydb.bridge_opening n2
       ON n2.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod3_implicit_rep_id IS NULL
@@ -1294,20 +1294,20 @@ BEGIN
   -- delete address not being referenced any more
   IF address_ref_id IS NOT NULL THEN
     DELETE FROM
-      address m
+      citydb.address m
     USING
       (VALUES (address_ref_id)) a(a_id)
     LEFT JOIN
-      bridge_opening n1
+      citydb.bridge_opening n1
       ON n1.address_id = a.a_id
     LEFT JOIN
-      address_to_bridge n2
+      citydb.address_to_bridge n2
       ON n2.address_id = a.a_id
     LEFT JOIN
-      address_to_building n3
+      citydb.address_to_building n3
       ON n3.address_id = a.a_id
     LEFT JOIN
-      opening n4
+      citydb.opening n4
       ON n4.address_id = a.a_id
     WHERE
       m.id = a.a_id
@@ -1318,7 +1318,7 @@ BEGIN
   END IF;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -1329,7 +1329,7 @@ LANGUAGE plpgsql STRICT;
 /*
 BRIDGE THEMATIC SURFACE
 */
-CREATE OR REPLACE FUNCTION delete_bridge_them_srf(
+CREATE OR REPLACE FUNCTION citydb.delete_bridge_them_srf(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -1346,7 +1346,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      bridge_thematic_surface t,
+      citydb.bridge_thematic_surface t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -1367,7 +1367,7 @@ BEGIN
   -- delete references to bridge_openings
   WITH delete_bridge_opening_refs AS (
     DELETE FROM
-      bridge_open_to_them_srf t
+      citydb.bridge_open_to_them_srf t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -1385,11 +1385,11 @@ BEGIN
   -- delete bridge_opening(s) not being referenced any more
   IF -1 = ALL(bridge_opening_ids) IS NOT NULL THEN
     PERFORM
-      delete_bridge_opening(array_agg(a.a_id))
+      citydb.delete_bridge_opening(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(bridge_opening_ids) AS a_id) a
     LEFT JOIN
-      bridge_open_to_them_srf n1
+      citydb.bridge_open_to_them_srf n1
       ON n1.bridge_opening_id = a.a_id
     WHERE
       n1.bridge_opening_id IS NULL;
@@ -1398,7 +1398,7 @@ BEGIN
   -- delete bridge_thematic_surfaces
   WITH delete_objects AS (
     DELETE FROM
-      bridge_thematic_surface t
+      citydb.bridge_thematic_surface t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -1415,7 +1415,7 @@ BEGIN
     delete_objects;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -1423,7 +1423,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_bridge_them_srf(
+CREATE OR REPLACE FUNCTION citydb.delete_bridge_them_srf(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -1440,7 +1440,7 @@ BEGIN
     INTO
       class_id
     FROM
-      bridge_thematic_surface
+      citydb.bridge_thematic_surface
     WHERE
       id = $1;
   ELSE
@@ -1455,7 +1455,7 @@ BEGIN
   -- delete references to bridge_openings
   WITH delete_bridge_opening_refs AS (
     DELETE FROM
-      bridge_open_to_them_srf
+      citydb.bridge_open_to_them_srf
     WHERE
       bridge_thematic_surface_id = $1
     RETURNING
@@ -1471,11 +1471,11 @@ BEGIN
   -- delete bridge_opening(s) not being referenced any more
   IF -1 = ALL(bridge_opening_ids) IS NOT NULL THEN
     PERFORM
-      delete_bridge_opening(array_agg(a.a_id))
+      citydb.delete_bridge_opening(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(bridge_opening_ids) AS a_id) a
     LEFT JOIN
-      bridge_open_to_them_srf n1
+      citydb.bridge_open_to_them_srf n1
       ON n1.bridge_opening_id = a.a_id
     WHERE
       n1.bridge_opening_id IS NULL;
@@ -1483,7 +1483,7 @@ BEGIN
 
   -- delete bridge_thematic_surface
   DELETE FROM
-    bridge_thematic_surface
+    citydb.bridge_thematic_surface
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -1493,7 +1493,7 @@ BEGIN
     deleted_id;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -1504,7 +1504,7 @@ LANGUAGE plpgsql STRICT;
 /*
 BRIDGE INSTALLATION
 */
-CREATE OR REPLACE FUNCTION delete_bridge_installation(
+CREATE OR REPLACE FUNCTION citydb.delete_bridge_installation(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -1521,7 +1521,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      bridge_installation t,
+      citydb.bridge_installation t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -1541,9 +1541,9 @@ BEGIN
 
   -- delete bridge_thematic_surfaces
   PERFORM
-    delete_bridge_them_srf(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_bridge_them_srf(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    bridge_thematic_surface t,
+    citydb.bridge_thematic_surface t,
     unnest($1) a(a_id)
   WHERE
     t.bridge_installation_id = a.a_id;
@@ -1551,7 +1551,7 @@ BEGIN
   -- delete bridge_installations
   WITH delete_objects AS (
     DELETE FROM
-      bridge_installation t
+      citydb.bridge_installation t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -1577,17 +1577,17 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      bridge_installation n1
+      citydb.bridge_installation n1
       ON n1.lod2_implicit_rep_id = a.a_id
     LEFT JOIN
-      bridge_installation n2
+      citydb.bridge_installation n2
       ON n2.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      bridge_installation n3
+      citydb.bridge_installation n3
       ON n3.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod2_implicit_rep_id IS NULL
@@ -1596,7 +1596,7 @@ BEGIN
   END IF;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -1604,7 +1604,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_bridge_installation(
+CREATE OR REPLACE FUNCTION citydb.delete_bridge_installation(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -1621,7 +1621,7 @@ BEGIN
     INTO
       class_id
     FROM
-      bridge_installation
+      citydb.bridge_installation
     WHERE
       id = $1;
   ELSE
@@ -1635,15 +1635,15 @@ BEGIN
 
   -- delete bridge_thematic_surfaces
   PERFORM
-    delete_bridge_them_srf(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_bridge_them_srf(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    bridge_thematic_surface
+    citydb.bridge_thematic_surface
   WHERE
     bridge_installation_id = $1;
 
   -- delete bridge_installation
   DELETE FROM
-    bridge_installation
+    citydb.bridge_installation
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -1661,17 +1661,17 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      bridge_installation n1
+      citydb.bridge_installation n1
       ON n1.lod2_implicit_rep_id = a.a_id
     LEFT JOIN
-      bridge_installation n2
+      citydb.bridge_installation n2
       ON n2.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      bridge_installation n3
+      citydb.bridge_installation n3
       ON n3.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod2_implicit_rep_id IS NULL
@@ -1680,7 +1680,7 @@ BEGIN
   END IF;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -1691,7 +1691,7 @@ LANGUAGE plpgsql STRICT;
 /*
 BRIDGE ROOM
 */
-CREATE OR REPLACE FUNCTION delete_bridge_room(
+CREATE OR REPLACE FUNCTION citydb.delete_bridge_room(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -1707,7 +1707,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      bridge_room t,
+      citydb.bridge_room t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -1727,27 +1727,27 @@ BEGIN
 
   -- delete bridge_furnitures
   PERFORM
-    delete_bridge_furniture(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_bridge_furniture(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    bridge_furniture t,
+    citydb.bridge_furniture t,
     unnest($1) a(a_id)
   WHERE
     t.bridge_room_id = a.a_id;
 
   -- delete bridge_installations
   PERFORM
-    delete_bridge_installation(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_bridge_installation(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    bridge_installation t,
+    citydb.bridge_installation t,
     unnest($1) a(a_id)
   WHERE
     t.bridge_room_id = a.a_id;
 
   -- delete bridge_thematic_surfaces
   PERFORM
-    delete_bridge_them_srf(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_bridge_them_srf(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    bridge_thematic_surface t,
+    citydb.bridge_thematic_surface t,
     unnest($1) a(a_id)
   WHERE
     t.bridge_room_id = a.a_id;
@@ -1755,7 +1755,7 @@ BEGIN
   -- delete bridge_rooms
   WITH delete_objects AS (
     DELETE FROM
-      bridge_room t
+      citydb.bridge_room t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -1772,7 +1772,7 @@ BEGIN
     delete_objects;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -1780,7 +1780,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_bridge_room(
+CREATE OR REPLACE FUNCTION citydb.delete_bridge_room(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -1796,7 +1796,7 @@ BEGIN
     INTO
       class_id
     FROM
-      bridge_room
+      citydb.bridge_room
     WHERE
       id = $1;
   ELSE
@@ -1810,31 +1810,31 @@ BEGIN
 
   -- delete bridge_furnitures
   PERFORM
-    delete_bridge_furniture(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_bridge_furniture(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    bridge_furniture
+    citydb.bridge_furniture
   WHERE
     bridge_room_id = $1;
 
   -- delete bridge_installations
   PERFORM
-    delete_bridge_installation(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_bridge_installation(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    bridge_installation
+    citydb.bridge_installation
   WHERE
     bridge_room_id = $1;
 
   -- delete bridge_thematic_surfaces
   PERFORM
-    delete_bridge_them_srf(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_bridge_them_srf(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    bridge_thematic_surface
+    citydb.bridge_thematic_surface
   WHERE
     bridge_room_id = $1;
 
   -- delete bridge_room
   DELETE FROM
-    bridge_room
+    citydb.bridge_room
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -1844,7 +1844,7 @@ BEGIN
     deleted_id;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -1855,7 +1855,7 @@ LANGUAGE plpgsql STRICT;
 /*
 BRIDGE CONSTRUCTION ELEMENT
 */
-CREATE OR REPLACE FUNCTION delete_bridge_constr_element(
+CREATE OR REPLACE FUNCTION citydb.delete_bridge_constr_element(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -1872,7 +1872,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      bridge_constr_element t,
+      citydb.bridge_constr_element t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -1892,9 +1892,9 @@ BEGIN
 
   -- delete bridge_thematic_surfaces
   PERFORM
-    delete_bridge_them_srf(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_bridge_them_srf(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    bridge_thematic_surface t,
+    citydb.bridge_thematic_surface t,
     unnest($1) a(a_id)
   WHERE
     t.bridge_constr_element_id = a.a_id;
@@ -1902,7 +1902,7 @@ BEGIN
   -- delete bridge_constr_elements
   WITH delete_objects AS (
     DELETE FROM
-      bridge_constr_element t
+      citydb.bridge_constr_element t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -1930,20 +1930,20 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      bridge_constr_element n1
+      citydb.bridge_constr_element n1
       ON n1.lod1_implicit_rep_id = a.a_id
     LEFT JOIN
-      bridge_constr_element n2
+      citydb.bridge_constr_element n2
       ON n2.lod2_implicit_rep_id = a.a_id
     LEFT JOIN
-      bridge_constr_element n3
+      citydb.bridge_constr_element n3
       ON n3.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      bridge_constr_element n4
+      citydb.bridge_constr_element n4
       ON n4.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod1_implicit_rep_id IS NULL
@@ -1953,7 +1953,7 @@ BEGIN
   END IF;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -1961,7 +1961,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_bridge_constr_element(
+CREATE OR REPLACE FUNCTION citydb.delete_bridge_constr_element(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -1978,7 +1978,7 @@ BEGIN
     INTO
       class_id
     FROM
-      bridge_constr_element
+      citydb.bridge_constr_element
     WHERE
       id = $1;
   ELSE
@@ -1992,15 +1992,15 @@ BEGIN
 
   -- delete bridge_thematic_surfaces
   PERFORM
-    delete_bridge_them_srf(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_bridge_them_srf(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    bridge_thematic_surface
+    citydb.bridge_thematic_surface
   WHERE
     bridge_constr_element_id = $1;
 
   -- delete bridge_constr_element
   DELETE FROM
-    bridge_constr_element
+    citydb.bridge_constr_element
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -2019,20 +2019,20 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      bridge_constr_element n1
+      citydb.bridge_constr_element n1
       ON n1.lod1_implicit_rep_id = a.a_id
     LEFT JOIN
-      bridge_constr_element n2
+      citydb.bridge_constr_element n2
       ON n2.lod2_implicit_rep_id = a.a_id
     LEFT JOIN
-      bridge_constr_element n3
+      citydb.bridge_constr_element n3
       ON n3.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      bridge_constr_element n4
+      citydb.bridge_constr_element n4
       ON n4.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod1_implicit_rep_id IS NULL
@@ -2042,7 +2042,7 @@ BEGIN
   END IF;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -2053,7 +2053,7 @@ LANGUAGE plpgsql STRICT;
 /*
 BRIDGE
 */
-CREATE OR REPLACE FUNCTION delete_bridge(
+CREATE OR REPLACE FUNCTION citydb.delete_bridge(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -2070,7 +2070,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      bridge t,
+      citydb.bridge t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -2091,7 +2091,7 @@ BEGIN
   -- delete references to addresses
   WITH delete_address_refs AS (
     DELETE FROM
-      address_to_bridge t
+      citydb.address_to_bridge t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -2109,20 +2109,20 @@ BEGIN
   -- delete address(es) not being referenced any more
   IF -1 = ALL(address_ids) IS NOT NULL THEN
     DELETE FROM
-      address m
+      citydb.address m
     USING
       (SELECT DISTINCT unnest(address_ids) AS a_id) a
     LEFT JOIN
-      address_to_bridge n1
+      citydb.address_to_bridge n1
       ON n1.address_id = a.a_id
     LEFT JOIN
-      address_to_building n2
+      citydb.address_to_building n2
       ON n2.address_id = a.a_id
     LEFT JOIN
-      bridge_opening n3
+      citydb.bridge_opening n3
       ON n3.address_id = a.a_id
     LEFT JOIN
-      opening n4
+      citydb.opening n4
       ON n4.address_id = a.a_id
     WHERE
       m.id = a.a_id
@@ -2134,45 +2134,45 @@ BEGIN
 
   -- delete bridge_constr_elements
   PERFORM
-    delete_bridge_constr_element(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_bridge_constr_element(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    bridge_constr_element t,
+    citydb.bridge_constr_element t,
     unnest($1) a(a_id)
   WHERE
     t.bridge_id = a.a_id;
 
   -- delete bridge_installations
   PERFORM
-    delete_bridge_installation(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_bridge_installation(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    bridge_installation t,
+    citydb.bridge_installation t,
     unnest($1) a(a_id)
   WHERE
     t.bridge_id = a.a_id;
 
   -- delete bridge_rooms
   PERFORM
-    delete_bridge_room(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_bridge_room(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    bridge_room t,
+    citydb.bridge_room t,
     unnest($1) a(a_id)
   WHERE
     t.bridge_id = a.a_id;
 
   -- delete bridge_thematic_surfaces
   PERFORM
-    delete_bridge_them_srf(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_bridge_them_srf(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    bridge_thematic_surface t,
+    citydb.bridge_thematic_surface t,
     unnest($1) a(a_id)
   WHERE
     t.bridge_id = a.a_id;
 
   -- delete referenced parts
   PERFORM
-    delete_bridge(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_bridge(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    bridge t,
+    citydb.bridge t,
     unnest($1) a(a_id)
   WHERE
     t.bridge_parent_id = a.a_id
@@ -2181,7 +2181,7 @@ BEGIN
   -- delete bridges
   WITH delete_objects AS (
     DELETE FROM
-      bridge t
+      citydb.bridge t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -2198,7 +2198,7 @@ BEGIN
     delete_objects;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -2206,7 +2206,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_bridge(
+CREATE OR REPLACE FUNCTION citydb.delete_bridge(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -2223,7 +2223,7 @@ BEGIN
     INTO
       class_id
     FROM
-      bridge
+      citydb.bridge
     WHERE
       id = $1;
   ELSE
@@ -2238,7 +2238,7 @@ BEGIN
   -- delete references to addresses
   WITH delete_address_refs AS (
     DELETE FROM
-      address_to_bridge
+      citydb.address_to_bridge
     WHERE
       bridge_id = $1
     RETURNING
@@ -2254,20 +2254,20 @@ BEGIN
   -- delete address(es) not being referenced any more
   IF -1 = ALL(address_ids) IS NOT NULL THEN
     DELETE FROM
-      address m
+      citydb.address m
     USING
       (SELECT DISTINCT unnest(address_ids) AS a_id) a
     LEFT JOIN
-      address_to_bridge n1
+      citydb.address_to_bridge n1
       ON n1.address_id = a.a_id
     LEFT JOIN
-      address_to_building n2
+      citydb.address_to_building n2
       ON n2.address_id = a.a_id
     LEFT JOIN
-      bridge_opening n3
+      citydb.bridge_opening n3
       ON n3.address_id = a.a_id
     LEFT JOIN
-      opening n4
+      citydb.opening n4
       ON n4.address_id = a.a_id
     WHERE
       m.id = a.a_id
@@ -2279,48 +2279,48 @@ BEGIN
 
   -- delete bridge_constr_elements
   PERFORM
-    delete_bridge_constr_element(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_bridge_constr_element(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    bridge_constr_element
+    citydb.bridge_constr_element
   WHERE
     bridge_id = $1;
 
   -- delete bridge_installations
   PERFORM
-    delete_bridge_installation(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_bridge_installation(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    bridge_installation
+    citydb.bridge_installation
   WHERE
     bridge_id = $1;
 
   -- delete bridge_rooms
   PERFORM
-    delete_bridge_room(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_bridge_room(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    bridge_room
+    citydb.bridge_room
   WHERE
     bridge_id = $1;
 
   -- delete bridge_thematic_surfaces
   PERFORM
-    delete_bridge_them_srf(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_bridge_them_srf(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    bridge_thematic_surface
+    citydb.bridge_thematic_surface
   WHERE
     bridge_id = $1;
 
   --delete referenced parts
   PERFORM
-    delete_bridge(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_bridge(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    bridge
+    citydb.bridge
   WHERE
     bridge_parent_id = $1
     AND id != $1;
 
   -- delete bridge
   DELETE FROM
-    bridge
+    citydb.bridge
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -2330,7 +2330,7 @@ BEGIN
     deleted_id;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -2344,7 +2344,7 @@ LANGUAGE plpgsql STRICT;
 /*
 BUILDING FURNITURE
 */
-CREATE OR REPLACE FUNCTION delete_building_furniture(
+CREATE OR REPLACE FUNCTION citydb.delete_building_furniture(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -2361,7 +2361,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      building_furniture t,
+      citydb.building_furniture t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -2382,7 +2382,7 @@ BEGIN
   -- delete building_furnitures
   WITH delete_objects AS (
     DELETE FROM
-      building_furniture t
+      citydb.building_furniture t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -2404,18 +2404,18 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      building_furniture n1
+      citydb.building_furniture n1
       ON n1.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod4_implicit_rep_id IS NULL;
   END IF;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -2423,7 +2423,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_building_furniture(
+CREATE OR REPLACE FUNCTION citydb.delete_building_furniture(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -2440,7 +2440,7 @@ BEGIN
     INTO
       class_id
     FROM
-      building_furniture
+      citydb.building_furniture
     WHERE
       id = $1;
   ELSE
@@ -2454,7 +2454,7 @@ BEGIN
 
   -- delete building_furniture
   DELETE FROM
-    building_furniture
+    citydb.building_furniture
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -2468,18 +2468,18 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF implicit_geometry_ref_id IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(a.a_id)
+      citydb.delete_implicit_geometry(a.a_id)
     FROM
       (VALUES (implicit_geometry_ref_id)) a(a_id)
     LEFT JOIN
-      building_furniture n1
+      citydb.building_furniture n1
       ON n1.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod4_implicit_rep_id IS NULL;
   END IF;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -2490,7 +2490,7 @@ LANGUAGE plpgsql STRICT;
 /*
 OPENING
 */
-CREATE OR REPLACE FUNCTION delete_opening(
+CREATE OR REPLACE FUNCTION citydb.delete_opening(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -2508,7 +2508,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      opening t,
+      citydb.opening t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -2529,7 +2529,7 @@ BEGIN
   -- delete openings
   WITH delete_objects AS (
     DELETE FROM
-      opening t
+      citydb.opening t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -2556,14 +2556,14 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      opening n1
+      citydb.opening n1
       ON n1.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      opening n2
+      citydb.opening n2
       ON n2.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod3_implicit_rep_id IS NULL
@@ -2573,20 +2573,20 @@ BEGIN
   -- delete address(es) not being referenced any more
   IF -1 = ALL(address_ids) IS NOT NULL THEN
     DELETE FROM
-      address m
+      citydb.address m
     USING
       (SELECT DISTINCT unnest(address_ids) AS a_id) a
     LEFT JOIN
-      opening n1
+      citydb.opening n1
       ON n1.address_id = a.a_id
     LEFT JOIN
-      address_to_bridge n2
+      citydb.address_to_bridge n2
       ON n2.address_id = a.a_id
     LEFT JOIN
-      address_to_building n3
+      citydb.address_to_building n3
       ON n3.address_id = a.a_id
     LEFT JOIN
-      bridge_opening n4
+      citydb.bridge_opening n4
       ON n4.address_id = a.a_id
     WHERE
       m.id = a.a_id
@@ -2597,7 +2597,7 @@ BEGIN
   END IF;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -2605,7 +2605,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_opening(
+CREATE OR REPLACE FUNCTION citydb.delete_opening(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -2623,7 +2623,7 @@ BEGIN
     INTO
       class_id
     FROM
-      opening
+      citydb.opening
     WHERE
       id = $1;
   ELSE
@@ -2637,7 +2637,7 @@ BEGIN
 
   -- delete opening
   DELETE FROM
-    opening
+    citydb.opening
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -2656,14 +2656,14 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      opening n1
+      citydb.opening n1
       ON n1.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      opening n2
+      citydb.opening n2
       ON n2.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod3_implicit_rep_id IS NULL
@@ -2673,20 +2673,20 @@ BEGIN
   -- delete address not being referenced any more
   IF address_ref_id IS NOT NULL THEN
     DELETE FROM
-      address m
+      citydb.address m
     USING
       (VALUES (address_ref_id)) a(a_id)
     LEFT JOIN
-      opening n1
+      citydb.opening n1
       ON n1.address_id = a.a_id
     LEFT JOIN
-      address_to_bridge n2
+      citydb.address_to_bridge n2
       ON n2.address_id = a.a_id
     LEFT JOIN
-      address_to_building n3
+      citydb.address_to_building n3
       ON n3.address_id = a.a_id
     LEFT JOIN
-      bridge_opening n4
+      citydb.bridge_opening n4
       ON n4.address_id = a.a_id
     WHERE
       m.id = a.a_id
@@ -2697,7 +2697,7 @@ BEGIN
   END IF;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -2708,7 +2708,7 @@ LANGUAGE plpgsql STRICT;
 /*
 THEMATIC SURFACE
 */
-CREATE OR REPLACE FUNCTION delete_thematic_surface(
+CREATE OR REPLACE FUNCTION citydb.delete_thematic_surface(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -2725,7 +2725,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      thematic_surface t,
+      citydb.thematic_surface t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -2746,7 +2746,7 @@ BEGIN
   -- delete references to openings
   WITH delete_opening_refs AS (
     DELETE FROM
-      opening_to_them_surface t
+      citydb.opening_to_them_surface t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -2764,11 +2764,11 @@ BEGIN
   -- delete opening(s) not being referenced any more
   IF -1 = ALL(opening_ids) IS NOT NULL THEN
     PERFORM
-      delete_opening(array_agg(a.a_id))
+      citydb.delete_opening(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(opening_ids) AS a_id) a
     LEFT JOIN
-      opening_to_them_surface n1
+      citydb.opening_to_them_surface n1
       ON n1.opening_id = a.a_id
     WHERE
       n1.opening_id IS NULL;
@@ -2777,7 +2777,7 @@ BEGIN
   -- delete thematic_surfaces
   WITH delete_objects AS (
     DELETE FROM
-      thematic_surface t
+      citydb.thematic_surface t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -2794,7 +2794,7 @@ BEGIN
     delete_objects;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -2802,7 +2802,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_thematic_surface(
+CREATE OR REPLACE FUNCTION citydb.delete_thematic_surface(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -2819,7 +2819,7 @@ BEGIN
     INTO
       class_id
     FROM
-      thematic_surface
+      citydb.thematic_surface
     WHERE
       id = $1;
   ELSE
@@ -2834,7 +2834,7 @@ BEGIN
   -- delete references to openings
   WITH delete_opening_refs AS (
     DELETE FROM
-      opening_to_them_surface
+      citydb.opening_to_them_surface
     WHERE
       thematic_surface_id = $1
     RETURNING
@@ -2850,11 +2850,11 @@ BEGIN
   -- delete opening(s) not being referenced any more
   IF -1 = ALL(opening_ids) IS NOT NULL THEN
     PERFORM
-      delete_opening(array_agg(a.a_id))
+      citydb.delete_opening(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(opening_ids) AS a_id) a
     LEFT JOIN
-      opening_to_them_surface n1
+      citydb.opening_to_them_surface n1
       ON n1.opening_id = a.a_id
     WHERE
       n1.opening_id IS NULL;
@@ -2862,7 +2862,7 @@ BEGIN
 
   -- delete thematic_surface
   DELETE FROM
-    thematic_surface
+    citydb.thematic_surface
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -2872,7 +2872,7 @@ BEGIN
     deleted_id;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -2883,7 +2883,7 @@ LANGUAGE plpgsql STRICT;
 /*
 BUILDING INSTALLATION
 */
-CREATE OR REPLACE FUNCTION delete_building_installation(
+CREATE OR REPLACE FUNCTION citydb.delete_building_installation(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -2900,7 +2900,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      building_installation t,
+      citydb.building_installation t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -2920,9 +2920,9 @@ BEGIN
 
   -- delete thematic_surfaces
   PERFORM
-    delete_thematic_surface(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_thematic_surface(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    thematic_surface t,
+    citydb.thematic_surface t,
     unnest($1) a(a_id)
   WHERE
     t.building_installation_id = a.a_id;
@@ -2930,7 +2930,7 @@ BEGIN
   -- delete building_installations
   WITH delete_objects AS (
     DELETE FROM
-      building_installation t
+      citydb.building_installation t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -2956,17 +2956,17 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      building_installation n1
+      citydb.building_installation n1
       ON n1.lod2_implicit_rep_id = a.a_id
     LEFT JOIN
-      building_installation n2
+      citydb.building_installation n2
       ON n2.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      building_installation n3
+      citydb.building_installation n3
       ON n3.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod2_implicit_rep_id IS NULL
@@ -2975,7 +2975,7 @@ BEGIN
   END IF;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -2983,7 +2983,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_building_installation(
+CREATE OR REPLACE FUNCTION citydb.delete_building_installation(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -3000,7 +3000,7 @@ BEGIN
     INTO
       class_id
     FROM
-      building_installation
+      citydb.building_installation
     WHERE
       id = $1;
   ELSE
@@ -3014,15 +3014,15 @@ BEGIN
 
   -- delete thematic_surfaces
   PERFORM
-    delete_thematic_surface(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_thematic_surface(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    thematic_surface
+    citydb.thematic_surface
   WHERE
     building_installation_id = $1;
 
   -- delete building_installation
   DELETE FROM
-    building_installation
+    citydb.building_installation
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -3040,17 +3040,17 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      building_installation n1
+      citydb.building_installation n1
       ON n1.lod2_implicit_rep_id = a.a_id
     LEFT JOIN
-      building_installation n2
+      citydb.building_installation n2
       ON n2.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      building_installation n3
+      citydb.building_installation n3
       ON n3.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod2_implicit_rep_id IS NULL
@@ -3059,7 +3059,7 @@ BEGIN
   END IF;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -3070,7 +3070,7 @@ LANGUAGE plpgsql STRICT;
 /*
 ROOM
 */
-CREATE OR REPLACE FUNCTION delete_room(
+CREATE OR REPLACE FUNCTION citydb.delete_room(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -3086,7 +3086,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      room t,
+      citydb.room t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -3106,27 +3106,27 @@ BEGIN
 
   -- delete building_furnitures
   PERFORM
-    delete_building_furniture(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_building_furniture(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    building_furniture t,
+    citydb.building_furniture t,
     unnest($1) a(a_id)
   WHERE
     t.room_id = a.a_id;
 
   -- delete building_installations
   PERFORM
-    delete_building_installation(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_building_installation(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    building_installation t,
+    citydb.building_installation t,
     unnest($1) a(a_id)
   WHERE
     t.room_id = a.a_id;
 
   -- delete thematic_surfaces
   PERFORM
-    delete_thematic_surface(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_thematic_surface(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    thematic_surface t,
+    citydb.thematic_surface t,
     unnest($1) a(a_id)
   WHERE
     t.room_id = a.a_id;
@@ -3134,7 +3134,7 @@ BEGIN
   -- delete rooms
   WITH delete_objects AS (
     DELETE FROM
-      room t
+      citydb.room t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -3151,7 +3151,7 @@ BEGIN
     delete_objects;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -3159,7 +3159,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_room(
+CREATE OR REPLACE FUNCTION citydb.delete_room(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -3175,7 +3175,7 @@ BEGIN
     INTO
       class_id
     FROM
-      room
+      citydb.room
     WHERE
       id = $1;
   ELSE
@@ -3189,31 +3189,31 @@ BEGIN
 
   -- delete building_furnitures
   PERFORM
-    delete_building_furniture(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_building_furniture(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    building_furniture
+    citydb.building_furniture
   WHERE
     room_id = $1;
 
   -- delete building_installations
   PERFORM
-    delete_building_installation(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_building_installation(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    building_installation
+    citydb.building_installation
   WHERE
     room_id = $1;
 
   -- delete thematic_surfaces
   PERFORM
-    delete_thematic_surface(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_thematic_surface(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    thematic_surface
+    citydb.thematic_surface
   WHERE
     room_id = $1;
 
   -- delete room
   DELETE FROM
-    room
+    citydb.room
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -3223,7 +3223,7 @@ BEGIN
     deleted_id;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -3234,7 +3234,7 @@ LANGUAGE plpgsql STRICT;
 /*
 BUILDING
 */
-CREATE OR REPLACE FUNCTION delete_building(
+CREATE OR REPLACE FUNCTION citydb.delete_building(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -3251,7 +3251,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      building t,
+      citydb.building t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -3272,7 +3272,7 @@ BEGIN
   -- delete references to addresses
   WITH delete_address_refs AS (
     DELETE FROM
-      address_to_building t
+      citydb.address_to_building t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -3290,20 +3290,20 @@ BEGIN
   -- delete address(es) not being referenced any more
   IF -1 = ALL(address_ids) IS NOT NULL THEN
     DELETE FROM
-      address m
+      citydb.address m
     USING
       (SELECT DISTINCT unnest(address_ids) AS a_id) a
     LEFT JOIN
-      address_to_building n1
+      citydb.address_to_building n1
       ON n1.address_id = a.a_id
     LEFT JOIN
-      address_to_bridge n2
+      citydb.address_to_bridge n2
       ON n2.address_id = a.a_id
     LEFT JOIN
-      bridge_opening n3
+      citydb.bridge_opening n3
       ON n3.address_id = a.a_id
     LEFT JOIN
-      opening n4
+      citydb.opening n4
       ON n4.address_id = a.a_id
     WHERE
       m.id = a.a_id
@@ -3315,36 +3315,36 @@ BEGIN
 
   -- delete building_installations
   PERFORM
-    delete_building_installation(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_building_installation(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    building_installation t,
+    citydb.building_installation t,
     unnest($1) a(a_id)
   WHERE
     t.building_id = a.a_id;
 
   -- delete rooms
   PERFORM
-    delete_room(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_room(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    room t,
+    citydb.room t,
     unnest($1) a(a_id)
   WHERE
     t.building_id = a.a_id;
 
   -- delete thematic_surfaces
   PERFORM
-    delete_thematic_surface(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_thematic_surface(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    thematic_surface t,
+    citydb.thematic_surface t,
     unnest($1) a(a_id)
   WHERE
     t.building_id = a.a_id;
 
   -- delete referenced parts
   PERFORM
-    delete_building(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_building(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    building t,
+    citydb.building t,
     unnest($1) a(a_id)
   WHERE
     t.building_parent_id = a.a_id
@@ -3353,7 +3353,7 @@ BEGIN
   -- delete buildings
   WITH delete_objects AS (
     DELETE FROM
-      building t
+      citydb.building t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -3370,7 +3370,7 @@ BEGIN
     delete_objects;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -3378,7 +3378,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_building(
+CREATE OR REPLACE FUNCTION citydb.delete_building(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -3395,7 +3395,7 @@ BEGIN
     INTO
       class_id
     FROM
-      building
+      citydb.building
     WHERE
       id = $1;
   ELSE
@@ -3410,7 +3410,7 @@ BEGIN
   -- delete references to addresses
   WITH delete_address_refs AS (
     DELETE FROM
-      address_to_building
+      citydb.address_to_building
     WHERE
       building_id = $1
     RETURNING
@@ -3426,20 +3426,20 @@ BEGIN
   -- delete address(es) not being referenced any more
   IF -1 = ALL(address_ids) IS NOT NULL THEN
     DELETE FROM
-      address m
+      citydb.address m
     USING
       (SELECT DISTINCT unnest(address_ids) AS a_id) a
     LEFT JOIN
-      address_to_building n1
+      citydb.address_to_building n1
       ON n1.address_id = a.a_id
     LEFT JOIN
-      address_to_bridge n2
+      citydb.address_to_bridge n2
       ON n2.address_id = a.a_id
     LEFT JOIN
-      bridge_opening n3
+      citydb.bridge_opening n3
       ON n3.address_id = a.a_id
     LEFT JOIN
-      opening n4
+      citydb.opening n4
       ON n4.address_id = a.a_id
     WHERE
       m.id = a.a_id
@@ -3451,40 +3451,40 @@ BEGIN
 
   -- delete building_installations
   PERFORM
-    delete_building_installation(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_building_installation(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    building_installation
+    citydb.building_installation
   WHERE
     building_id = $1;
 
   -- delete rooms
   PERFORM
-    delete_room(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_room(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    room
+    citydb.room
   WHERE
     building_id = $1;
 
   -- delete thematic_surfaces
   PERFORM
-    delete_thematic_surface(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_thematic_surface(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    thematic_surface
+    citydb.thematic_surface
   WHERE
     building_id = $1;
 
   --delete referenced parts
   PERFORM
-    delete_building(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_building(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    building
+    citydb.building
   WHERE
     building_parent_id = $1
     AND id != $1;
 
   -- delete building
   DELETE FROM
-    building
+    citydb.building
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -3494,7 +3494,7 @@ BEGIN
     deleted_id;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -3505,7 +3505,7 @@ LANGUAGE plpgsql STRICT;
 /*******************
 * CITY FURNITURE
 *******************/
-CREATE OR REPLACE FUNCTION delete_city_furniture(
+CREATE OR REPLACE FUNCTION citydb.delete_city_furniture(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -3522,7 +3522,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      city_furniture t,
+      citydb.city_furniture t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -3543,7 +3543,7 @@ BEGIN
   -- delete city_furnitures
   WITH delete_objects AS (
     DELETE FROM
-      city_furniture t
+      citydb.city_furniture t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -3571,20 +3571,20 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      city_furniture n1
+      citydb.city_furniture n1
       ON n1.lod1_implicit_rep_id = a.a_id
     LEFT JOIN
-      city_furniture n2
+      citydb.city_furniture n2
       ON n2.lod2_implicit_rep_id = a.a_id
     LEFT JOIN
-      city_furniture n3
+      citydb.city_furniture n3
       ON n3.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      city_furniture n4
+      citydb.city_furniture n4
       ON n4.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod1_implicit_rep_id IS NULL
@@ -3594,7 +3594,7 @@ BEGIN
   END IF;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -3602,7 +3602,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_city_furniture(
+CREATE OR REPLACE FUNCTION citydb.delete_city_furniture(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -3619,7 +3619,7 @@ BEGIN
     INTO
       class_id
     FROM
-      city_furniture
+      citydb.city_furniture
     WHERE
       id = $1;
   ELSE
@@ -3633,7 +3633,7 @@ BEGIN
 
   -- delete city_furniture
   DELETE FROM
-    city_furniture
+    citydb.city_furniture
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -3652,20 +3652,20 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      city_furniture n1
+      citydb.city_furniture n1
       ON n1.lod1_implicit_rep_id = a.a_id
     LEFT JOIN
-      city_furniture n2
+      citydb.city_furniture n2
       ON n2.lod2_implicit_rep_id = a.a_id
     LEFT JOIN
-      city_furniture n3
+      citydb.city_furniture n3
       ON n3.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      city_furniture n4
+      citydb.city_furniture n4
       ON n4.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod1_implicit_rep_id IS NULL
@@ -3675,7 +3675,7 @@ BEGIN
   END IF;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -3686,7 +3686,7 @@ LANGUAGE plpgsql STRICT;
 /********************
 * CITYOBJECT GROUP
 ********************/
-CREATE OR REPLACE FUNCTION delete_cityobjectgroup(
+CREATE OR REPLACE FUNCTION citydb.delete_cityobjectgroup(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -3702,7 +3702,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      cityobjectgroup t,
+      citydb.cityobjectgroup t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -3723,7 +3723,7 @@ BEGIN
   -- delete cityobjectgroups
   WITH delete_objects AS (
     DELETE FROM
-      cityobjectgroup t
+      citydb.cityobjectgroup t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -3740,7 +3740,7 @@ BEGIN
     delete_objects;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -3748,7 +3748,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_cityobjectgroup(
+CREATE OR REPLACE FUNCTION citydb.delete_cityobjectgroup(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -3764,7 +3764,7 @@ BEGIN
     INTO
       class_id
     FROM
-      cityobjectgroup
+      citydb.cityobjectgroup
     WHERE
       id = $1;
   ELSE
@@ -3778,7 +3778,7 @@ BEGIN
 
   -- delete cityobjectgroup
   DELETE FROM
-    cityobjectgroup
+    citydb.cityobjectgroup
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -3788,7 +3788,7 @@ BEGIN
     deleted_id;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -3799,7 +3799,7 @@ LANGUAGE plpgsql STRICT;
 /**********************
 * GENERIC CITYOBJECT
 **********************/
-CREATE OR REPLACE FUNCTION delete_generic_cityobject(
+CREATE OR REPLACE FUNCTION citydb.delete_generic_cityobject(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -3816,7 +3816,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      generic_cityobject t,
+      citydb.generic_cityobject t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -3837,7 +3837,7 @@ BEGIN
   -- delete generic_cityobjects
   WITH delete_objects AS (
     DELETE FROM
-      generic_cityobject t
+      citydb.generic_cityobject t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -3867,23 +3867,23 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      generic_cityobject n1
+      citydb.generic_cityobject n1
       ON n1.lod0_implicit_rep_id = a.a_id
     LEFT JOIN
-      generic_cityobject n2
+      citydb.generic_cityobject n2
       ON n2.lod1_implicit_rep_id = a.a_id
     LEFT JOIN
-      generic_cityobject n3
+      citydb.generic_cityobject n3
       ON n3.lod2_implicit_rep_id = a.a_id
     LEFT JOIN
-      generic_cityobject n4
+      citydb.generic_cityobject n4
       ON n4.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      generic_cityobject n5
+      citydb.generic_cityobject n5
       ON n5.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod0_implicit_rep_id IS NULL
@@ -3894,7 +3894,7 @@ BEGIN
   END IF;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -3902,7 +3902,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_generic_cityobject(
+CREATE OR REPLACE FUNCTION citydb.delete_generic_cityobject(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -3919,7 +3919,7 @@ BEGIN
     INTO
       class_id
     FROM
-      generic_cityobject
+      citydb.generic_cityobject
     WHERE
       id = $1;
   ELSE
@@ -3933,7 +3933,7 @@ BEGIN
 
   -- delete generic_cityobject
   DELETE FROM
-    generic_cityobject
+    citydb.generic_cityobject
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -3953,23 +3953,23 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      generic_cityobject n1
+      citydb.generic_cityobject n1
       ON n1.lod0_implicit_rep_id = a.a_id
     LEFT JOIN
-      generic_cityobject n2
+      citydb.generic_cityobject n2
       ON n2.lod1_implicit_rep_id = a.a_id
     LEFT JOIN
-      generic_cityobject n3
+      citydb.generic_cityobject n3
       ON n3.lod2_implicit_rep_id = a.a_id
     LEFT JOIN
-      generic_cityobject n4
+      citydb.generic_cityobject n4
       ON n4.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      generic_cityobject n5
+      citydb.generic_cityobject n5
       ON n5.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod0_implicit_rep_id IS NULL
@@ -3980,7 +3980,7 @@ BEGIN
   END IF;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -3991,7 +3991,7 @@ LANGUAGE plpgsql STRICT;
 /*******************
 * LAND USE
 *******************/
-CREATE OR REPLACE FUNCTION delete_land_use(
+CREATE OR REPLACE FUNCTION citydb.delete_land_use(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -4007,7 +4007,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      land_use t,
+      citydb.land_use t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -4028,7 +4028,7 @@ BEGIN
   -- delete land_uses
   WITH delete_objects AS (
     DELETE FROM
-      land_use t
+      citydb.land_use t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -4045,7 +4045,7 @@ BEGIN
     delete_objects;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -4053,7 +4053,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_land_use(
+CREATE OR REPLACE FUNCTION citydb.delete_land_use(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -4069,7 +4069,7 @@ BEGIN
     INTO
       class_id
     FROM
-      land_use
+      citydb.land_use
     WHERE
       id = $1;
   ELSE
@@ -4083,7 +4083,7 @@ BEGIN
 
   -- delete land_use
   DELETE FROM
-    land_use
+    citydb.land_use
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -4093,7 +4093,7 @@ BEGIN
     deleted_id;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -4107,7 +4107,7 @@ LANGUAGE plpgsql STRICT;
 /*
 RELIEF COMPONENT INTERNALS
 */
-CREATE OR REPLACE FUNCTION delete_relief_component_post(
+CREATE OR REPLACE FUNCTION citydb.delete_relief_component_post(
     pids integer[],
     objclass_ids integer[])
   RETURNS SETOF integer AS
@@ -4121,7 +4121,7 @@ BEGIN
   -- delete relief_components
   WITH delete_objects AS (
     DELETE FROM
-      relief_component t
+      citydb.relief_component t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -4138,7 +4138,7 @@ BEGIN
     delete_objects;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -4146,7 +4146,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_relief_component_post(
+CREATE OR REPLACE FUNCTION citydb.delete_relief_component_post(
     pid integer,
     objclass_id integer)
   RETURNS integer AS
@@ -4159,7 +4159,7 @@ BEGIN
 
   -- delete relief_component
   DELETE FROM
-    relief_component
+    citydb.relief_component
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -4169,7 +4169,7 @@ BEGIN
     deleted_id;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -4180,7 +4180,7 @@ LANGUAGE plpgsql STRICT;
 /*
 BREAKLINE RELIEF
 */
-CREATE OR REPLACE FUNCTION delete_breakline_relief(
+CREATE OR REPLACE FUNCTION citydb.delete_breakline_relief(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -4196,7 +4196,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      breakline_relief t,
+      citydb.breakline_relief t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -4217,7 +4217,7 @@ BEGIN
   -- delete breakline_reliefs
   WITH delete_objects AS (
     DELETE FROM
-      breakline_relief t
+      citydb.breakline_relief t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -4234,7 +4234,7 @@ BEGIN
     delete_objects;
 
   -- delete relief_components
-  PERFORM delete_relief_component_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_relief_component_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -4242,7 +4242,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_breakline_relief(
+CREATE OR REPLACE FUNCTION citydb.delete_breakline_relief(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -4258,7 +4258,7 @@ BEGIN
     INTO
       class_id
     FROM
-      breakline_relief
+      citydb.breakline_relief
     WHERE
       id = $1;
   ELSE
@@ -4272,7 +4272,7 @@ BEGIN
 
   -- delete breakline_relief
   DELETE FROM
-    breakline_relief
+    citydb.breakline_relief
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -4282,7 +4282,7 @@ BEGIN
     deleted_id;
 
   -- delete relief_component
-  PERFORM delete_relief_component_post(deleted_id, class_id);
+  PERFORM citydb.delete_relief_component_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -4293,7 +4293,7 @@ LANGUAGE plpgsql STRICT;
 /*
 MASSPOINT RELIEF
 */
-CREATE OR REPLACE FUNCTION delete_masspoint_relief(
+CREATE OR REPLACE FUNCTION citydb.delete_masspoint_relief(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -4309,7 +4309,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      masspoint_relief t,
+      citydb.masspoint_relief t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -4330,7 +4330,7 @@ BEGIN
   -- delete masspoint_reliefs
   WITH delete_objects AS (
     DELETE FROM
-      masspoint_relief t
+      citydb.masspoint_relief t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -4347,7 +4347,7 @@ BEGIN
     delete_objects;
 
   -- delete relief_components
-  PERFORM delete_relief_component_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_relief_component_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -4355,7 +4355,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_masspoint_relief(
+CREATE OR REPLACE FUNCTION citydb.delete_masspoint_relief(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -4371,7 +4371,7 @@ BEGIN
     INTO
       class_id
     FROM
-      masspoint_relief
+      citydb.masspoint_relief
     WHERE
       id = $1;
   ELSE
@@ -4385,7 +4385,7 @@ BEGIN
 
   -- delete masspoint_relief
   DELETE FROM
-    masspoint_relief
+    citydb.masspoint_relief
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -4395,7 +4395,7 @@ BEGIN
     deleted_id;
 
   -- delete relief_component
-  PERFORM delete_relief_component_post(deleted_id, class_id);
+  PERFORM citydb.delete_relief_component_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -4406,7 +4406,7 @@ LANGUAGE plpgsql STRICT;
 /*
 RASTER RELIEF
 */
-CREATE OR REPLACE FUNCTION delete_raster_relief(
+CREATE OR REPLACE FUNCTION citydb.delete_raster_relief(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -4423,7 +4423,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      raster_relief t,
+      citydb.raster_relief t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -4444,7 +4444,7 @@ BEGIN
   -- delete raster_reliefs
   WITH delete_objects AS (
     DELETE FROM
-      raster_relief t
+      citydb.raster_relief t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -4466,11 +4466,11 @@ BEGIN
   -- delete grid_coverage(s) not being referenced any more
   IF -1 = ALL(grid_coverage_ids) IS NOT NULL THEN
     DELETE FROM
-      grid_coverage m
+      citydb.grid_coverage m
     USING
       (SELECT DISTINCT unnest(grid_coverage_ids) AS a_id) a
     LEFT JOIN
-      raster_relief n1
+      citydb.raster_relief n1
       ON n1.coverage_id = a.a_id
     WHERE
       m.id = a.a_id
@@ -4478,7 +4478,7 @@ BEGIN
   END IF;
 
   -- delete relief_components
-  PERFORM delete_relief_component_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_relief_component_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -4486,7 +4486,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_raster_relief(
+CREATE OR REPLACE FUNCTION citydb.delete_raster_relief(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -4503,7 +4503,7 @@ BEGIN
     INTO
       class_id
     FROM
-      raster_relief
+      citydb.raster_relief
     WHERE
       id = $1;
   ELSE
@@ -4517,7 +4517,7 @@ BEGIN
 
   -- delete raster_relief
   DELETE FROM
-    raster_relief
+    citydb.raster_relief
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -4531,11 +4531,11 @@ BEGIN
   -- delete grid_coverage not being referenced any more
   IF grid_coverage_ref_id IS NOT NULL THEN
     DELETE FROM
-      grid_coverage m
+      citydb.grid_coverage m
     USING
       (VALUES (grid_coverage_ref_id)) a(a_id)
     LEFT JOIN
-      raster_relief n1
+      citydb.raster_relief n1
       ON n1.coverage_id = a.a_id
     WHERE
       m.id = a.a_id
@@ -4543,7 +4543,7 @@ BEGIN
   END IF;
 
   -- delete relief_component
-  PERFORM delete_relief_component_post(deleted_id, class_id);
+  PERFORM citydb.delete_relief_component_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -4554,7 +4554,7 @@ LANGUAGE plpgsql STRICT;
 /*
 TIN RELIEF
 */
-CREATE OR REPLACE FUNCTION delete_tin_relief(
+CREATE OR REPLACE FUNCTION citydb.delete_tin_relief(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -4570,7 +4570,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      tin_relief t,
+      citydb.tin_relief t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -4591,7 +4591,7 @@ BEGIN
   -- delete tin_reliefs
   WITH delete_objects AS (
     DELETE FROM
-      tin_relief t
+      citydb.tin_relief t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -4608,7 +4608,7 @@ BEGIN
     delete_objects;
 
   -- delete relief_components
-  PERFORM delete_relief_component_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_relief_component_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -4616,7 +4616,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_tin_relief(
+CREATE OR REPLACE FUNCTION citydb.delete_tin_relief(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -4632,7 +4632,7 @@ BEGIN
     INTO
       class_id
     FROM
-      tin_relief
+      citydb.tin_relief
     WHERE
       id = $1;
   ELSE
@@ -4646,7 +4646,7 @@ BEGIN
 
   -- delete tin_relief
   DELETE FROM
-    tin_relief
+    citydb.tin_relief
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -4656,7 +4656,7 @@ BEGIN
     deleted_id;
 
   -- delete relief_component
-  PERFORM delete_relief_component_post(deleted_id, class_id);
+  PERFORM citydb.delete_relief_component_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -4667,7 +4667,7 @@ LANGUAGE plpgsql STRICT;
 /*
 RELIEF COMPONENT ROUTER
 */
-CREATE OR REPLACE FUNCTION delete_relief_component(
+CREATE OR REPLACE FUNCTION citydb.delete_relief_component(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -4683,7 +4683,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      relief_component t,
+      citydb.relief_component t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -4703,26 +4703,26 @@ BEGIN
 
   -- delete breakline_reliefs
   IF class_ids && ARRAY[18]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_breakline_relief($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_breakline_relief($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete masspoint_reliefs
   IF class_ids && ARRAY[17]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_masspoint_relief($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_masspoint_relief($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete raster_reliefs
   IF class_ids && ARRAY[19]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_raster_relief($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_raster_relief($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete tin_reliefs
   IF class_ids && ARRAY[16]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_tin_relief($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_tin_relief($1, class_ids) AS a(a_id));
   END IF;
 
   IF array_length(deleted_ids, 1) IS NULL OR array_length(deleted_ids, 1) <> array_length($1, 1) THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_relief_component_post($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_relief_component_post($1, class_ids) AS a(a_id));
   END IF;
 
   RETURN QUERY
@@ -4731,7 +4731,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_relief_component(
+CREATE OR REPLACE FUNCTION citydb.delete_relief_component(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -4747,7 +4747,7 @@ BEGIN
     INTO
       class_id
     FROM
-      relief_component
+      citydb.relief_component
     WHERE
       id = $1;
   ELSE
@@ -4761,26 +4761,26 @@ BEGIN
 
   -- delete breakline_relief
   IF class_id IN (18) THEN
-    deleted_id := delete_breakline_relief($1, class_id);
+    deleted_id := citydb.delete_breakline_relief($1, class_id);
   END IF;
 
   -- delete masspoint_relief
   IF class_id IN (17) THEN
-    deleted_id := delete_masspoint_relief($1, class_id);
+    deleted_id := citydb.delete_masspoint_relief($1, class_id);
   END IF;
 
   -- delete raster_relief
   IF class_id IN (19) THEN
-    deleted_id := delete_raster_relief($1, class_id);
+    deleted_id := citydb.delete_raster_relief($1, class_id);
   END IF;
 
   -- delete tin_relief
   IF class_id IN (16) THEN
-    deleted_id := delete_tin_relief($1, class_id);
+    deleted_id := citydb.delete_tin_relief($1, class_id);
   END IF;
 
   IF deleted_id IS NULL THEN
-    deleted_id := delete_relief_component_post($1, class_id);
+    deleted_id := citydb.delete_relief_component_post($1, class_id);
   END IF;
 
   RETURN deleted_id;
@@ -4792,7 +4792,7 @@ LANGUAGE plpgsql STRICT;
 /*
 RELIEF FEATURE
 */
-CREATE OR REPLACE FUNCTION delete_relief_feature(
+CREATE OR REPLACE FUNCTION citydb.delete_relief_feature(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -4809,7 +4809,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      relief_feature t,
+      citydb.relief_feature t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -4830,7 +4830,7 @@ BEGIN
   -- delete references to relief_components
   WITH delete_relief_component_refs AS (
     DELETE FROM
-      relief_feat_to_rel_comp t
+      citydb.relief_feat_to_rel_comp t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -4848,11 +4848,11 @@ BEGIN
   -- delete relief_component(s) not being referenced any more
   IF -1 = ALL(relief_component_ids) IS NOT NULL THEN
     PERFORM
-      delete_relief_component(array_agg(a.a_id))
+      citydb.delete_relief_component(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(relief_component_ids) AS a_id) a
     LEFT JOIN
-      relief_feat_to_rel_comp n1
+      citydb.relief_feat_to_rel_comp n1
       ON n1.relief_component_id = a.a_id
     WHERE
       n1.relief_component_id IS NULL;
@@ -4861,7 +4861,7 @@ BEGIN
   -- delete relief_features
   WITH delete_objects AS (
     DELETE FROM
-      relief_feature t
+      citydb.relief_feature t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -4878,7 +4878,7 @@ BEGIN
     delete_objects;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -4886,7 +4886,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_relief_feature(
+CREATE OR REPLACE FUNCTION citydb.delete_relief_feature(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -4903,7 +4903,7 @@ BEGIN
     INTO
       class_id
     FROM
-      relief_feature
+      citydb.relief_feature
     WHERE
       id = $1;
   ELSE
@@ -4918,7 +4918,7 @@ BEGIN
   -- delete references to relief_components
   WITH delete_relief_component_refs AS (
     DELETE FROM
-      relief_feat_to_rel_comp
+      citydb.relief_feat_to_rel_comp
     WHERE
       relief_feature_id = $1
     RETURNING
@@ -4934,11 +4934,11 @@ BEGIN
   -- delete relief_component(s) not being referenced any more
   IF -1 = ALL(relief_component_ids) IS NOT NULL THEN
     PERFORM
-      delete_relief_component(array_agg(a.a_id))
+      citydb.delete_relief_component(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(relief_component_ids) AS a_id) a
     LEFT JOIN
-      relief_feat_to_rel_comp n1
+      citydb.relief_feat_to_rel_comp n1
       ON n1.relief_component_id = a.a_id
     WHERE
       n1.relief_component_id IS NULL;
@@ -4946,7 +4946,7 @@ BEGIN
 
   -- delete relief_feature
   DELETE FROM
-    relief_feature
+    citydb.relief_feature
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -4956,7 +4956,7 @@ BEGIN
     deleted_id;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -4970,7 +4970,7 @@ LANGUAGE plpgsql STRICT;
 /*
 TRAFFIC AREA
 */
-CREATE OR REPLACE FUNCTION delete_traffic_area(
+CREATE OR REPLACE FUNCTION citydb.delete_traffic_area(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -4986,7 +4986,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      traffic_area t,
+      citydb.traffic_area t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -5007,7 +5007,7 @@ BEGIN
   -- delete traffic_areas
   WITH delete_objects AS (
     DELETE FROM
-      traffic_area t
+      citydb.traffic_area t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -5024,7 +5024,7 @@ BEGIN
     delete_objects;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -5032,7 +5032,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_traffic_area(
+CREATE OR REPLACE FUNCTION citydb.delete_traffic_area(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -5048,7 +5048,7 @@ BEGIN
     INTO
       class_id
     FROM
-      traffic_area
+      citydb.traffic_area
     WHERE
       id = $1;
   ELSE
@@ -5062,7 +5062,7 @@ BEGIN
 
   -- delete traffic_area
   DELETE FROM
-    traffic_area
+    citydb.traffic_area
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -5072,7 +5072,7 @@ BEGIN
     deleted_id;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -5083,7 +5083,7 @@ LANGUAGE plpgsql STRICT;
 /*
 TRANSPORTATION COMPLEX
 */
-CREATE OR REPLACE FUNCTION delete_transport_complex(
+CREATE OR REPLACE FUNCTION citydb.delete_transport_complex(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -5099,7 +5099,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      transportation_complex t,
+      citydb.transportation_complex t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -5119,9 +5119,9 @@ BEGIN
 
   -- delete traffic_areas
   PERFORM
-    delete_traffic_area(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_traffic_area(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    traffic_area t,
+    citydb.traffic_area t,
     unnest($1) a(a_id)
   WHERE
     t.transportation_complex_id = a.a_id;
@@ -5129,7 +5129,7 @@ BEGIN
   -- delete transportation_complexes
   WITH delete_objects AS (
     DELETE FROM
-      transportation_complex t
+      citydb.transportation_complex t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -5146,7 +5146,7 @@ BEGIN
     delete_objects;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -5154,7 +5154,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_transport_complex(
+CREATE OR REPLACE FUNCTION citydb.delete_transport_complex(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -5170,7 +5170,7 @@ BEGIN
     INTO
       class_id
     FROM
-      transportation_complex
+      citydb.transportation_complex
     WHERE
       id = $1;
   ELSE
@@ -5184,15 +5184,15 @@ BEGIN
 
   -- delete traffic_areas
   PERFORM
-    delete_traffic_area(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_traffic_area(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    traffic_area
+    citydb.traffic_area
   WHERE
     transportation_complex_id = $1;
 
   -- delete transportation_complex
   DELETE FROM
-    transportation_complex
+    citydb.transportation_complex
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -5202,7 +5202,7 @@ BEGIN
     deleted_id;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -5216,7 +5216,7 @@ LANGUAGE plpgsql STRICT;
 /*
 TUNNEL FRUNITURE
 */
-CREATE OR REPLACE FUNCTION delete_tunnel_furniture(
+CREATE OR REPLACE FUNCTION citydb.delete_tunnel_furniture(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -5233,7 +5233,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      tunnel_furniture t,
+      citydb.tunnel_furniture t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -5254,7 +5254,7 @@ BEGIN
   -- delete tunnel_furnitures
   WITH delete_objects AS (
     DELETE FROM
-      tunnel_furniture t
+      citydb.tunnel_furniture t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -5276,18 +5276,18 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      tunnel_furniture n1
+      citydb.tunnel_furniture n1
       ON n1.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod4_implicit_rep_id IS NULL;
   END IF;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -5295,7 +5295,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_tunnel_furniture(
+CREATE OR REPLACE FUNCTION citydb.delete_tunnel_furniture(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -5312,7 +5312,7 @@ BEGIN
     INTO
       class_id
     FROM
-      tunnel_furniture
+      citydb.tunnel_furniture
     WHERE
       id = $1;
   ELSE
@@ -5326,7 +5326,7 @@ BEGIN
 
   -- delete tunnel_furniture
   DELETE FROM
-    tunnel_furniture
+    citydb.tunnel_furniture
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -5340,18 +5340,18 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF implicit_geometry_ref_id IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(a.a_id)
+      citydb.delete_implicit_geometry(a.a_id)
     FROM
       (VALUES (implicit_geometry_ref_id)) a(a_id)
     LEFT JOIN
-      tunnel_furniture n1
+      citydb.tunnel_furniture n1
       ON n1.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod4_implicit_rep_id IS NULL;
   END IF;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -5362,7 +5362,7 @@ LANGUAGE plpgsql STRICT;
 /*
 TUNNEL OPENING
 */
-CREATE OR REPLACE FUNCTION delete_tunnel_opening(
+CREATE OR REPLACE FUNCTION citydb.delete_tunnel_opening(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -5379,7 +5379,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      tunnel_opening t,
+      citydb.tunnel_opening t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -5400,7 +5400,7 @@ BEGIN
   -- delete tunnel_openings
   WITH delete_objects AS (
     DELETE FROM
-      tunnel_opening t
+      citydb.tunnel_opening t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -5424,14 +5424,14 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      tunnel_opening n1
+      citydb.tunnel_opening n1
       ON n1.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      tunnel_opening n2
+      citydb.tunnel_opening n2
       ON n2.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod3_implicit_rep_id IS NULL
@@ -5439,7 +5439,7 @@ BEGIN
   END IF;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -5447,7 +5447,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_tunnel_opening(
+CREATE OR REPLACE FUNCTION citydb.delete_tunnel_opening(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -5464,7 +5464,7 @@ BEGIN
     INTO
       class_id
     FROM
-      tunnel_opening
+      citydb.tunnel_opening
     WHERE
       id = $1;
   ELSE
@@ -5478,7 +5478,7 @@ BEGIN
 
   -- delete tunnel_opening
   DELETE FROM
-    tunnel_opening
+    citydb.tunnel_opening
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -5495,14 +5495,14 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      tunnel_opening n1
+      citydb.tunnel_opening n1
       ON n1.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      tunnel_opening n2
+      citydb.tunnel_opening n2
       ON n2.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod3_implicit_rep_id IS NULL
@@ -5510,7 +5510,7 @@ BEGIN
   END IF;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -5521,7 +5521,7 @@ LANGUAGE plpgsql STRICT;
 /*
 TUNNEL THEMATIC SURFACE
 */
-CREATE OR REPLACE FUNCTION delete_tunnel_them_srf(
+CREATE OR REPLACE FUNCTION citydb.delete_tunnel_them_srf(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -5538,7 +5538,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      tunnel_thematic_surface t,
+      citydb.tunnel_thematic_surface t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -5559,7 +5559,7 @@ BEGIN
   -- delete references to tunnel_openings
   WITH delete_tunnel_opening_refs AS (
     DELETE FROM
-      tunnel_open_to_them_srf t
+      citydb.tunnel_open_to_them_srf t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -5577,11 +5577,11 @@ BEGIN
   -- delete tunnel_opening(s) not being referenced any more
   IF -1 = ALL(tunnel_opening_ids) IS NOT NULL THEN
     PERFORM
-      delete_tunnel_opening(array_agg(a.a_id))
+      citydb.delete_tunnel_opening(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(tunnel_opening_ids) AS a_id) a
     LEFT JOIN
-      tunnel_open_to_them_srf n1
+      citydb.tunnel_open_to_them_srf n1
       ON n1.tunnel_opening_id = a.a_id
     WHERE
       n1.tunnel_opening_id IS NULL;
@@ -5590,7 +5590,7 @@ BEGIN
   -- delete tunnel_thematic_surfaces
   WITH delete_objects AS (
     DELETE FROM
-      tunnel_thematic_surface t
+      citydb.tunnel_thematic_surface t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -5607,7 +5607,7 @@ BEGIN
     delete_objects;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -5615,7 +5615,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_tunnel_them_srf(
+CREATE OR REPLACE FUNCTION citydb.delete_tunnel_them_srf(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -5632,7 +5632,7 @@ BEGIN
     INTO
       class_id
     FROM
-      tunnel_thematic_surface
+      citydb.tunnel_thematic_surface
     WHERE
       id = $1;
   ELSE
@@ -5647,7 +5647,7 @@ BEGIN
   -- delete references to tunnel_openings
   WITH delete_tunnel_opening_refs AS (
     DELETE FROM
-      tunnel_open_to_them_srf
+      citydb.tunnel_open_to_them_srf
     WHERE
       tunnel_thematic_surface_id = $1
     RETURNING
@@ -5663,11 +5663,11 @@ BEGIN
   -- delete tunnel_opening(s) not being referenced any more
   IF -1 = ALL(tunnel_opening_ids) IS NOT NULL THEN
     PERFORM
-      delete_tunnel_opening(array_agg(a.a_id))
+      citydb.delete_tunnel_opening(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(tunnel_opening_ids) AS a_id) a
     LEFT JOIN
-      tunnel_open_to_them_srf n1
+      citydb.tunnel_open_to_them_srf n1
       ON n1.tunnel_opening_id = a.a_id
     WHERE
       n1.tunnel_opening_id IS NULL;
@@ -5675,7 +5675,7 @@ BEGIN
 
   -- delete tunnel_thematic_surface
   DELETE FROM
-    tunnel_thematic_surface
+    citydb.tunnel_thematic_surface
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -5685,7 +5685,7 @@ BEGIN
     deleted_id;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -5696,7 +5696,7 @@ LANGUAGE plpgsql STRICT;
 /*
 TUNNEL INSTALLATION
 */
-CREATE OR REPLACE FUNCTION delete_tunnel_installation(
+CREATE OR REPLACE FUNCTION citydb.delete_tunnel_installation(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -5713,7 +5713,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      tunnel_installation t,
+      citydb.tunnel_installation t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -5733,9 +5733,9 @@ BEGIN
 
   -- delete tunnel_thematic_surfaces
   PERFORM
-    delete_tunnel_them_srf(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_tunnel_them_srf(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    tunnel_thematic_surface t,
+    citydb.tunnel_thematic_surface t,
     unnest($1) a(a_id)
   WHERE
     t.tunnel_installation_id = a.a_id;
@@ -5743,7 +5743,7 @@ BEGIN
   -- delete tunnel_installations
   WITH delete_objects AS (
     DELETE FROM
-      tunnel_installation t
+      citydb.tunnel_installation t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -5769,17 +5769,17 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      tunnel_installation n1
+      citydb.tunnel_installation n1
       ON n1.lod2_implicit_rep_id = a.a_id
     LEFT JOIN
-      tunnel_installation n2
+      citydb.tunnel_installation n2
       ON n2.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      tunnel_installation n3
+      citydb.tunnel_installation n3
       ON n3.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod2_implicit_rep_id IS NULL
@@ -5788,7 +5788,7 @@ BEGIN
   END IF;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -5796,7 +5796,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_tunnel_installation(
+CREATE OR REPLACE FUNCTION citydb.delete_tunnel_installation(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -5813,7 +5813,7 @@ BEGIN
     INTO
       class_id
     FROM
-      tunnel_installation
+      citydb.tunnel_installation
     WHERE
       id = $1;
   ELSE
@@ -5827,15 +5827,15 @@ BEGIN
 
   -- delete tunnel_thematic_surfaces
   PERFORM
-    delete_tunnel_them_srf(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_tunnel_them_srf(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    tunnel_thematic_surface
+    citydb.tunnel_thematic_surface
   WHERE
     tunnel_installation_id = $1;
 
   -- delete tunnel_installations
   DELETE FROM
-    tunnel_installation
+    citydb.tunnel_installation
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -5853,17 +5853,17 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      tunnel_installation n1
+      citydb.tunnel_installation n1
       ON n1.lod2_implicit_rep_id = a.a_id
     LEFT JOIN
-      tunnel_installation n2
+      citydb.tunnel_installation n2
       ON n2.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      tunnel_installation n3
+      citydb.tunnel_installation n3
       ON n3.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod2_implicit_rep_id IS NULL
@@ -5872,7 +5872,7 @@ BEGIN
   END IF;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -5883,7 +5883,7 @@ LANGUAGE plpgsql STRICT;
 /*
 TUNNEL HOLLOW SPACE
 */
-CREATE OR REPLACE FUNCTION delete_tunnel_hollow_space(
+CREATE OR REPLACE FUNCTION citydb.delete_tunnel_hollow_space(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -5899,7 +5899,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      tunnel_hollow_space t,
+      citydb.tunnel_hollow_space t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -5919,27 +5919,27 @@ BEGIN
 
   -- delete tunnel_furnitures
   PERFORM
-    delete_tunnel_furniture(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_tunnel_furniture(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    tunnel_furniture t,
+    citydb.tunnel_furniture t,
     unnest($1) a(a_id)
   WHERE
     t.tunnel_hollow_space_id = a.a_id;
 
   -- delete tunnel_installations
   PERFORM
-    delete_tunnel_installation(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_tunnel_installation(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    tunnel_installation t,
+    citydb.tunnel_installation t,
     unnest($1) a(a_id)
   WHERE
     t.tunnel_hollow_space_id = a.a_id;
 
   -- delete tunnel_thematic_surfaces
   PERFORM
-    delete_tunnel_them_srf(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_tunnel_them_srf(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    tunnel_thematic_surface t,
+    citydb.tunnel_thematic_surface t,
     unnest($1) a(a_id)
   WHERE
     t.tunnel_hollow_space_id = a.a_id;
@@ -5947,7 +5947,7 @@ BEGIN
   -- delete tunnel_hollow_spaces
   WITH delete_objects AS (
     DELETE FROM
-      tunnel_hollow_space t
+      citydb.tunnel_hollow_space t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -5964,7 +5964,7 @@ BEGIN
     delete_objects;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -5972,7 +5972,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_tunnel_hollow_space(
+CREATE OR REPLACE FUNCTION citydb.delete_tunnel_hollow_space(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -5988,7 +5988,7 @@ BEGIN
     INTO
       class_id
     FROM
-      tunnel_hollow_space
+      citydb.tunnel_hollow_space
     WHERE
       id = $1;
   ELSE
@@ -6002,31 +6002,31 @@ BEGIN
 
   -- delete tunnel_furnitures
   PERFORM
-    delete_tunnel_furniture(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_tunnel_furniture(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    tunnel_furniture
+    citydb.tunnel_furniture
   WHERE
     tunnel_hollow_space_id = $1;
 
   -- delete tunnel_installations
   PERFORM
-    delete_tunnel_installation(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_tunnel_installation(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    tunnel_installation
+    citydb.tunnel_installation
   WHERE
     tunnel_hollow_space_id = $1;
 
   -- delete tunnel_thematic_surfaces
   PERFORM
-    delete_tunnel_them_srf(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_tunnel_them_srf(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    tunnel_thematic_surface
+    citydb.tunnel_thematic_surface
   WHERE
     tunnel_hollow_space_id = $1;
 
   -- delete tunnel_hollow_spaces
   DELETE FROM
-    tunnel_hollow_space
+    citydb.tunnel_hollow_space
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -6036,7 +6036,7 @@ BEGIN
     deleted_id;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -6047,7 +6047,7 @@ LANGUAGE plpgsql STRICT;
 /*
 TUNNEL
 */
-CREATE OR REPLACE FUNCTION delete_tunnel(
+CREATE OR REPLACE FUNCTION citydb.delete_tunnel(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -6063,7 +6063,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      tunnel t,
+      citydb.tunnel t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -6083,36 +6083,36 @@ BEGIN
 
   -- delete tunnel_hollow_spaces
   PERFORM
-    delete_tunnel_hollow_space(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_tunnel_hollow_space(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    tunnel_hollow_space t,
+    citydb.tunnel_hollow_space t,
     unnest($1) a(a_id)
   WHERE
     t.tunnel_id = a.a_id;
 
   -- delete tunnel_installations
   PERFORM
-    delete_tunnel_installation(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_tunnel_installation(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    tunnel_installation t,
+    citydb.tunnel_installation t,
     unnest($1) a(a_id)
   WHERE
     t.tunnel_id = a.a_id;
 
   -- delete tunnel_thematic_surfaces
   PERFORM
-    delete_tunnel_them_srf(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_tunnel_them_srf(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    tunnel_thematic_surface t,
+    citydb.tunnel_thematic_surface t,
     unnest($1) a(a_id)
   WHERE
     t.tunnel_id = a.a_id;
 
   -- delete referenced parts
   PERFORM
-    delete_tunnel(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
+    citydb.delete_tunnel(array_agg(t.id), array_agg(DISTINCT t.objectclass_id))
   FROM
-    tunnel t,
+    citydb.tunnel t,
     unnest($1) a(a_id)
   WHERE
     t.tunnel_parent_id = a.a_id
@@ -6121,7 +6121,7 @@ BEGIN
   -- delete tunnels
   WITH delete_objects AS (
     DELETE FROM
-      tunnel t
+      citydb.tunnel t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -6138,7 +6138,7 @@ BEGIN
     delete_objects;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -6146,7 +6146,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_tunnel(
+CREATE OR REPLACE FUNCTION citydb.delete_tunnel(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -6162,7 +6162,7 @@ BEGIN
     INTO
       class_id
     FROM
-      tunnel
+      citydb.tunnel
     WHERE
       id = $1;
   ELSE
@@ -6176,40 +6176,40 @@ BEGIN
 
   -- delete tunnel_hollow_spaces
   PERFORM
-    delete_tunnel_hollow_space(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_tunnel_hollow_space(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    tunnel_hollow_space
+    citydb.tunnel_hollow_space
   WHERE
     tunnel_id = $1;
 
   -- delete tunnel_installations
   PERFORM
-    delete_tunnel_installation(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_tunnel_installation(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    tunnel_installation
+    citydb.tunnel_installation
   WHERE
     tunnel_id = $1;
 
   -- delete tunnel_thematic_surfaces
   PERFORM
-    delete_tunnel_them_srf(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_tunnel_them_srf(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    tunnel_thematic_surface
+    citydb.tunnel_thematic_surface
   WHERE
     tunnel_id = $1;
 
   --delete referenced parts
   PERFORM
-    delete_tunnel(array_agg(id), array_agg(DISTINCT objectclass_id))
+    citydb.delete_tunnel(array_agg(id), array_agg(DISTINCT objectclass_id))
   FROM
-    tunnel
+    citydb.tunnel
   WHERE
     tunnel_parent_id = $1
     AND id != $1;
 
   -- delete tunnel
   DELETE FROM
-    tunnel
+    citydb.tunnel
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -6219,7 +6219,7 @@ BEGIN
     deleted_id;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -6233,7 +6233,7 @@ LANGUAGE plpgsql STRICT;
 /*
 PLANT COVER
 */
-CREATE OR REPLACE FUNCTION delete_plant_cover(
+CREATE OR REPLACE FUNCTION citydb.delete_plant_cover(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -6249,7 +6249,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      plant_cover t,
+      citydb.plant_cover t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -6270,7 +6270,7 @@ BEGIN
   -- delete plant_covers
   WITH delete_objects AS (
     DELETE FROM
-      plant_cover t
+      citydb.plant_cover t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -6287,7 +6287,7 @@ BEGIN
     delete_objects;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -6295,7 +6295,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_plant_cover(
+CREATE OR REPLACE FUNCTION citydb.delete_plant_cover(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -6311,7 +6311,7 @@ BEGIN
     INTO
       class_id
     FROM
-      plant_cover
+      citydb.plant_cover
     WHERE
       id = $1;
   ELSE
@@ -6325,7 +6325,7 @@ BEGIN
 
   -- delete plant_cover
   DELETE FROM
-    plant_cover
+    citydb.plant_cover
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -6335,7 +6335,7 @@ BEGIN
     deleted_id;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -6346,7 +6346,7 @@ LANGUAGE plpgsql STRICT;
 /*
 SOLITARY VEGETATION OBJECT
 */
-CREATE OR REPLACE FUNCTION delete_solitary_veg_obj(
+CREATE OR REPLACE FUNCTION citydb.delete_solitary_veg_obj(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -6363,7 +6363,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      solitary_vegetat_object t,
+      citydb.solitary_vegetat_object t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -6384,7 +6384,7 @@ BEGIN
   -- delete solitary_vegetat_objects
   WITH delete_objects AS (
     DELETE FROM
-      solitary_vegetat_object t
+      citydb.solitary_vegetat_object t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -6412,20 +6412,20 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      solitary_vegetat_object n1
+      citydb.solitary_vegetat_object n1
       ON n1.lod1_implicit_rep_id = a.a_id
     LEFT JOIN
-      solitary_vegetat_object n2
+      citydb.solitary_vegetat_object n2
       ON n2.lod2_implicit_rep_id = a.a_id
     LEFT JOIN
-      solitary_vegetat_object n3
+      citydb.solitary_vegetat_object n3
       ON n3.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      solitary_vegetat_object n4
+      citydb.solitary_vegetat_object n4
       ON n4.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod1_implicit_rep_id IS NULL
@@ -6435,7 +6435,7 @@ BEGIN
   END IF;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -6443,7 +6443,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_solitary_veg_obj(
+CREATE OR REPLACE FUNCTION citydb.delete_solitary_veg_obj(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -6460,7 +6460,7 @@ BEGIN
     INTO
       class_id
     FROM
-      solitary_vegetat_object
+      citydb.solitary_vegetat_object
     WHERE
       id = $1;
   ELSE
@@ -6474,7 +6474,7 @@ BEGIN
 
   -- delete solitary_vegetat_object
   DELETE FROM
-    solitary_vegetat_object
+    citydb.solitary_vegetat_object
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -6493,20 +6493,20 @@ BEGIN
   -- delete implicit_geometry not being referenced any more
   IF -1 = ALL(implicit_geometry_ids) IS NOT NULL THEN
     PERFORM
-      delete_implicit_geometry(array_agg(a.a_id))
+      citydb.delete_implicit_geometry(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(implicit_geometry_ids) AS a_id) a
     LEFT JOIN
-      solitary_vegetat_object n1
+      citydb.solitary_vegetat_object n1
       ON n1.lod1_implicit_rep_id = a.a_id
     LEFT JOIN
-      solitary_vegetat_object n2
+      citydb.solitary_vegetat_object n2
       ON n2.lod2_implicit_rep_id = a.a_id
     LEFT JOIN
-      solitary_vegetat_object n3
+      citydb.solitary_vegetat_object n3
       ON n3.lod3_implicit_rep_id = a.a_id
     LEFT JOIN
-      solitary_vegetat_object n4
+      citydb.solitary_vegetat_object n4
       ON n4.lod4_implicit_rep_id = a.a_id
     WHERE
       n1.lod1_implicit_rep_id IS NULL
@@ -6516,7 +6516,7 @@ BEGIN
   END IF;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -6530,7 +6530,7 @@ LANGUAGE plpgsql STRICT;
 /*
 WATER BOUNDARY SURFACE
 */
-CREATE OR REPLACE FUNCTION delete_waterbnd_surface(
+CREATE OR REPLACE FUNCTION citydb.delete_waterbnd_surface(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -6546,7 +6546,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      waterboundary_surface t,
+      citydb.waterboundary_surface t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -6567,7 +6567,7 @@ BEGIN
   -- delete waterboundary_surfaces
   WITH delete_objects AS (
     DELETE FROM
-      waterboundary_surface t
+      citydb.waterboundary_surface t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -6584,7 +6584,7 @@ BEGIN
     delete_objects;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -6592,7 +6592,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_waterbnd_surface(
+CREATE OR REPLACE FUNCTION citydb.delete_waterbnd_surface(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -6608,7 +6608,7 @@ BEGIN
     INTO
       class_id
     FROM
-      waterboundary_surface
+      citydb.waterboundary_surface
     WHERE
       id = $1;
   ELSE
@@ -6622,7 +6622,7 @@ BEGIN
 
   -- delete waterboundary_surface
   DELETE FROM
-    waterboundary_surface
+    citydb.waterboundary_surface
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -6632,7 +6632,7 @@ BEGIN
     deleted_id;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -6643,7 +6643,7 @@ LANGUAGE plpgsql STRICT;
 /*
 WATER BODY
 */
-CREATE OR REPLACE FUNCTION delete_waterbody(
+CREATE OR REPLACE FUNCTION citydb.delete_waterbody(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -6660,7 +6660,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      waterbody t,
+      citydb.waterbody t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -6681,7 +6681,7 @@ BEGIN
   -- delete references to waterboundary_surfaces
   WITH delete_waterboundary_sur_refs AS (
     DELETE FROM
-      waterbod_to_waterbnd_srf t
+      citydb.waterbod_to_waterbnd_srf t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -6699,11 +6699,11 @@ BEGIN
   -- delete waterboundary_surface(s) not being referenced any more
   IF -1 = ALL(waterboundary_srf_ids) IS NOT NULL THEN
     PERFORM
-      delete_waterbnd_surface(array_agg(a.a_id))
+      citydb.delete_waterbnd_surface(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(waterboundary_srf_ids) AS a_id) a
     LEFT JOIN
-      waterbod_to_waterbnd_srf n1
+      citydb.waterbod_to_waterbnd_srf n1
       ON n1.waterboundary_surface_id = a.a_id
     WHERE
       n1.waterboundary_surface_id IS NULL;
@@ -6712,7 +6712,7 @@ BEGIN
   -- delete waterbodys
   WITH delete_objects AS (
     DELETE FROM
-      waterbody t
+      citydb.waterbody t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -6729,7 +6729,7 @@ BEGIN
     delete_objects;
 
   -- delete cityobjects
-  PERFORM delete_cityobject_post(deleted_ids, class_ids);
+  PERFORM citydb.delete_cityobject_post(deleted_ids, class_ids);
 
   RETURN QUERY
     SELECT unnest(deleted_ids);
@@ -6737,7 +6737,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_waterbody(
+CREATE OR REPLACE FUNCTION citydb.delete_waterbody(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -6754,7 +6754,7 @@ BEGIN
     INTO
       class_id
     FROM
-      waterbody
+      citydb.waterbody
     WHERE
       id = $1;
   ELSE
@@ -6769,7 +6769,7 @@ BEGIN
   -- delete references to waterboundary_surfaces
   WITH delete_waterboundary_sur_refs AS (
     DELETE FROM
-      waterbod_to_waterbnd_srf
+      citydb.waterbod_to_waterbnd_srf
     WHERE
       waterbody_id = $1
     RETURNING
@@ -6785,11 +6785,11 @@ BEGIN
   -- delete waterboundary_surface(s) not being referenced any more
   IF -1 = ALL(waterboundary_srf_ids) IS NOT NULL THEN
     PERFORM
-      delete_waterbnd_surface(array_agg(a.a_id))
+      citydb.delete_waterbnd_surface(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(waterboundary_srf_ids) AS a_id) a
     LEFT JOIN
-      waterbod_to_waterbnd_srf n1
+      citydb.waterbod_to_waterbnd_srf n1
       ON n1.waterboundary_surface_id = a.a_id
     WHERE
       n1.waterboundary_surface_id IS NULL;
@@ -6797,7 +6797,7 @@ BEGIN
 
   -- delete waterbody
   DELETE FROM
-    waterbody
+    citydb.waterbody
   WHERE
     id = $1
     AND objectclass_id = class_id
@@ -6807,7 +6807,7 @@ BEGIN
     deleted_id;
 
   -- delete cityobject
-  PERFORM delete_cityobject_post(deleted_id, class_id);
+  PERFORM citydb.delete_cityobject_post(deleted_id, class_id);
 
   RETURN deleted_id;
 END;
@@ -6818,7 +6818,7 @@ LANGUAGE plpgsql STRICT;
 /*********************
 * CITYOBJECT ROUTER
 *********************/
-CREATE OR REPLACE FUNCTION delete_cityobject(
+CREATE OR REPLACE FUNCTION citydb.delete_cityobject(
     pids integer[],
     objclass_ids integer[] DEFAULT '{}'::integer[])
   RETURNS SETOF integer AS
@@ -6834,7 +6834,7 @@ BEGIN
     INTO
       class_ids
     FROM
-      cityobject t,
+      citydb.cityobject t,
       unnest($1) a(a_id)
     WHERE
       t.id = a.a_id;
@@ -6854,161 +6854,161 @@ BEGIN
 
   -- delete bridges
   IF class_ids && ARRAY[62,63,64]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_bridge($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_bridge($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete bridge_constr_elements
   IF class_ids && ARRAY[82]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_bridge_constr_element($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_bridge_constr_element($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete bridge_furnitures
   IF class_ids && ARRAY[80]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_bridge_furniture($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_bridge_furniture($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete bridge_installations
   IF class_ids && ARRAY[65,66]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_bridge_installation($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_bridge_installation($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete bridge_openings
   IF class_ids && ARRAY[77,78,79]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_bridge_opening($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_bridge_opening($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete bridge_rooms
   IF class_ids && ARRAY[81]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_bridge_room($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_bridge_room($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete bridge_thematic_surfaces
   IF class_ids && ARRAY[67,68,69,70,71,72,73,74,75,76]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_bridge_them_srf($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_bridge_them_srf($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete buildings
   IF class_ids && ARRAY[24,25,26]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_building($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_building($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete building_furnitures
   IF class_ids && ARRAY[40]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_building_furniture($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_building_furniture($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete building_installations
   IF class_ids && ARRAY[27,28]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_building_installation($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_building_installation($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete city_furnitures
   IF class_ids && ARRAY[21]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_city_furniture($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_city_furniture($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete cityobjectgroups
   IF class_ids && ARRAY[23]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_cityobjectgroup($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_cityobjectgroup($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete generic_cityobjects
   IF class_ids && ARRAY[5]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_generic_cityobject($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_generic_cityobject($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete land_uses
   IF class_ids && ARRAY[4]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_land_use($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_land_use($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete openings
   IF class_ids && ARRAY[37,38,39]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_opening($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_opening($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete plant_covers
   IF class_ids && ARRAY[8]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_plant_cover($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_plant_cover($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete relief_components
   IF class_ids && ARRAY[15,16,17,18,19]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_relief_component($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_relief_component($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete relief_features
   IF class_ids && ARRAY[14]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_relief_feature($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_relief_feature($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete rooms
   IF class_ids && ARRAY[41]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_room($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_room($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete solitary_vegetat_objects
   IF class_ids && ARRAY[7]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_solitary_veg_obj($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_solitary_veg_obj($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete thematic_surfaces
   IF class_ids && ARRAY[29,30,31,32,33,34,35,36,60,61]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_thematic_surface($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_thematic_surface($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete traffic_areas
   IF class_ids && ARRAY[47,48]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_traffic_area($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_traffic_area($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete transportation_complexes
   IF class_ids && ARRAY[42,43,44,45,46]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_transport_complex($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_transport_complex($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete tunnels
   IF class_ids && ARRAY[83,84,85]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_tunnel($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_tunnel($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete tunnel_furnitures
   IF class_ids && ARRAY[101]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_tunnel_furniture($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_tunnel_furniture($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete tunnel_hollow_spaces
   IF class_ids && ARRAY[102]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_tunnel_hollow_space($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_tunnel_hollow_space($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete tunnel_installations
   IF class_ids && ARRAY[86,87]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_tunnel_installation($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_tunnel_installation($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete tunnel_openings
   IF class_ids && ARRAY[98,99,100]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_tunnel_opening($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_tunnel_opening($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete tunnel_thematic_surfaces
   IF class_ids && ARRAY[88,89,90,91,92,93,94,95,96,97]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_tunnel_them_srf($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_tunnel_them_srf($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete waterbodys
   IF class_ids && ARRAY[9]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_waterbody($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_waterbody($1, class_ids) AS a(a_id));
   END IF;
 
   -- delete waterboundary_surfaces
   IF class_ids && ARRAY[10,11,12,13]::int[] THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_waterbnd_surface($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_waterbnd_surface($1, class_ids) AS a(a_id));
   END IF;
 
   IF array_length(deleted_ids, 1) IS NULL OR array_length(deleted_ids, 1) <> array_length($1, 1) THEN
-    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM delete_cityobject_post($1, class_ids) AS a(a_id));
+    deleted_ids := deleted_ids || (SELECT array_agg(a_id) FROM citydb.delete_cityobject_post($1, class_ids) AS a(a_id));
   END IF;
 
   RETURN QUERY
@@ -7017,7 +7017,7 @@ END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_cityobject(
+CREATE OR REPLACE FUNCTION citydb.delete_cityobject(
     pid integer,
     objclass_id integer DEFAULT 0)
   RETURNS integer AS
@@ -7033,7 +7033,7 @@ BEGIN
     INTO
       class_id
     FROM
-      cityobject
+      citydb.cityobject
     WHERE
       id = $1;
   ELSE
@@ -7047,161 +7047,161 @@ BEGIN
 
   -- delete bridge
   IF class_id IN (62,63,64) THEN
-    deleted_id := delete_bridge($1, class_id);
+    deleted_id := citydb.delete_bridge($1, class_id);
   END IF;
 
   -- delete bridge_constr_element
   IF class_id IN (82) THEN
-    deleted_id := delete_bridge_constr_element($1, class_id);
+    deleted_id := citydb.delete_bridge_constr_element($1, class_id);
   END IF;
 
   -- delete bridge_furniture
   IF class_id IN (80) THEN
-    deleted_id := delete_bridge_furniture($1, class_id);
+    deleted_id := citydb.delete_bridge_furniture($1, class_id);
   END IF;
 
   -- delete bridge_installation
   IF class_id IN (65,66) THEN
-    deleted_id := delete_bridge_installation($1, class_id);
+    deleted_id := citydb.delete_bridge_installation($1, class_id);
   END IF;
 
   -- delete bridge_opening
   IF class_id IN (77,78,79) THEN
-    deleted_id := delete_bridge_opening($1, class_id);
+    deleted_id := citydb.delete_bridge_opening($1, class_id);
   END IF;
 
   -- delete bridge_room
   IF class_id IN (81) THEN
-    deleted_id := delete_bridge_room($1, class_id);
+    deleted_id := citydb.delete_bridge_room($1, class_id);
   END IF;
 
   -- delete bridge_thematic_surface
   IF class_id IN (67,68,69,70,71,72,73,74,75,76) THEN
-    deleted_id := delete_bridge_them_srf($1, class_id);
+    deleted_id := citydb.delete_bridge_them_srf($1, class_id);
   END IF;
 
   -- delete building
   IF class_id IN (24,25,26) THEN
-    deleted_id := delete_building($1, class_id);
+    deleted_id := citydb.delete_building($1, class_id);
   END IF;
 
   -- delete building_furniture
   IF class_id IN (40) THEN
-    deleted_id := delete_building_furniture($1, class_id);
+    deleted_id := citydb.delete_building_furniture($1, class_id);
   END IF;
 
   -- delete building_installation
   IF class_id IN (27,28) THEN
-    deleted_id := delete_building_installation($1, class_id);
+    deleted_id := citydb.delete_building_installation($1, class_id);
   END IF;
 
   -- delete city_furniture
   IF class_id IN (21) THEN
-    deleted_id := delete_city_furniture($1, class_id);
+    deleted_id := citydb.delete_city_furniture($1, class_id);
   END IF;
 
   -- delete cityobjectgroup
   IF class_id IN (23) THEN
-    deleted_id := delete_cityobjectgroup($1, class_id);
+    deleted_id := citydb.delete_cityobjectgroup($1, class_id);
   END IF;
 
   -- delete generic_cityobject
   IF class_id IN (5) THEN
-    deleted_id := delete_generic_cityobject($1, class_id);
+    deleted_id := citydb.delete_generic_cityobject($1, class_id);
   END IF;
 
   -- delete land_use
   IF class_id IN (4) THEN
-    deleted_id := delete_land_use($1, class_id);
+    deleted_id := citydb.delete_land_use($1, class_id);
   END IF;
 
   -- delete opening
   IF class_id IN (37,38,39) THEN
-    deleted_id := delete_opening($1, class_id);
+    deleted_id := citydb.delete_opening($1, class_id);
   END IF;
 
   -- delete plant_cover
   IF class_id IN (8) THEN
-    deleted_id := delete_plant_cover($1, class_id);
+    deleted_id := citydb.delete_plant_cover($1, class_id);
   END IF;
 
   -- delete relief_component
   IF class_id IN (15,16,17,18,19) THEN
-    deleted_id := delete_relief_component($1, class_id);
+    deleted_id := citydb.delete_relief_component($1, class_id);
   END IF;
 
   -- delete relief_feature
   IF class_id IN (14) THEN
-    deleted_id := delete_relief_feature($1, class_id);
+    deleted_id := citydb.delete_relief_feature($1, class_id);
   END IF;
 
   -- delete room
   IF class_id IN (41) THEN
-    deleted_id := delete_room($1, class_id);
+    deleted_id := citydb.delete_room($1, class_id);
   END IF;
 
   -- delete solitary_vegetat_object
   IF class_id IN (7) THEN
-    deleted_id := delete_solitary_veg_obj($1, class_id);
+    deleted_id := citydb.delete_solitary_veg_obj($1, class_id);
   END IF;
 
   -- delete thematic_surface
   IF class_id IN (29,30,31,32,33,34,35,36,60,61) THEN
-    deleted_id := delete_thematic_surface($1, class_id);
+    deleted_id := citydb.delete_thematic_surface($1, class_id);
   END IF;
 
   -- delete traffic_area
   IF class_id IN (47,48) THEN
-    deleted_id := delete_traffic_area($1, class_id);
+    deleted_id := citydb.delete_traffic_area($1, class_id);
   END IF;
 
   -- delete transportation_complex
   IF class_id IN (42,43,44,45,46) THEN
-    deleted_id := delete_transport_complex($1, class_id);
+    deleted_id := citydb.delete_transport_complex($1, class_id);
   END IF;
 
   -- delete tunnel
   IF class_id IN (83,84,85) THEN
-    deleted_id := delete_tunnel($1, class_id);
+    deleted_id := citydb.delete_tunnel($1, class_id);
   END IF;
 
   -- delete tunnel_furniture
   IF class_id IN (101) THEN
-    deleted_id := delete_tunnel_furniture($1, class_id);
+    deleted_id := citydb.delete_tunnel_furniture($1, class_id);
   END IF;
 
   -- delete tunnel_hollow_space
   IF class_id IN (102) THEN
-    deleted_id := delete_tunnel_hollow_space($1, class_id);
+    deleted_id := citydb.delete_tunnel_hollow_space($1, class_id);
   END IF;
 
   -- delete tunnel_installation
   IF class_id IN (86,87) THEN
-    deleted_id := delete_tunnel_installation($1, class_id);
+    deleted_id := citydb.delete_tunnel_installation($1, class_id);
   END IF;
 
   -- delete tunnel_opening
   IF class_id IN (98,99,100) THEN
-    deleted_id := delete_tunnel_opening($1, class_id);
+    deleted_id := citydb.delete_tunnel_opening($1, class_id);
   END IF;
 
   -- delete tunnel_thematic_surface
   IF class_id IN (88,89,90,91,92,93,94,95,96,97) THEN
-    deleted_id := delete_tunnel_them_srf($1, class_id);
+    deleted_id := citydb.delete_tunnel_them_srf($1, class_id);
   END IF;
 
   -- delete waterbody
   IF class_id IN (9) THEN
-    deleted_id := delete_waterbody($1, class_id);
+    deleted_id := citydb.delete_waterbody($1, class_id);
   END IF;
 
   -- delete waterboundary_surface
   IF class_id IN (10,11,12,13) THEN
-    deleted_id := delete_waterbnd_surface($1, class_id);
+    deleted_id := citydb.delete_waterbnd_surface($1, class_id);
   END IF;
 
   IF deleted_id IS NULL THEN
-    deleted_id := delete_cityobject_post($1, class_id);
+    deleted_id := citydb.delete_cityobject_post($1, class_id);
   END IF;
 
   RETURN deleted_id;
@@ -7213,7 +7213,7 @@ LANGUAGE plpgsql STRICT;
 /****************************
 * CITY MODEL incl. MEMBERS
 ****************************/
-CREATE OR REPLACE FUNCTION delete_citymodel_with_members(pids integer[])
+CREATE OR REPLACE FUNCTION citydb.delete_citymodel_with_members(pids integer[])
   RETURNS SETOF integer AS
 $BODY$
 DECLARE
@@ -7223,7 +7223,7 @@ BEGIN
   -- delete references to cityobjects
   WITH delete_cityobject_refs AS (
     DELETE FROM
-      cityobject_member t
+      citydb.cityobject_member t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -7241,23 +7241,23 @@ BEGIN
   -- delete cityobject(s) not being referenced any more
   IF -1 = ALL(cityobject_ids) IS NOT NULL THEN
     PERFORM
-      delete_cityobject(array_agg(a.a_id))
+      citydb.delete_cityobject(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(cityobject_ids) AS a_id) a
     LEFT JOIN
-      cityobject_member n1
+      citydb.cityobject_member n1
       ON n1.cityobject_id = a.a_id
     LEFT JOIN
-      cityobjectgroup n2
+      citydb.cityobjectgroup n2
       ON n2.parent_cityobject_id = a.a_id
     LEFT JOIN
-      generalization n3
+      citydb.generalization n3
       ON n3.cityobject_id = a.a_id
     LEFT JOIN
-      generalization n4
+      citydb.generalization n4
       ON n4.generalizes_to_id = a.a_id
     LEFT JOIN
-      group_to_cityobject n5
+      citydb.group_to_cityobject n5
       ON n5.cityobject_id = a.a_id
     WHERE
       n1.cityobject_id IS NULL
@@ -7269,12 +7269,12 @@ BEGIN
 
   -- delete citymodels
   RETURN QUERY
-    SELECT delete_citymodel($1);
+    SELECT citydb.delete_citymodel($1);
 END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_citymodel_with_members(pid integer)
+CREATE OR REPLACE FUNCTION citydb.delete_citymodel_with_members(pid integer)
   RETURNS integer AS
 $BODY$
 DECLARE
@@ -7284,7 +7284,7 @@ BEGIN
   -- delete references to cityobjects
   WITH delete_cityobject_refs AS (
     DELETE FROM
-      cityobject_member
+      citydb.cityobject_member
     WHERE
       citymodel_id = $1
     RETURNING
@@ -7300,23 +7300,23 @@ BEGIN
   -- delete cityobject(s) not being referenced any more
   IF -1 = ALL(cityobject_ids) IS NOT NULL THEN
     PERFORM
-      delete_cityobject(array_agg(a.a_id))
+      citydb.delete_cityobject(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(cityobject_ids) AS a_id) a
     LEFT JOIN
-      cityobject_member n1
+      citydb.cityobject_member n1
       ON n1.cityobject_id = a.a_id
     LEFT JOIN
-      cityobjectgroup n2
+      citydb.cityobjectgroup n2
       ON n2.parent_cityobject_id = a.a_id
     LEFT JOIN
-      generalization n3
+      citydb.generalization n3
       ON n3.cityobject_id = a.a_id
     LEFT JOIN
-      generalization n4
+      citydb.generalization n4
       ON n4.generalizes_to_id = a.a_id
     LEFT JOIN
-      group_to_cityobject n5
+      citydb.group_to_cityobject n5
       ON n5.cityobject_id = a.a_id
     WHERE
       n1.cityobject_id IS NULL
@@ -7327,7 +7327,7 @@ BEGIN
   END IF;
 
   -- delete citymodel
-  RETURN delete_citymodel($1);
+  RETURN citydb.delete_citymodel($1);
 END;
 $BODY$
 LANGUAGE plpgsql STRICT;
@@ -7336,7 +7336,7 @@ LANGUAGE plpgsql STRICT;
 /***********************************
 * CITY OBJECT GROUP incl. MEMBERS
 ***********************************/
-CREATE OR REPLACE FUNCTION delete_cityobjectgroup_with_members(pids integer[])
+CREATE OR REPLACE FUNCTION citydb.delete_cityobjectgroup_with_members(pids integer[])
   RETURNS SETOF integer AS
 $BODY$
 DECLARE
@@ -7346,7 +7346,7 @@ BEGIN
   -- delete references to cityobjects
   WITH delete_cityobject_refs AS (
     DELETE FROM
-      group_to_cityobject t
+      citydb.group_to_cityobject t
     USING
       unnest($1) a(a_id)
     WHERE
@@ -7364,23 +7364,23 @@ BEGIN
   -- delete cityobject(s) not being referenced any more
   IF -1 = ALL(cityobject_ids) IS NOT NULL THEN
     PERFORM
-      delete_cityobject(array_agg(a.a_id))
+      citydb.delete_cityobject(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(cityobject_ids) AS a_id) a
     LEFT JOIN
-      group_to_cityobject n1
+      citydb.group_to_cityobject n1
       ON n1.cityobject_id = a.a_id
     LEFT JOIN
-      cityobject_member n2
+      citydb.cityobject_member n2
       ON n2.cityobject_id = a.a_id
     LEFT JOIN
-      cityobjectgroup n3
+      citydb.cityobjectgroup n3
       ON n3.parent_cityobject_id = a.a_id
     LEFT JOIN
-      generalization n4
+      citydb.generalization n4
       ON n4.cityobject_id = a.a_id
     LEFT JOIN
-      generalization n5
+      citydb.generalization n5
       ON n5.generalizes_to_id = a.a_id
     WHERE
       n1.cityobject_id IS NULL
@@ -7392,12 +7392,12 @@ BEGIN
 
   -- delete cityobjectgroups
   RETURN QUERY
-    SELECT delete_cityobjectgroup($1);
+    SELECT citydb.delete_cityobjectgroup($1);
 END;
 $BODY$
 LANGUAGE plpgsql STRICT;
 
-CREATE OR REPLACE FUNCTION delete_cityobjectgroup_with_members(pid integer)
+CREATE OR REPLACE FUNCTION citydb.delete_cityobjectgroup_with_members(pid integer)
   RETURNS integer AS
 $BODY$
 DECLARE
@@ -7407,7 +7407,7 @@ BEGIN
   -- delete references to cityobjects
   WITH delete_cityobject_refs AS (
     DELETE FROM
-      group_to_cityobject
+      citydb.group_to_cityobject
     WHERE
       cityobjectgroup_id = $1
     RETURNING
@@ -7423,23 +7423,23 @@ BEGIN
   -- delete cityobject(s) not being referenced any more
   IF -1 = ALL(cityobject_ids) IS NOT NULL THEN
     PERFORM
-      delete_cityobject(array_agg(a.a_id))
+      citydb.delete_cityobject(array_agg(a.a_id))
     FROM
       (SELECT DISTINCT unnest(cityobject_ids) AS a_id) a
     LEFT JOIN
-      group_to_cityobject n1
+      citydb.group_to_cityobject n1
       ON n1.cityobject_id = a.a_id
     LEFT JOIN
-      cityobject_member n2
+      citydb.cityobject_member n2
       ON n2.cityobject_id = a.a_id
     LEFT JOIN
-      cityobjectgroup n3
+      citydb.cityobjectgroup n3
       ON n3.parent_cityobject_id = a.a_id
     LEFT JOIN
-      generalization n4
+      citydb.generalization n4
       ON n4.cityobject_id = a.a_id
     LEFT JOIN
-      generalization n5
+      citydb.generalization n5
       ON n5.generalizes_to_id = a.a_id
     WHERE
       n1.cityobject_id IS NULL
@@ -7450,7 +7450,7 @@ BEGIN
   END IF;
 
   -- delete cityobjectgroup
-  RETURN delete_cityobjectgroup($1);
+  RETURN citydb.delete_cityobjectgroup($1);
 END;
 $BODY$
 LANGUAGE plpgsql STRICT;
@@ -7464,24 +7464,24 @@ CREATE OR REPLACE FUNCTION cleanup_schema() RETURNS SETOF VOID AS
 $$
 BEGIN
   -- clear tables
-  TRUNCATE TABLE cityobject CASCADE;
-  TRUNCATE TABLE tex_image CASCADE;
-  TRUNCATE TABLE grid_coverage CASCADE;
-  TRUNCATE TABLE address CASCADE;
-  TRUNCATE TABLE citymodel CASCADE;
+  TRUNCATE TABLE citydb.cityobject CASCADE;
+  TRUNCATE TABLE citydb.tex_image CASCADE;
+  TRUNCATE TABLE citydb.grid_coverage CASCADE;
+  TRUNCATE TABLE citydb.address CASCADE;
+  TRUNCATE TABLE citydb.citymodel CASCADE;
 
   -- restart sequences
-  ALTER SEQUENCE address_seq RESTART;
-  ALTER SEQUENCE appearance_seq RESTART;
-  ALTER SEQUENCE citymodel_seq RESTART;
-  ALTER SEQUENCE cityobject_genericatt_seq RESTART;
-  ALTER SEQUENCE cityobject_seq RESTART;
-  ALTER SEQUENCE external_ref_seq RESTART;
-  ALTER SEQUENCE grid_coverage_seq RESTART;
-  ALTER SEQUENCE implicit_geometry_seq RESTART;
-  ALTER SEQUENCE surface_data_seq RESTART;
-  ALTER SEQUENCE surface_geometry_seq RESTART;
-  ALTER SEQUENCE tex_image_seq RESTART;
+  ALTER SEQUENCE citydb.address_seq RESTART;
+  ALTER SEQUENCE citydb.appearance_seq RESTART;
+  ALTER SEQUENCE citydb.citymodel_seq RESTART;
+  ALTER SEQUENCE citydb.cityobject_genericatt_seq RESTART;
+  ALTER SEQUENCE citydb.cityobject_seq RESTART;
+  ALTER SEQUENCE citydb.external_ref_seq RESTART;
+  ALTER SEQUENCE citydb.grid_coverage_seq RESTART;
+  ALTER SEQUENCE citydb.implicit_geometry_seq RESTART;
+  ALTER SEQUENCE citydb.surface_data_seq RESTART;
+  ALTER SEQUENCE citydb.surface_geometry_seq RESTART;
+  ALTER SEQUENCE citydb.tex_image_seq RESTART;
 END; 
 $$ 
 LANGUAGE plpgsql;
