@@ -100,3 +100,5 @@ SELECT citydb_pkg.check_srid(:SRSNO);
 INSERT INTO citydb.DATABASE_SRS(SRID,GML_SRS_NAME) VALUES (0,'init');
 SELECT citydb_pkg.change_schema_srid(:SRSNO,:'GMLSRSNAME');
 \echo 'Done'
+
+--Test
