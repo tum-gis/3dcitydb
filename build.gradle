@@ -4,6 +4,8 @@ plugins {
 
 version '4.0.3'
 
+test
+
 task createVersionTxt(type: Copy)  {
     def tmp = File.createTempFile('tmp', '.txt')
     tmp.write(project.version)
