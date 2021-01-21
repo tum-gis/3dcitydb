@@ -107,3 +107,4 @@ SELECT citydb_pkg.change_schema_srid(:SRSNO,:'GMLSRSNAME');
 --test5
 --test6
 --test9
+--test10
