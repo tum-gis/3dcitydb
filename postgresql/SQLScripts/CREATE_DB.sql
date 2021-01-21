@@ -102,3 +102,4 @@ SELECT citydb_pkg.change_schema_srid(:SRSNO,:'GMLSRSNAME');
 \echo 'Done'
 
 --Test
+--Test2
