@@ -7052,5 +7052,424 @@ REFERENCES objectclass (id) MATCH FULL
 ON DELETE CASCADE ON UPDATE CASCADE;
 -- ddl-end --
 
+------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------Additional in V5----------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+
+CREATE  TABLE citydb.feature (
+  id                   BIGSERIAL PRIMARY KEY ,
+  objectclass_id       integer  NOT NULL ,
+  is_toplevel          numeric,
+  space_or_boundary_type varchar(256)   ,
+  gmlid                varchar(256)   ,
+  gmlid_namespace      varchar(256)   ,
+  identifier           varchar(256)   ,
+  identifier_namespace varchar(256)   ,
+  envelope             geometry(POLYGONZ)   ,
+  last_modification_date timestamptz(6)   ,
+  updating_person      varchar(256)   ,
+  reason_for_update    varchar(4000)   ,
+  lineage              varchar(256)   ,
+  xml_source           text   ,
+  creation_date        timestamptz(6)   ,
+  termination_date     timestamptz(6)   ,
+  valid_from           timestamptz(6)   ,
+  valid_to             timestamptz(6)
+);ALTER TABLE citydb.feature
+  ADD CONSTRAINT feature_objectclass_fk
+    FOREIGN KEY ( objectclass_id )
+      REFERENCES citydb.objectclass( id )
+      ON UPDATE CASCADE;
 
 
+COMMENT
+ON COLUMN citydb.feature.id
+        IS 'Primary key / surrogate';
+
+COMMENT ON COLUMN citydb.feature.objectclass_id
+    IS 'Foreign key to OBJECTCLASS(id) - CityGML feature type ';
+
+COMMENT ON COLUMN citydb.feature.is_toplevel
+    IS 'true, if this feature is a toplevel feature';
+
+COMMENT ON COLUMN citydb.feature.space_or_boundary_type
+    IS 'name of the most specific CityGML abstract space or space boundary class (e.g. AbstractOccupiedSpace)';
+
+COMMENT ON COLUMN citydb.feature.envelope
+    IS 'Bounding volume of the feature (if it has a geometry)';
+
+COMMENT ON COLUMN citydb.feature.last_modification_date
+    IS 'Adopted from 3DCityDB Version 4';
+
+COMMENT ON COLUMN citydb.feature.updating_person
+    IS 'Adopted from 3DCityDB Version 4';
+
+COMMENT ON COLUMN citydb.feature.reason_for_update
+    IS 'Adopted from 3DCityDB Version 4';
+
+COMMENT ON COLUMN citydb.feature.lineage
+    IS 'Adopted from 3DCityDB Version 4';
+
+COMMENT ON COLUMN citydb.feature.xml_source
+    IS 'Adopted from 3DCityDB Version 4 - has this been used in the past?';CREATE  TABLE citydb.feature_relation (
+  id                   BIGSERIAL PRIMARY KEY ,
+  from_feature         bigint  NOT NULL ,
+  to_feature           bigint  NOT NULL ,
+  namespace            varchar(256)   ,
+  name                 varchar(256)   ,
+  relationtype         varchar(256)   ,
+  relationtype_codelist varchar(256)
+);
+
+
+
+ALTER TABLE citydb.feature_relation
+  ADD CONSTRAINT feature_relation_to_feature_fk
+    FOREIGN KEY ( to_feature )
+      REFERENCES citydb.feature( id )
+      ON UPDATE CASCADE;
+
+ALTER TABLE citydb.feature_relation
+  ADD CONSTRAINT feature_to_feature_relation_fk
+    FOREIGN KEY ( from_feature )
+      REFERENCES citydb.feature( id )
+      ON UPDATE CASCADE;
+
+COMMENT ON TABLE citydb.feature_relation IS 'added at 3DCityDB Version 5.0 for CityGML 3.0';
+
+ALTER TABLE citydb.feature_relation
+  ADD CONSTRAINT feature_relation_from_to_namespace_name_unique
+    UNIQUE (from_feature, to_feature, namespace, name);
+
+CREATE  TABLE citydb.codelist (
+  id                   BIGSERIAL PRIMARY KEY ,
+  codelist_type        varchar(256)   ,
+  url                  varchar(4000)   ,
+  mimetype             varchar(256)   ,
+  CONSTRAINT codelist_codelist_type_unique UNIQUE ( codelist_type )
+);
+
+COMMENT ON TABLE citydb.codelist IS 'added at 3DCityDB Version 5.0 for CityGML 3.0';
+
+--end of codelist creation scripts
+CREATE  TABLE citydb.codelist_entry (
+  id                   BIGSERIAL PRIMARY KEY ,
+  codelist_id          INTEGER  NOT NULL ,
+  code                 varchar(256)   ,
+  definition           varchar(256)
+);
+
+COMMENT ON TABLE citydb.codelist_entry IS 'added at 3DCityDB Version 5.0 for CityGML 3.0';
+
+ALTER TABLE citydb.codelist_entry
+  ADD CONSTRAINT fk_codelist_entry_codelist
+    FOREIGN KEY ( codelist_id )
+      REFERENCES citydb.codelist( id )
+      ON UPDATE CASCADE
+      ON DELETE CASCADE;
+
+ALTER TABLE IF EXISTS citydb.codelist_entry
+  ADD CONSTRAINT unique_codelist_entry_codelist_id_code
+  UNIQUE (codelist_id, code);
+
+--end of codelist_entry ceration scripts
+CREATE  TABLE citydb.property
+(
+  id                   BIGSERIAL PRIMARY KEY ,
+  feature_id           bigint   ,
+  relation_id          bigint   ,
+  parent_id            bigint   ,
+  root_id              bigint   ,
+  namespace            varchar(256)   ,
+  name                 varchar(256)   ,
+  index_number         integer   ,
+  datatype             varchar   ,
+  data_valtype         integer   ,
+  val_int              bigint   ,
+  val_double			 numeric ,
+  val_string           varchar(256)   ,
+  val_date             timestamptz   ,
+  val_uri              varchar(4000)   ,
+  val_geometry         geometry   ,
+  val_surface_geometry bigint   ,
+  val_implicitgeom_id	 bigint   ,
+  val_implicitgeom_refpoint geometry(PointZ),
+  val_implicitgeom_transform varchar(1000),
+  val_grid_coverage	 bigint ,
+  val_appearance       bigint   ,
+  val_dynamizer        bigint   ,
+  val_feature			 bigint ,
+  val_feature_is_xlink int,
+  val_code         	 varchar(256)   ,
+  val_codelist         integer   ,
+  val_uom              varchar   ,
+  val_complex          json   ,
+  val_xml              xml
+  --is_feature_relation  boolean DEFAULT false
+);
+ALTER TABLE IF EXISTS citydb.property
+  ADD CONSTRAINT property_feature_fk
+  FOREIGN KEY ( feature_id )
+  REFERENCES citydb.feature( id )
+  ON UPDATE CASCADE;
+
+ALTER TABLE IF EXISTS citydb.property
+  ADD CONSTRAINT property_codelist_fk
+  FOREIGN KEY ( val_codelist )
+  REFERENCES citydb.codelist( id )
+  ON UPDATE CASCADE;
+
+ALTER TABLE IF EXISTS citydb.property
+  ADD CONSTRAINT property_surface_geometry_fk
+  FOREIGN KEY ( val_surface_geometry )
+  REFERENCES citydb.surface_geometry( id )
+  ON UPDATE CASCADE;
+
+ALTER TABLE IF EXISTS citydb.property
+  ADD CONSTRAINT property_implicitgeom_id_fk
+  FOREIGN KEY ( val_implicitgeom_id )
+  REFERENCES citydb.implicit_geometry( id )
+  ON UPDATE CASCADE;
+
+ALTER TABLE IF EXISTS citydb.property
+  ADD CONSTRAINT property_appearance_fk
+  FOREIGN KEY ( val_appearance )
+  REFERENCES citydb.appearance( id )
+  ON UPDATE CASCADE;
+
+ALTER TABLE IF EXISTS citydb.property
+  ADD CONSTRAINT property_val_feature_fk
+  FOREIGN KEY ( val_feature )
+  REFERENCES citydb.feature( id )
+  ON UPDATE CASCADE;
+
+ALTER TABLE IF EXISTS citydb.property
+  ADD CONSTRAINT property_unique_feature_id_namespace_name_index
+  UNIQUE (feature_id, namespace, name, index_number);
+
+--Following UNIQUE CONSTRAINT TYPE CANCELLED
+/*ALTER TABLE IF EXISTS citydb.property
+    ADD CONSTRAINT property_unique_conditional
+    	UNIQUE (feature_id, relation_id, namespace, name, index_number);
+
+--!!!ATTENTION, this constraint refers to a conditional indexes created with expressions below!!!
+
+CREATE UNIQUE INDEX property_unique_conditional_when_property
+    ON property
+       (feature_id, COALESCE(relation_id, 0), namespace, name, index_number )
+ WHERE relation_id IS NULL;
+CREATE UNIQUE INDEX property_unique_conditional_when_relation
+    ON property
+       (COALESCE(feature_id,0), relation_id, namespace, name, index_number)
+ WHERE feature_id IS NULL;*/
+COMMENT ON TABLE citydb.property IS 'added at 3DCityDB Version 5.0 for CityGML 3.0';
+
+COMMENT ON COLUMN citydb.property.id
+    IS 'Primary key / surrogate';
+
+COMMENT ON COLUMN citydb.property.feature_id
+    IS 'Foreign key to FEATURE(id) - if the property belongs to a feature_relation, then this attribute is NULL';
+
+COMMENT ON COLUMN citydb.property.parent_id
+    IS 'Foreign key to PROPERTY(id). If this property belongs to a named set of properties (as supported for generic attributes), this attribute links to the parent group';
+
+COMMENT ON COLUMN citydb.property.root_id
+    IS 'Foreign key to PROPERTY(id). Points to the id of the root property entry (only relevant when using nested properties as supported by generic attributes)';
+
+COMMENT ON COLUMN citydb.property.namespace
+    IS 'CityGML 3.0 namespace in which this property is defined';
+
+COMMENT ON COLUMN citydb.property.name
+    IS 'Property name (or should we put qualified names here? E.g. core:relativeToWater or core:lod2Solid)';
+
+COMMENT ON COLUMN citydb.property.index_number
+    IS 'Index number (if multiple properties with the same name are stored and the order should be preserved)';
+
+COMMENT ON COLUMN citydb.property.datatype
+    IS 'the datatype should be given as a qualified datatype name from the CityGML schema (e.g. gml:GenericName, gml:DateTime)';
+
+COMMENT ON COLUMN citydb.property.data_valtype
+    IS 'tells in which attribute(s) the value is actually stored (0=val_int, 1=val_double, 2=val_string, 3=val_date, etc.)';
+
+COMMENT ON COLUMN citydb.property.val_surface_geometry
+    IS 'Foreign key to SURFACE_GEOMETRY(id)';
+
+COMMENT ON COLUMN citydb.property.val_implicitgeom_id
+    IS 'Foreign key to IMPLICIT_GEOMETRY(id)';
+
+COMMENT ON COLUMN citydb.property.val_implicitgeom_refpoint
+    IS 'base point in 3D world coordinates for the instantiation of the implicit geometry';
+
+COMMENT ON COLUMN citydb.property.val_implicitgeom_transform
+    IS '4x4 transformation matrix encoded as a string of space separated double values (as strings) in row major sequence';
+
+COMMENT ON COLUMN citydb.property.val_grid_coverage
+    IS 'Foreign key to GRID_COVERAGE(id)';
+
+COMMENT ON COLUMN citydb.property.val_appearance
+    IS 'Foreign key to APPEARANCE(id)';
+
+COMMENT ON COLUMN citydb.property.val_dynamizer
+    IS 'Foreign key to APPEARANCE(id)';
+
+COMMENT ON COLUMN citydb.property.val_feature
+    IS 'Foreign key to FEATURE(id)';
+
+COMMENT ON COLUMN citydb.property.val_feature_is_xlink
+    IS '0=related feature was represented inline, 1=related feature was referenced using an XLink';
+
+COMMENT ON COLUMN citydb.property.val_code
+    IS 'if a code from a codelist should be stored, we could also put the code in the val_string attribute and omit this attribute';
+
+COMMENT ON COLUMN citydb.property.val_codelist
+    IS 'Foreign key to CODELIST(code) (or alternatively - if we do not store codelists also in the 3DCityDB - then a URL to the codelist)';
+
+COMMENT ON COLUMN citydb.property.val_uom
+    IS 'unit of measure (for all subtypes of gml:Measure); the value is stored in val_double';
+
+COMMENT ON COLUMN citydb.property.val_complex
+    IS 'stores all data of complex datatypes as a JSON string (e.g. con:Height)';
+
+COMMENT ON COLUMN citydb.property.val_xml
+    IS 'stores XML data';
+
+
+CREATE INDEX feature_creation_date_inx
+    ON citydb.feature USING btree
+    (creation_date ASC NULLS LAST)
+    WITH (FILLFACTOR = 90);
+
+CREATE INDEX feature_last_mod_date_inx
+    ON citydb.feature USING btree
+    (last_modification_date ASC NULLS LAST)
+    WITH (FILLFACTOR = 90);
+
+CREATE INDEX feature_term_date_inx
+    ON citydb.feature USING btree
+    (termination_date ASC NULLS LAST)
+    WITH (FILLFACTOR = 90);
+
+CREATE INDEX feature_envelope_spx
+    ON citydb.feature USING gist
+    (envelope);
+
+CREATE INDEX feature_inx
+    ON citydb.feature USING btree
+    (
+      gmlid ASC NULLS LAST,
+      gmlid_namespace
+    ) WITH (FILLFACTOR = 90);
+
+CREATE INDEX feature_lineage_inx
+    ON citydb.feature USING btree
+    (lineage ASC NULLS LAST)
+     WITH (FILLFACTOR = 90);
+
+CREATE INDEX feature_objectclass_fkx
+    ON citydb.feature USING btree
+    (objectclass_id ASC NULLS LAST)
+    WITH (FILLFACTOR=90);
+
+CREATE INDEX property_feature_id_inx ON property
+  USING btree
+  (
+  feature_id ASC NULLS LAST
+  ) WITH (FILLFACTOR = 90);
+
+CREATE INDEX property_ns_inx ON property
+  USING btree
+  (
+  namespace ASC NULLS LAST
+  ) WITH (FILLFACTOR = 90);
+
+CREATE INDEX property_name_inx ON property
+  USING btree
+  (
+  name ASC NULLS LAST
+  ) WITH (FILLFACTOR = 90);
+
+CREATE INDEX property_var_int_inx ON property
+  USING btree
+  (
+  val_int ASC NULLS LAST
+  ) WITH (FILLFACTOR = 90);
+
+CREATE INDEX property_val_double_inx ON property
+  USING btree
+  (
+  val_double ASC NULLS LAST
+  ) WITH (FILLFACTOR = 90);
+
+CREATE INDEX property_val_string_inx ON property
+  USING btree
+  (
+  val_string ASC NULLS LAST
+  ) WITH (FILLFACTOR = 90);
+
+CREATE INDEX property_val_date_inx ON property
+  USING btree
+  (
+  val_date ASC NULLS LAST
+  ) WITH (FILLFACTOR = 90);
+
+CREATE INDEX property_val_uri_inx ON property
+  USING btree
+  (
+  val_uri ASC NULLS LAST
+  ) WITH (FILLFACTOR = 90);
+
+CREATE INDEX property_var_geom_spx
+    ON citydb.property USING gist
+    (val_geometry);
+
+CREATE INDEX property_val_surf_inx ON property
+  USING btree
+  (
+  val_surface_geometry ASC NULLS LAST
+  ) WITH (FILLFACTOR = 90);
+
+CREATE INDEX property_var_imp_ref_pt_spx
+    ON citydb.property USING gist
+    (val_implicitgeom_refpoint);
+
+CREATE INDEX property_val_grid_inx ON property
+  USING btree
+  (
+  val_grid_coverage ASC NULLS LAST
+  ) WITH (FILLFACTOR = 90);
+
+CREATE INDEX property_val_app_inx ON property
+  USING btree
+  (
+  val_appearance ASC NULLS LAST
+  ) WITH (FILLFACTOR = 90);
+
+CREATE INDEX property_val_dyn_inx ON property
+  USING btree
+  (
+  val_dynamizer ASC NULLS LAST
+  ) WITH (FILLFACTOR = 90);
+
+CREATE INDEX property_val_feat_inx ON property
+  USING btree
+  (
+  val_feature ASC NULLS LAST
+  ) WITH (FILLFACTOR = 90);
+
+CREATE INDEX property_val_feat_xl_inx ON property
+  USING btree
+  (
+  val_feature_is_xlink ASC NULLS LAST
+  ) WITH (FILLFACTOR = 90);
+
+CREATE INDEX property_val_code_inx ON property
+  USING btree
+  (
+  val_code ASC NULLS LAST
+  ) WITH (FILLFACTOR = 90);
+
+CREATE INDEX property_val_uom_inx ON property
+  USING btree
+  (
+  val_uom ASC NULLS LAST
+  ) WITH (FILLFACTOR = 90);
