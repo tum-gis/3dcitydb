@@ -1,0 +1,4 @@
+/pgModeler
+/ShellScripts
+build.sh
+DockerScripts/docker-build.sh
