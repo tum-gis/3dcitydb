@@ -8,7 +8,7 @@ arr=(
   "11-2.5"    "11-3.0"   "11-3.1"   "11-3.2"
   "12-2.5"    "12-3.0"   "12-3.1"   "12-3.2"
               "13-3.0"   "13-3.1"   "13-3.2"
-                          "14-3.1"   "14-3.2"
+                         "14-3.1"   "14-3.2"
 )
 
 # Image variants
@@ -24,7 +24,10 @@ do
   do
     tag="${i}-$citydb_version$j"
     echo "Tag = $tag"
-    docker build --build-arg CITYDB_VERSION=$citydb_version -t 3dcitydb/3dcitydb-pg:$tag ..
+    docker pull postgis/postgis:$i$j
+    docker build -t 3dcitydb/3dcitydb-pg:$tag ..\
+      --build-arg BASEIMAGE_TAG=$i$j \
+      --build-arg CITYDB_VERSION=$citydb_version
     docker push 3dcitydb/3dcitydb-pg:$tag
   done
 done
