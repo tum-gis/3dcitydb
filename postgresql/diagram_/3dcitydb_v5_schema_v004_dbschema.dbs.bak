@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<project name="PostgreSQL" id="Project-1a7" database="PostgreSQL" >
+<project name="3DCityDB v5 Schema" id="Project-1a7" database="PostgreSQL" >
+	<comment><![CDATA[New Tables and inherited tables combined]]></comment>
 	<schema name="citydb" >
 		<table name="ade" >
 			<column name="id" type="integer" length="10" decimal="0" jt="4" mandatory="y" >
@@ -512,6 +513,9 @@
 			</fk>
 			<fk name="property_surface_geometry_fk" to_schema="citydb" to_table="surface_geometry" update_action="cascade" >
 				<fk_column name="val_surface_geometry" pk="id" />
+			</fk>
+			<fk name="fk_property_grid_coverage" virtual="y" to_schema="citydb" to_table="grid_coverage" >
+				<fk_column name="val_grid_coverage" pk="id" />
 			</fk>
 		</table>
 		<table name="schema" >
@@ -2855,23 +2859,23 @@
 	</schema>
 	<connector name="PostgreSQL" database="PostgreSQL" driver_class="org.postgresql.Driver" driver_jar="postgresql-42.3.5.jar" driver_desc="Standard" host="localhost" port="9020" instance="demo20_db" user="demo20" passwd="bGFoYW5h" />
 	<layout name="Main Layout" id="Layout-1758" joined_routing="y" show_column_type="y" show_relation="name" >
-		<comment><![CDATA[3dcitydb_v5_schema_v004]]></comment>
-		<entity schema="citydb" name="ade" color="BEBEF4" x="2048" y="544" />
-		<entity schema="citydb" name="aggregation_info" color="BEBEF4" x="2320" y="80" />
-		<entity schema="citydb" name="appear_to_surface_data" color="F7F2EC" x="1536" y="1104" />
-		<entity schema="citydb" name="appearance" color="F7F2EC" x="1072" y="1056" />
-		<entity schema="citydb" name="codelist" color="F7F2EC" x="48" y="704" />
-		<entity schema="citydb" name="codelist_entry" color="F7F2EC" x="336" y="880" />
-		<entity schema="citydb" name="database_srs" color="BED3F4" x="224" y="1264" />
-		<entity schema="citydb" name="feature" color="F7F2EC" x="1072" y="208" />
-		<entity schema="citydb" name="grid_coverage" color="BED3F4" x="288" y="1120" >
+		<comment><![CDATA[3DCityDB v5 Schema]]></comment>
+		<entity schema="citydb" name="ade" color="BEBEF4" x="496" y="288" />
+		<entity schema="citydb" name="aggregation_info" color="BEBEF4" x="704" y="96" />
+		<entity schema="citydb" name="appear_to_surface_data" color="FFFFFF" x="1488" y="1312" />
+		<entity schema="citydb" name="appearance" color="FFFFFF" x="1360" y="1024" />
+		<entity schema="citydb" name="codelist" color="F7F2EC" x="2560" y="496" />
+		<entity schema="citydb" name="codelist_entry" color="F7F2EC" x="2848" y="704" />
+		<entity schema="citydb" name="database_srs" color="BED3F4" x="400" y="912" />
+		<entity schema="citydb" name="feature" color="F7F2EC" x="1472" y="80" />
+		<entity schema="citydb" name="grid_coverage" color="FFFFFF" x="1008" y="1056" >
 			<column name="id" />
 			<column name="rasterproperty" />
 		</entity>
-		<entity schema="citydb" name="implicit_geometry" color="C7F4BE" x="688" y="1344" />
-		<entity schema="citydb" name="index_table" color="BED3F4" x="288" y="1392" />
-		<entity schema="citydb" name="objectclass" color="BEBEF4" x="1808" y="272" />
-		<entity schema="citydb" name="property" color="F7F2EC" x="464" y="256" >
+		<entity schema="citydb" name="implicit_geometry" color="FFFFFF" x="2144" y="1024" />
+		<entity schema="citydb" name="index_table" color="BED3F4" x="464" y="1040" />
+		<entity schema="citydb" name="objectclass" color="BEBEF4" x="992" y="368" />
+		<entity schema="citydb" name="property" color="F7F2EC" x="2000" y="144" >
 			<column name="id" />
 			<column name="feature_id" />
 			<column name="relation_id" />
@@ -2903,40 +2907,40 @@
 			<column name="val_complex" />
 			<column name="val_xml" />
 		</entity>
-		<entity schema="citydb" name="schema" color="BEBEF4" x="2432" y="560" />
-		<entity schema="citydb" name="schema_referencing" color="BEBEF4" x="3056" y="320" />
-		<entity schema="citydb" name="schema_to_objectclass" color="BEBEF4" x="3040" y="672" />
-		<entity schema="citydb" name="surface_data" color="C7F4BE" x="2304" y="1168" />
-		<entity schema="citydb" name="surface_geometry" color="C7F4BE" x="1360" y="1312" />
-		<entity schema="citydb" name="tex_image" color="C7F4BE" x="2912" y="1248" />
-		<entity schema="citydb" name="textureparam" color="C7F4BE" x="1904" y="1408" />
+		<entity schema="citydb" name="schema" color="BEBEF4" x="48" y="416" />
+		<entity schema="citydb" name="schema_referencing" color="BEBEF4" x="112" y="128" />
+		<entity schema="citydb" name="schema_to_objectclass" color="BEBEF4" x="624" y="640" />
+		<entity schema="citydb" name="surface_data" color="FFFFFF" x="1872" y="1408" />
+		<entity schema="citydb" name="surface_geometry" color="FFFFFF" x="2784" y="960" />
+		<entity schema="citydb" name="tex_image" color="FFFFFF" x="2480" y="1600" />
+		<entity schema="citydb" name="textureparam" color="FFFFFF" x="3312" y="1120" />
 		<group name="database_srs - index" color="ECF0F7" >
 			<entity schema="citydb" name="index_table" />
 			<entity schema="citydb" name="database_srs" />
-			<entity schema="citydb" name="grid_coverage" />
 		</group>
-		<group name="appearance - surface_geometry - surface_data" color="EEF7EC" >
+		<group name="appearance - surface_geometry - surface_data" color="FFFFFF" >
+			<entity schema="citydb" name="surface_data" />
 			<entity schema="citydb" name="appearance" />
 			<entity schema="citydb" name="appear_to_surface_data" />
-			<entity schema="citydb" name="surface_geometry" />
-			<entity schema="citydb" name="implicit_geometry" />
 			<entity schema="citydb" name="tex_image" />
-			<entity schema="citydb" name="surface_data" />
+			<entity schema="citydb" name="implicit_geometry" />
+			<entity schema="citydb" name="surface_geometry" />
 			<entity schema="citydb" name="textureparam" />
+			<entity schema="citydb" name="grid_coverage" />
 		</group>
-		<group name="objectclass - ade - schema" color="ECECF7" >
+		<group name="objectclass - ade - schema" color="FFFFFF" >
 			<entity schema="citydb" name="objectclass" />
-			<entity schema="citydb" name="ade" />
-			<entity schema="citydb" name="schema" />
+			<entity schema="citydb" name="aggregation_info" />
 			<entity schema="citydb" name="schema_to_objectclass" />
 			<entity schema="citydb" name="schema_referencing" />
-			<entity schema="citydb" name="aggregation_info" />
+			<entity schema="citydb" name="schema" />
+			<entity schema="citydb" name="ade" />
 		</group>
-		<group name="feature - property - codelist" color="F7F2EC" >
+		<group name="feature - property - codelist" color="00FF00" >
 			<comment><![CDATA[New tables defined by CityDB v5]]></comment>
+			<entity schema="citydb" name="feature" />
 			<entity schema="citydb" name="codelist_entry" />
 			<entity schema="citydb" name="codelist" />
-			<entity schema="citydb" name="feature" />
 			<entity schema="citydb" name="property" />
 		</group>
 	</layout>

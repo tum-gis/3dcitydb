@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang='en-us' xmlns='http://www.w3.org/1999/xhtml' >
 <head>
-<title>3dcitydb&#95;v5&#95;schema&#95;v004</title>
+<title>3DCityDB v5 Schema</title>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
 <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no' />
 <link rel='shortcut icon' href='https://dbschema.com/images/favicon.ico'>
@@ -38,9 +38,1678 @@ tr:nth-child(even) {
 
 
 <a name='layout1'/><h4>Main Layout</h4>
-<object data='file:/home/kendir/3dcitydb/postgresql/3dcitydb_v5_schema_v004/MainLayout.svg' type='image/svg+xml'>
-    <embed src='file:/home/kendir/3dcitydb/postgresql/3dcitydb_v5_schema_v004/MainLayout.svg' type='image/svg+xml'/>
+<object data='file:/home/kendir/3dcitydb/postgresql/diagram_/3dcitydb_v5_schema/MainLayout.svg' type='image/svg+xml'>
+    <embed src='file:/home/kendir/3dcitydb/postgresql/diagram_/3dcitydb_v5_schema/MainLayout.svg' type='image/svg+xml'/>
 </object>
+
+</div>
+<div class='container pt-2'>
+
+<div class='card'><div class='card-body'>
+<h5 class='card-title'>Tables</h5>
+<ul>
+<li><a href='#citydb.ade'/>citydb.ade</a>
+<li><a href='#citydb.aggregation_info'/>citydb.aggregation_info</a>
+<li><a href='#citydb.appear_to_surface_data'/>citydb.appear_to_surface_data</a>
+<li><a href='#citydb.appearance'/>citydb.appearance</a>
+<li><a href='#citydb.codelist'/>citydb.codelist</a>
+<li><a href='#citydb.codelist_entry'/>citydb.codelist_entry</a>
+<li><a href='#citydb.database_srs'/>citydb.database_srs</a>
+<li><a href='#citydb.feature'/>citydb.feature</a>
+<li><a href='#citydb.grid_coverage'/>citydb.grid_coverage</a>
+<li><a href='#citydb.implicit_geometry'/>citydb.implicit_geometry</a>
+<li><a href='#citydb.index_table'/>citydb.index_table</a>
+<li><a href='#citydb.objectclass'/>citydb.objectclass</a>
+<li><a href='#citydb.property'/>citydb.property</a>
+<li><a href='#citydb.schema'/>citydb.schema</a>
+<li><a href='#citydb.schema_referencing'/>citydb.schema_referencing</a>
+<li><a href='#citydb.schema_to_objectclass'/>citydb.schema_to_objectclass</a>
+<li><a href='#citydb.surface_data'/>citydb.surface_data</a>
+<li><a href='#citydb.surface_geometry'/>citydb.surface_geometry</a>
+<li><a href='#citydb.tex_image'/>citydb.tex_image</a>
+<li><a href='#citydb.textureparam'/>citydb.textureparam</a></ul>
+</div></div><br><br><br>
+<div class='card'><div class='card-body'><a name='citydb.ade'  onclick="window.scrollTo(296, 288);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.ade').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Schema citydb</h5><h5 class='card-title'>Table ade</h5></a>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:40%'>Field Name</th><th>Data Type</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#ref'/></svg></td>
+		<td><a name='citydb.ade_id'>id</a></td>
+		<td> integer  DEFAULT nextval('ade_seq'::regclass) </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='citydb.ade_adeid'>adeid</a></td>
+		<td> varchar&#40;256&#41;  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='citydb.ade_name'>name</a></td>
+		<td> varchar&#40;1000&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.ade_description'>description</a></td>
+		<td> varchar&#40;4000&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.ade_version'>version</a></td>
+		<td> varchar&#40;50&#41;  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='citydb.ade_db_prefix'>db&#95;prefix</a></td>
+		<td> varchar&#40;10&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.ade_xml_schemamapping_file'>xml&#95;schemamapping&#95;file</a></td>
+		<td> text  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.ade_drop_db_script'>drop&#95;db&#95;script</a></td>
+		<td> text  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.ade_creation_date'>creation&#95;date</a></td>
+		<td> timestamptz  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.ade_creation_person'>creation&#95;person</a></td>
+		<td> varchar&#40;256&#41;  </td>
+	</tr>
+<tr><th colspan='3'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>ade&#95;pk</td>
+		<td> ON id</td>
+	</tr>
+<tr><th colspan='3'>Referring Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>objectclass_ade_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;objectclass'  onclick="window.scrollTo(792, 368);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.objectclass').classList.add('palpable'); return false;">objectclass</a>(ade&#95;id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>schema_ade_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;schema'  onclick="window.scrollTo(60, 416);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.schema').classList.add('palpable'); return false;">schema</a>(ade&#95;id) </td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='citydb.aggregation_info'  onclick="window.scrollTo(504, 96);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.aggregation_info').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Table aggregation_info</h5></a>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:40%'>Field Name</th><th>Data Type</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.aggregation_info_child_id'>child&#95;id</a></td>
+		<td> integer  </td>
+	</tr>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.aggregation_info_parent_id'>parent&#95;id</a></td>
+		<td> integer  </td>
+	</tr>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg></td>
+		<td><a name='citydb.aggregation_info_join_table_or_column_name'>join&#95;table&#95;or&#95;column&#95;name</a></td>
+		<td> varchar&#40;30&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.aggregation_info_min_occurs'>min&#95;occurs</a></td>
+		<td> integer  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.aggregation_info_max_occurs'>max&#95;occurs</a></td>
+		<td> integer  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.aggregation_info_is_composite'>is&#95;composite</a></td>
+		<td> numeric  </td>
+	</tr>
+<tr><th colspan='3'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>aggregation&#95;info&#95;pk</td>
+		<td> ON child&#95;id&#44; parent&#95;id&#44; join&#95;table&#95;or&#95;column&#95;name</td>
+	</tr>
+<tr><th colspan='3'>Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>aggregation_info_fk1</td>
+		<td > (child&#95;id) &#8594; <a href='#citydb&#46;objectclass'  onclick="window.scrollTo(792, 368);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.objectclass').classList.add('palpable'); return false;">objectclass</a>(id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>aggregation_info_fk2</td>
+		<td > (parent&#95;id) &#8594; <a href='#citydb&#46;objectclass'  onclick="window.scrollTo(792, 368);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.objectclass').classList.add('palpable'); return false;">objectclass</a>(id) </td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='citydb.appear_to_surface_data'  onclick="window.scrollTo(1288, 1312);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.appear_to_surface_data').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Table appear_to_surface_data</h5></a>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:40%'>Field Name</th><th>Data Type</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.appear_to_surface_data_surface_data_id'>surface&#95;data&#95;id</a></td>
+		<td> bigint  </td>
+	</tr>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.appear_to_surface_data_appearance_id'>appearance&#95;id</a></td>
+		<td> bigint  </td>
+	</tr>
+<tr><th colspan='3'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>appear&#95;to&#95;surface&#95;data&#95;pk</td>
+		<td> ON surface&#95;data&#95;id&#44; appearance&#95;id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>app&#95;to&#95;surf&#95;data&#95;fkx</td>
+		<td> ON surface&#95;data&#95;id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>app&#95;to&#95;surf&#95;data&#95;fkx1</td>
+		<td> ON appearance&#95;id</td>
+	</tr>
+<tr><th colspan='3'>Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>app_to_surf_data_fk1</td>
+		<td > (appearance&#95;id) &#8594; <a href='#citydb&#46;appearance'  onclick="window.scrollTo(1160, 1024);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.appearance').classList.add('palpable'); return false;">appearance</a>(id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>app_to_surf_data_fk</td>
+		<td > (surface&#95;data&#95;id) &#8594; <a href='#citydb&#46;surface&#95;data'  onclick="window.scrollTo(1672, 1408);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.surface_data').classList.add('palpable'); return false;">surface&#95;data</a>(id) </td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='citydb.appearance'  onclick="window.scrollTo(1160, 1024);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.appearance').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Table appearance</h5></a>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:40%'>Field Name</th><th>Data Type</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#ref'/></svg></td>
+		<td><a name='citydb.appearance_id'>id</a></td>
+		<td> bigint  DEFAULT nextval('appearance_seq'::regclass) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.appearance_gmlid'>gmlid</a></td>
+		<td> varchar&#40;256&#41;  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.appearance_gmlid_codespace'>gmlid&#95;codespace</a></td>
+		<td> varchar&#40;1000&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.appearance_name'>name</a></td>
+		<td> varchar&#40;1000&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.appearance_name_codespace'>name&#95;codespace</a></td>
+		<td> varchar&#40;4000&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.appearance_description'>description</a></td>
+		<td> varchar&#40;4000&#41;  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.appearance_theme'>theme</a></td>
+		<td> varchar&#40;256&#41;  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.appearance_citymodel_id'>citymodel&#95;id</a></td>
+		<td> bigint  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.appearance_cityobject_id'>cityobject&#95;id</a></td>
+		<td> bigint  </td>
+	</tr>
+<tr><th colspan='3'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>appearance&#95;pk</td>
+		<td> ON id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>appearance&#95;inx</td>
+		<td> ON gmlid&#44; gmlid&#95;codespace</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>appearance&#95;theme&#95;inx</td>
+		<td> ON theme</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>appearance&#95;citymodel&#95;fkx</td>
+		<td> ON citymodel&#95;id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>appearance&#95;cityobject&#95;fkx</td>
+		<td> ON cityobject&#95;id</td>
+	</tr>
+<tr><th colspan='3'>Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>appearance_citymodel_fk</td>
+		<td > (citymodel&#95;id) &#8594; <a href='#citydb&#46;citymodel' >citymodel</a>(id) </td>
+	</tr>
+<tr><th colspan='3'>Referring Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>app_to_surf_data_fk1</td>
+		<td > (id) &#8592; <a href='#citydb&#46;appear&#95;to&#95;surface&#95;data'  onclick="window.scrollTo(1288, 1312);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.appear_to_surface_data').classList.add('palpable'); return false;">appear&#95;to&#95;surface&#95;data</a>(appearance&#95;id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>property_appearance_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;property'  onclick="window.scrollTo(1800, 144);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.property').classList.add('palpable'); return false;">property</a>(val&#95;appearance) </td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='citydb.codelist'  onclick="window.scrollTo(2360, 496);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.codelist').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Table codelist</h5></a>
+<p class="text-muted">added at 3DCityDB Version 5&#46;0 for CityGML 3&#46;0</p>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:20%'>Field Name</th><th style='width:23%'>Data Type</th><th style='width:52%'>Description</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#ref'/></svg></td>
+		<td><a name='citydb.codelist_id'>id</a></td>
+		<td> bigint  DEFAULT nextval('codelist_id_seq'::regclass) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#unq'/></svg></td>
+		<td><a name='citydb.codelist_codelist_type'>codelist&#95;type</a></td>
+		<td> varchar&#40;256&#41;  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.codelist_url'>url</a></td>
+		<td> varchar&#40;4000&#41;  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.codelist_mimetype'>mimetype</a></td>
+		<td> varchar&#40;256&#41;  </td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>codelist&#95;pkey</td>
+		<td> ON id</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#unq'/></svg></td><td>codelist&#95;codelist&#95;type&#95;unique</td>
+		<td> ON codelist&#95;type</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>codelist&#95;codelist&#95;type&#95;btr</td>
+		<td> ON codelist&#95;type</td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'>Referring Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>fk_codelist_entry_codelist</td>
+		<td > (id) &#8592; <a href='#citydb&#46;codelist&#95;entry'  onclick="window.scrollTo(2648, 704);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.codelist_entry').classList.add('palpable'); return false;">codelist&#95;entry</a>(codelist&#95;id) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>property_codelist_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;property'  onclick="window.scrollTo(1800, 144);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.property').classList.add('palpable'); return false;">property</a>(val&#95;codelist) </td>
+		<td>  </td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='citydb.codelist_entry'  onclick="window.scrollTo(2648, 704);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.codelist_entry').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Table codelist_entry</h5></a>
+<p class="text-muted">added at 3DCityDB Version 5&#46;0 for CityGML 3&#46;0</p>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:20%'>Field Name</th><th style='width:23%'>Data Type</th><th style='width:52%'>Description</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg></td>
+		<td><a name='citydb.codelist_entry_id'>id</a></td>
+		<td> bigint  DEFAULT nextval('codelist_entry_id_seq'::regclass) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#unq'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.codelist_entry_codelist_id'>codelist&#95;id</a></td>
+		<td> integer  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#unq'/></svg></td>
+		<td><a name='citydb.codelist_entry_code'>code</a></td>
+		<td> varchar&#40;256&#41;  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.codelist_entry_definition'>definition</a></td>
+		<td> varchar&#40;256&#41;  </td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>codelist&#95;entry&#95;pkey</td>
+		<td> ON id</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#unq'/></svg></td><td>unique&#95;codelist&#95;entry&#95;codelist&#95;id&#95;code</td>
+		<td> ON codelist&#95;id&#44; code</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>codelist&#95;entry&#95;codelist&#95;id&#95;idx</td>
+		<td> ON codelist&#95;id</td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'>Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>fk_codelist_entry_codelist</td>
+		<td > (codelist&#95;id) &#8594; <a href='#citydb&#46;codelist'  onclick="window.scrollTo(2360, 496);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.codelist').classList.add('palpable'); return false;">codelist</a>(id) </td>
+		<td>  </td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='citydb.database_srs'  onclick="window.scrollTo(200, 912);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.database_srs').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Table database_srs</h5></a>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:40%'>Field Name</th><th>Data Type</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg></td>
+		<td><a name='citydb.database_srs_srid'>srid</a></td>
+		<td> integer  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.database_srs_gml_srs_name'>gml&#95;srs&#95;name</a></td>
+		<td> varchar&#40;1000&#41;  </td>
+	</tr>
+<tr><th colspan='3'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>database&#95;srs&#95;pk</td>
+		<td> ON srid</td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='citydb.feature'  onclick="window.scrollTo(1272, 80);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.feature').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Table feature</h5></a>
+<p class="text-muted">added at 3DCityDB Version 5&#46;0 for CityGML 3&#46;0</p>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:20%'>Field Name</th><th style='width:23%'>Data Type</th><th style='width:52%'>Description</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#ref'/></svg></td>
+		<td><a name='citydb.feature_id'>id</a></td>
+		<td> bigint  DEFAULT nextval('feature_id_seq'::regclass) </td>
+		<td> Primary key &#47; surrogate </td>
+	</tr>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#idx'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.feature_objectclass_id'>objectclass&#95;id</a></td>
+		<td> integer  </td>
+		<td> Foreign key to OBJECTCLASS&#40;id&#41; &#45; CityGML feature type </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.feature_is_toplevel'>is&#95;toplevel</a></td>
+		<td> boolean  </td>
+		<td> true&#44; if this feature is a toplevel feature </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.feature_space_or_boundary_type'>space&#95;or&#95;boundary&#95;type</a></td>
+		<td> varchar&#40;256&#41;  </td>
+		<td> name of the most specific CityGML abstract space or space boundary class &#40;e&#46;g&#46; AbstractOccupiedSpace&#41; </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#unq'/></svg></td>
+		<td><a name='citydb.feature_gmlid'>gmlid</a></td>
+		<td> varchar&#40;256&#41;  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.feature_gmlid_namespace'>gmlid&#95;namespace</a></td>
+		<td> varchar&#40;256&#41;  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.feature_identifier'>identifier</a></td>
+		<td> varchar&#40;256&#41;  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.feature_identifier_namespace'>identifier&#95;namespace</a></td>
+		<td> varchar&#40;256&#41;  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.feature_envelope'>envelope</a></td>
+		<td> geometry  </td>
+		<td> Bounding volume of the feature &#40;if it has a geometry&#41; </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.feature_last_modification_date'>last&#95;modification&#95;date</a></td>
+		<td> timestamptz  </td>
+		<td> Adopted from 3DCityDB Version 4 </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.feature_updating_person'>updating&#95;person</a></td>
+		<td> varchar&#40;256&#41;  </td>
+		<td> Adopted from 3DCityDB Version 4 </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.feature_reason_for_update'>reason&#95;for&#95;update</a></td>
+		<td> varchar&#40;4000&#41;  </td>
+		<td> Adopted from 3DCityDB Version 4 </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.feature_lineage'>lineage</a></td>
+		<td> varchar&#40;256&#41;  </td>
+		<td> Adopted from 3DCityDB Version 4 </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.feature_xml_source'>xml&#95;source</a></td>
+		<td> text  </td>
+		<td> Adopted from 3DCityDB Version 4 &#45; has this been used in the past&#63; </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.feature_creation_date'>creation&#95;date</a></td>
+		<td> timestamptz  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.feature_termination_date'>termination&#95;date</a></td>
+		<td> timestamptz  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.feature_valid_from'>valid&#95;from</a></td>
+		<td> timestamptz  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.feature_valid_to'>valid&#95;to</a></td>
+		<td> timestamptz  </td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>feature&#95;pkey</td>
+		<td> ON id</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#unq'/></svg></td><td>feature&#95;gmlid&#95;unique</td>
+		<td> ON gmlid</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>feature&#95;objectclass&#95;id&#95;idx</td>
+		<td> ON objectclass&#95;id</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>feature&#95;is&#95;toplevel&#95;btr</td>
+		<td> ON is&#95;toplevel</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>feature&#95;gmlid&#95;btr</td>
+		<td> ON gmlid</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>feature&#95;identifier</td>
+		<td> ON identifier</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>feature&#95;envelope&#95;gist</td>
+		<td> ON envelope</td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'>Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>feature_objectclass_fk</td>
+		<td > (objectclass&#95;id) &#8594; <a href='#citydb&#46;objectclass'  onclick="window.scrollTo(792, 368);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.objectclass').classList.add('palpable'); return false;">objectclass</a>(id) </td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'>Referring Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>feature_relation_to_feature_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;feature&#95;relation' >feature&#95;relation</a>(to&#95;feature) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>feature_to_feature_relation_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;feature&#95;relation' >feature&#95;relation</a>(from&#95;feature) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>property_feature_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;property'  onclick="window.scrollTo(1800, 144);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.property').classList.add('palpable'); return false;">property</a>(feature&#95;id) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>property_val_feature_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;property'  onclick="window.scrollTo(1800, 144);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.property').classList.add('palpable'); return false;">property</a>(val&#95;feature) </td>
+		<td>  </td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='citydb.grid_coverage'  onclick="window.scrollTo(808, 1056);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.grid_coverage').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Table grid_coverage</h5></a>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:40%'>Field Name</th><th>Data Type</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#ref'/></svg></td>
+		<td><a name='citydb.grid_coverage_id'>id</a></td>
+		<td> bigint  DEFAULT nextval('grid_coverage_seq'::regclass) </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.grid_coverage_rasterproperty'>rasterproperty</a></td>
+		<td> raster  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.grid_coverage_st_convexhull%28rasterproperty%29'>st&#95;convexhull&#40;rasterproperty&#41;</a></td>
+		<td> varchar  </td>
+	</tr>
+<tr><th colspan='3'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>grid&#95;coverage&#95;pk</td>
+		<td> ON id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>grid&#95;coverage&#95;raster&#95;spx</td>
+		<td> ON st&#95;convexhull&#40;rasterproperty&#41;</td>
+	</tr>
+<tr><th colspan='3'>Referring Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg><svg width='14' height='14'><use xlink:href='#virtual'/></svg></td><td>fk_property_grid_coverage</td>
+		<td > (id) &#8592; <a href='#citydb&#46;property'  onclick="window.scrollTo(1800, 144);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.property').classList.add('palpable'); return false;">property</a>(val&#95;grid&#95;coverage) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg><svg width='14' height='14'><use xlink:href='#virtual'/></svg></td><td>fk_property_grid_coverage</td>
+		<td > (id) &#8592; <a href='#citydb&#46;property'  onclick="window.scrollTo(1800, 144);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.property').classList.add('palpable'); return false;">property</a>(val&#95;grid&#95;coverage) </td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='citydb.implicit_geometry'  onclick="window.scrollTo(1944, 1024);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.implicit_geometry').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Table implicit_geometry</h5></a>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:40%'>Field Name</th><th>Data Type</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#ref'/></svg></td>
+		<td><a name='citydb.implicit_geometry_id'>id</a></td>
+		<td> bigint  DEFAULT nextval('implicit_geometry_seq'::regclass) </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.implicit_geometry_mime_type'>mime&#95;type</a></td>
+		<td> varchar&#40;256&#41;  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.implicit_geometry_reference_to_library'>reference&#95;to&#95;library</a></td>
+		<td> varchar&#40;4000&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.implicit_geometry_library_object'>library&#95;object</a></td>
+		<td> bytea  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.implicit_geometry_relative_brep_id'>relative&#95;brep&#95;id</a></td>
+		<td> bigint  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.implicit_geometry_relative_other_geom'>relative&#95;other&#95;geom</a></td>
+		<td> geometry  </td>
+	</tr>
+<tr><th colspan='3'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>implicit&#95;geometry&#95;pk</td>
+		<td> ON id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>implicit&#95;geom&#95;ref2lib&#95;inx</td>
+		<td> ON reference&#95;to&#95;library</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>implicit&#95;geom&#95;brep&#95;fkx</td>
+		<td> ON relative&#95;brep&#95;id</td>
+	</tr>
+<tr><th colspan='3'>Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>implicit_geom_brep_fk</td>
+		<td > (relative&#95;brep&#95;id) &#8594; <a href='#citydb&#46;surface&#95;geometry'  onclick="window.scrollTo(2584, 960);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.surface_geometry').classList.add('palpable'); return false;">surface&#95;geometry</a>(id) </td>
+	</tr>
+<tr><th colspan='3'>Referring Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>property_implicitgeom_id_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;property'  onclick="window.scrollTo(1800, 144);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.property').classList.add('palpable'); return false;">property</a>(val&#95;implicitgeom&#95;id) </td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='citydb.index_table'  onclick="window.scrollTo(264, 1040);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.index_table').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Table index_table</h5></a>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:40%'>Field Name</th><th>Data Type</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg></td>
+		<td><a name='citydb.index_table_id'>id</a></td>
+		<td> integer  DEFAULT nextval('index_table_id_seq'::regclass) </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.index_table_obj'>obj</a></td>
+		<td> index&#95;obj  </td>
+	</tr>
+<tr><th colspan='3'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>index&#95;table&#95;pkey</td>
+		<td> ON id</td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='citydb.objectclass'  onclick="window.scrollTo(792, 368);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.objectclass').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Table objectclass</h5></a>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:40%'>Field Name</th><th>Data Type</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#ref'/></svg></td>
+		<td><a name='citydb.objectclass_id'>id</a></td>
+		<td> integer  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.objectclass_ade_id'>ade&#95;id</a></td>
+		<td> integer  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.objectclass_baseclass_id'>baseclass&#95;id</a></td>
+		<td> integer  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.objectclass_classname'>classname</a></td>
+		<td> varchar&#40;256&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.objectclass_is_ade_class'>is&#95;ade&#95;class</a></td>
+		<td> numeric  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.objectclass_is_toplevel'>is&#95;toplevel</a></td>
+		<td> numeric  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.objectclass_superclass_id'>superclass&#95;id</a></td>
+		<td> integer  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.objectclass_tablename'>tablename</a></td>
+		<td> varchar&#40;30&#41;  </td>
+	</tr>
+<tr><th colspan='3'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>objectclass&#95;pk</td>
+		<td> ON id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>objectclass&#95;superclass&#95;fkx</td>
+		<td> ON superclass&#95;id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>objectclass&#95;baseclass&#95;fkx</td>
+		<td> ON baseclass&#95;id</td>
+	</tr>
+<tr><th colspan='3'>Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>objectclass_ade_fk</td>
+		<td > (ade&#95;id) &#8594; <a href='#citydb&#46;ade'  onclick="window.scrollTo(296, 288);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.ade').classList.add('palpable'); return false;">ade</a>(id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>objectclass_baseclass_fk</td>
+		<td > (baseclass&#95;id) &#8594; <a href='#citydb&#46;objectclass'  onclick="window.scrollTo(792, 368);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.objectclass').classList.add('palpable'); return false;">objectclass</a>(id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>objectclass_superclass_fk</td>
+		<td > (superclass&#95;id) &#8594; <a href='#citydb&#46;objectclass'  onclick="window.scrollTo(792, 368);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.objectclass').classList.add('palpable'); return false;">objectclass</a>(id) </td>
+	</tr>
+<tr><th colspan='3'>Referring Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>aggregation_info_fk1</td>
+		<td > (id) &#8592; <a href='#citydb&#46;aggregation&#95;info'  onclick="window.scrollTo(504, 96);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.aggregation_info').classList.add('palpable'); return false;">aggregation&#95;info</a>(child&#95;id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>aggregation_info_fk2</td>
+		<td > (id) &#8592; <a href='#citydb&#46;aggregation&#95;info'  onclick="window.scrollTo(504, 96);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.aggregation_info').classList.add('palpable'); return false;">aggregation&#95;info</a>(parent&#95;id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>feature_objectclass_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;feature'  onclick="window.scrollTo(1272, 80);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.feature').classList.add('palpable'); return false;">feature</a>(objectclass&#95;id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>objectclass_baseclass_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;objectclass'  onclick="window.scrollTo(792, 368);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.objectclass').classList.add('palpable'); return false;">objectclass</a>(baseclass&#95;id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>objectclass_superclass_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;objectclass'  onclick="window.scrollTo(792, 368);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.objectclass').classList.add('palpable'); return false;">objectclass</a>(superclass&#95;id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>schema_to_objectclass_fk2</td>
+		<td > (id) &#8592; <a href='#citydb&#46;schema&#95;to&#95;objectclass'  onclick="window.scrollTo(424, 640);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.schema_to_objectclass').classList.add('palpable'); return false;">schema&#95;to&#95;objectclass</a>(objectclass&#95;id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>surface_data_objclass_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;surface&#95;data'  onclick="window.scrollTo(1672, 1408);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.surface_data').classList.add('palpable'); return false;">surface&#95;data</a>(objectclass&#95;id) </td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='citydb.property'  onclick="window.scrollTo(1800, 144);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.property').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Table property</h5></a>
+<p class="text-muted">added at 3DCityDB Version 5&#46;0 for CityGML 3&#46;0</p>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:20%'>Field Name</th><th style='width:23%'>Data Type</th><th style='width:52%'>Description</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#ref'/></svg></td>
+		<td><a name='citydb.property_id'>id</a></td>
+		<td> bigint  DEFAULT nextval('property_id_seq'::regclass) </td>
+		<td> Primary key &#47; surrogate </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#unq'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.property_feature_id'>feature&#95;id</a></td>
+		<td> bigint  </td>
+		<td> Foreign key to FEATURE&#40;id&#41; &#45; if the property belongs to a feature&#95;relation&#44; then this attribute is NULL </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.property_relation_id'>relation&#95;id</a></td>
+		<td> bigint  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.property_parent_id'>parent&#95;id</a></td>
+		<td> bigint  </td>
+		<td> Foreign key to PROPERTY&#40;id&#41;&#46; If this property belongs to a named set of properties &#40;as supported for generic attributes&#41;&#44; this attribute links to the parent group </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.property_root_id'>root&#95;id</a></td>
+		<td> bigint  </td>
+		<td> Foreign key to PROPERTY&#40;id&#41;&#46; Points to the id of the root property entry &#40;only relevant when using nested properties as supported by generic attributes&#41; </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#unq'/></svg></td>
+		<td><a name='citydb.property_namespace'>namespace</a></td>
+		<td> varchar&#40;256&#41;  </td>
+		<td> CityGML 3&#46;0 namespace in which this property is defined </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#unq'/></svg></td>
+		<td><a name='citydb.property_name'>name</a></td>
+		<td> varchar&#40;256&#41;  </td>
+		<td> Property name &#40;or should we put qualified names here&#63; E&#46;g&#46; core&#58;relativeToWater or core&#58;lod2Solid&#41; </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#unq'/></svg></td>
+		<td><a name='citydb.property_index_number'>index&#95;number</a></td>
+		<td> integer  </td>
+		<td> Index number &#40;if multiple properties with the same name are stored and the order should be preserved&#41; </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.property_datatype'>datatype</a></td>
+		<td> varchar  </td>
+		<td> the datatype should be given as a qualified datatype name from the CityGML schema &#40;e&#46;g&#46; gml&#58;GenericName&#44; gml&#58;DateTime&#41; </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.property_data_valtype'>data&#95;valtype</a></td>
+		<td> integer  </td>
+		<td> tells in which attribute&#40;s&#41; the value is actually stored &#40;0&#61;val&#95;int&#44; 1&#61;val&#95;double&#44; 2&#61;val&#95;string&#44; 3&#61;val&#95;date&#44; etc&#46;&#41; </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.property_val_int'>val&#95;int</a></td>
+		<td> bigint  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.property_val_double'>val&#95;double</a></td>
+		<td> numeric  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.property_val_string'>val&#95;string</a></td>
+		<td> varchar&#40;256&#41;  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.property_val_date'>val&#95;date</a></td>
+		<td> timestamptz  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.property_val_uri'>val&#95;uri</a></td>
+		<td> varchar&#40;4000&#41;  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.property_val_geometry'>val&#95;geometry</a></td>
+		<td> geometry  </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.property_val_surface_geometry'>val&#95;surface&#95;geometry</a></td>
+		<td> bigint  </td>
+		<td> Foreign key to SURFACE&#95;GEOMETRY&#40;id&#41; </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.property_val_implicitgeom_id'>val&#95;implicitgeom&#95;id</a></td>
+		<td> bigint  </td>
+		<td> Foreign key to IMPLICIT&#95;GEOMETRY&#40;id&#41; </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.property_val_implicitgeom_refpoint'>val&#95;implicitgeom&#95;refpoint</a></td>
+		<td> geometry  </td>
+		<td> base point in 3D world coordinates for the instantiation of the implicit geometry </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.property_val_implicitgeom_transform'>val&#95;implicitgeom&#95;transform</a></td>
+		<td> varchar&#40;1000&#41;  </td>
+		<td> 4x4 transformation matrix encoded as a string of space separated double values &#40;as strings&#41; in row major sequence </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.property_val_grid_coverage'>val&#95;grid&#95;coverage</a></td>
+		<td> bigint  </td>
+		<td> Foreign key to GRID&#95;COVERAGE&#40;id&#41; </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.property_val_appearance'>val&#95;appearance</a></td>
+		<td> bigint  </td>
+		<td> Foreign key to APPEARANCE&#40;id&#41; </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.property_val_dynamizer'>val&#95;dynamizer</a></td>
+		<td> bigint  </td>
+		<td> Foreign key to APPEARANCE&#40;id&#41; </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.property_val_feature'>val&#95;feature</a></td>
+		<td> bigint  </td>
+		<td> Foreign key to FEATURE&#40;id&#41; </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.property_val_feature_is_xlink'>val&#95;feature&#95;is&#95;xlink</a></td>
+		<td> integer  </td>
+		<td> 0&#61;related feature was represented inline&#44; 1&#61;related feature was referenced using an XLink </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.property_val_code'>val&#95;code</a></td>
+		<td> varchar&#40;256&#41;  </td>
+		<td> if a code from a codelist should be stored&#44; we could also put the code in the val&#95;string attribute and omit this attribute </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.property_val_codelist'>val&#95;codelist</a></td>
+		<td> integer  </td>
+		<td> Foreign key to CODELIST&#40;code&#41; &#40;or alternatively &#45; if we do not store codelists also in the 3DCityDB &#45; then a URL to the codelist&#41; </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.property_val_uom'>val&#95;uom</a></td>
+		<td> varchar  </td>
+		<td> unit of measure &#40;for all subtypes of gml&#58;Measure&#41;&#59; the value is stored in val&#95;double </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.property_val_complex'>val&#95;complex</a></td>
+		<td> json  </td>
+		<td> stores all data of complex datatypes as a JSON string &#40;e&#46;g&#46; con&#58;Height&#41; </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.property_val_xml'>val&#95;xml</a></td>
+		<td> xml  </td>
+		<td> stores XML data </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.property_%28%28%28val_complex+-%3E%3E+%27value%27%3A%3Atext%29%29%3A%3Adouble+precision%29'>&#40;&#40;&#40;val&#95;complex &#45;&gt;&gt; &#39;value&#39;&#58;&#58;text&#41;&#41;&#58;&#58;double precision&#41;</a></td>
+		<td> varchar  </td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>property&#95;pkey</td>
+		<td> ON id</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#unq'/></svg></td><td>property&#95;unique&#95;feature&#95;id&#95;namespace&#95;name&#95;index</td>
+		<td> ON feature&#95;id&#44; namespace&#44; name&#44; index&#95;number</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>property&#95;feature&#95;id&#95;idx</td>
+		<td> ON feature&#95;id</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>property&#95;relation&#95;id&#95;idx</td>
+		<td> ON relation&#95;id</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>property&#95;parent&#95;id&#95;idx</td>
+		<td> ON parent&#95;id</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>property&#95;namespace&#95;btr</td>
+		<td> ON namespace</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>property&#95;name&#95;btr</td>
+		<td> ON name</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>property&#95;root&#95;id&#95;idx</td>
+		<td> ON root&#95;id</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>property&#95;conheight&#95;val&#95;complex&#95;value&#95;btr</td>
+		<td> ON &#40;&#40;&#40;val&#95;complex &#45;&gt;&gt; &#39;value&#39;&#58;&#58;text&#41;&#41;&#58;&#58;double precision&#41;</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>property&#95;data&#95;valtype&#95;btr</td>
+		<td> ON data&#95;valtype</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>property&#95;val&#95;feature&#95;btr</td>
+		<td> ON val&#95;feature</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>property&#95;namespace&#95;name&#95;btr</td>
+		<td> ON namespace&#44; name</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>property&#95;val&#95;string&#95;btr</td>
+		<td> ON val&#95;string</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>property&#95;val&#95;uom&#95;btr</td>
+		<td> ON val&#95;uom</td>
+		<td>  </td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>property&#95;val&#95;uri&#95;btr</td>
+		<td> ON val&#95;uri</td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'>Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>property_appearance_fk</td>
+		<td > (val&#95;appearance) &#8594; <a href='#citydb&#46;appearance'  onclick="window.scrollTo(1160, 1024);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.appearance').classList.add('palpable'); return false;">appearance</a>(id) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>property_codelist_fk</td>
+		<td > (val&#95;codelist) &#8594; <a href='#citydb&#46;codelist'  onclick="window.scrollTo(2360, 496);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.codelist').classList.add('palpable'); return false;">codelist</a>(id) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>property_feature_fk</td>
+		<td > (feature&#95;id) &#8594; <a href='#citydb&#46;feature'  onclick="window.scrollTo(1272, 80);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.feature').classList.add('palpable'); return false;">feature</a>(id) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>property_val_feature_fk</td>
+		<td > (val&#95;feature) &#8594; <a href='#citydb&#46;feature'  onclick="window.scrollTo(1272, 80);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.feature').classList.add('palpable'); return false;">feature</a>(id) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>property_implicitgeom_id_fk</td>
+		<td > (val&#95;implicitgeom&#95;id) &#8594; <a href='#citydb&#46;implicit&#95;geometry'  onclick="window.scrollTo(1944, 1024);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.implicit_geometry').classList.add('palpable'); return false;">implicit&#95;geometry</a>(id) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>property_parent_id_fk</td>
+		<td > (parent&#95;id) &#8594; <a href='#citydb&#46;property'  onclick="window.scrollTo(1800, 144);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.property').classList.add('palpable'); return false;">property</a>(id) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>property_root_id_fk</td>
+		<td > (root&#95;id) &#8594; <a href='#citydb&#46;property'  onclick="window.scrollTo(1800, 144);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.property').classList.add('palpable'); return false;">property</a>(id) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>property_surface_geometry_fk</td>
+		<td > (val&#95;surface&#95;geometry) &#8594; <a href='#citydb&#46;surface&#95;geometry'  onclick="window.scrollTo(2584, 960);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.surface_geometry').classList.add('palpable'); return false;">surface&#95;geometry</a>(id) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg><svg width='14' height='14'><use xlink:href='#virtual'/></svg></td><td>fk_property_grid_coverage</td>
+		<td > (val&#95;grid&#95;coverage) &#8594; <a href='#citydb&#46;grid&#95;coverage'  onclick="window.scrollTo(808, 1056);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.grid_coverage').classList.add('palpable'); return false;">grid&#95;coverage</a>(id) </td>
+		<td>  </td>
+	</tr>
+<tr><th colspan='4'>Referring Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>property_parent_id_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;property'  onclick="window.scrollTo(1800, 144);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.property').classList.add('palpable'); return false;">property</a>(parent&#95;id) </td>
+		<td>  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>property_root_id_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;property'  onclick="window.scrollTo(1800, 144);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.property').classList.add('palpable'); return false;">property</a>(root&#95;id) </td>
+		<td>  </td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='citydb.schema'  onclick="window.scrollTo(60, 416);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.schema').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Table schema</h5></a>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:40%'>Field Name</th><th>Data Type</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#ref'/></svg></td>
+		<td><a name='citydb.schema_id'>id</a></td>
+		<td> integer  DEFAULT nextval('schema_seq'::regclass) </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='citydb.schema_is_ade_root'>is&#95;ade&#95;root</a></td>
+		<td> numeric  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='citydb.schema_citygml_version'>citygml&#95;version</a></td>
+		<td> varchar&#40;50&#41;  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='citydb.schema_xml_namespace_uri'>xml&#95;namespace&#95;uri</a></td>
+		<td> varchar&#40;4000&#41;  </td>
+	</tr>
+	<tr>
+		<td>*</td>
+		<td><a name='citydb.schema_xml_namespace_prefix'>xml&#95;namespace&#95;prefix</a></td>
+		<td> varchar&#40;50&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.schema_xml_schema_location'>xml&#95;schema&#95;location</a></td>
+		<td> varchar&#40;4000&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.schema_xml_schemafile'>xml&#95;schemafile</a></td>
+		<td> bytea  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.schema_xml_schemafile_type'>xml&#95;schemafile&#95;type</a></td>
+		<td> varchar&#40;256&#41;  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.schema_ade_id'>ade&#95;id</a></td>
+		<td> integer  </td>
+	</tr>
+<tr><th colspan='3'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>schema&#95;pk</td>
+		<td> ON id</td>
+	</tr>
+<tr><th colspan='3'>Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>schema_ade_fk</td>
+		<td > (ade&#95;id) &#8594; <a href='#citydb&#46;ade'  onclick="window.scrollTo(296, 288);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.ade').classList.add('palpable'); return false;">ade</a>(id) </td>
+	</tr>
+<tr><th colspan='3'>Referring Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>schema_referencing_fk1</td>
+		<td > (id) &#8592; <a href='#citydb&#46;schema&#95;referencing'  onclick="window.scrollTo(60, 128);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.schema_referencing').classList.add('palpable'); return false;">schema&#95;referencing</a>(referencing&#95;id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>schema_referencing_fk2</td>
+		<td > (id) &#8592; <a href='#citydb&#46;schema&#95;referencing'  onclick="window.scrollTo(60, 128);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.schema_referencing').classList.add('palpable'); return false;">schema&#95;referencing</a>(referenced&#95;id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>schema_to_objectclass_fk1</td>
+		<td > (id) &#8592; <a href='#citydb&#46;schema&#95;to&#95;objectclass'  onclick="window.scrollTo(424, 640);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.schema_to_objectclass').classList.add('palpable'); return false;">schema&#95;to&#95;objectclass</a>(schema&#95;id) </td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='citydb.schema_referencing'  onclick="window.scrollTo(60, 128);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.schema_referencing').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Table schema_referencing</h5></a>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:40%'>Field Name</th><th>Data Type</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.schema_referencing_referencing_id'>referencing&#95;id</a></td>
+		<td> integer  </td>
+	</tr>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.schema_referencing_referenced_id'>referenced&#95;id</a></td>
+		<td> integer  </td>
+	</tr>
+<tr><th colspan='3'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>schema&#95;referencing&#95;pk</td>
+		<td> ON referenced&#95;id&#44; referencing&#95;id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>schema&#95;referencing&#95;fkx1</td>
+		<td> ON referenced&#95;id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>schema&#95;referencing&#95;fkx2</td>
+		<td> ON referencing&#95;id</td>
+	</tr>
+<tr><th colspan='3'>Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>schema_referencing_fk1</td>
+		<td > (referencing&#95;id) &#8594; <a href='#citydb&#46;schema'  onclick="window.scrollTo(60, 416);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.schema').classList.add('palpable'); return false;">schema</a>(id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>schema_referencing_fk2</td>
+		<td > (referenced&#95;id) &#8594; <a href='#citydb&#46;schema'  onclick="window.scrollTo(60, 416);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.schema').classList.add('palpable'); return false;">schema</a>(id) </td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='citydb.schema_to_objectclass'  onclick="window.scrollTo(424, 640);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.schema_to_objectclass').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Table schema_to_objectclass</h5></a>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:40%'>Field Name</th><th>Data Type</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.schema_to_objectclass_schema_id'>schema&#95;id</a></td>
+		<td> integer  </td>
+	</tr>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.schema_to_objectclass_objectclass_id'>objectclass&#95;id</a></td>
+		<td> integer  </td>
+	</tr>
+<tr><th colspan='3'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>schema&#95;to&#95;objectclass&#95;pk</td>
+		<td> ON schema&#95;id&#44; objectclass&#95;id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>schema&#95;to&#95;objectclass&#95;fkx1</td>
+		<td> ON schema&#95;id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>schema&#95;to&#95;objectclass&#95;fkx2</td>
+		<td> ON objectclass&#95;id</td>
+	</tr>
+<tr><th colspan='3'>Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>schema_to_objectclass_fk2</td>
+		<td > (objectclass&#95;id) &#8594; <a href='#citydb&#46;objectclass'  onclick="window.scrollTo(792, 368);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.objectclass').classList.add('palpable'); return false;">objectclass</a>(id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>schema_to_objectclass_fk1</td>
+		<td > (schema&#95;id) &#8594; <a href='#citydb&#46;schema'  onclick="window.scrollTo(60, 416);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.schema').classList.add('palpable'); return false;">schema</a>(id) </td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='citydb.surface_data'  onclick="window.scrollTo(1672, 1408);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.surface_data').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Table surface_data</h5></a>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:40%'>Field Name</th><th>Data Type</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#ref'/></svg></td>
+		<td><a name='citydb.surface_data_id'>id</a></td>
+		<td> bigint  DEFAULT nextval('surface_data_seq'::regclass) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.surface_data_gmlid'>gmlid</a></td>
+		<td> varchar&#40;256&#41;  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.surface_data_gmlid_codespace'>gmlid&#95;codespace</a></td>
+		<td> varchar&#40;1000&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_data_name'>name</a></td>
+		<td> varchar&#40;1000&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_data_name_codespace'>name&#95;codespace</a></td>
+		<td> varchar&#40;4000&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_data_description'>description</a></td>
+		<td> varchar&#40;4000&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_data_is_front'>is&#95;front</a></td>
+		<td> numeric  </td>
+	</tr>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#idx'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.surface_data_objectclass_id'>objectclass&#95;id</a></td>
+		<td> integer  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_data_x3d_shininess'>x3d&#95;shininess</a></td>
+		<td> double precision  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_data_x3d_transparency'>x3d&#95;transparency</a></td>
+		<td> double precision  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_data_x3d_ambient_intensity'>x3d&#95;ambient&#95;intensity</a></td>
+		<td> double precision  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_data_x3d_specular_color'>x3d&#95;specular&#95;color</a></td>
+		<td> varchar&#40;256&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_data_x3d_diffuse_color'>x3d&#95;diffuse&#95;color</a></td>
+		<td> varchar&#40;256&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_data_x3d_emissive_color'>x3d&#95;emissive&#95;color</a></td>
+		<td> varchar&#40;256&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_data_x3d_is_smooth'>x3d&#95;is&#95;smooth</a></td>
+		<td> numeric  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.surface_data_tex_image_id'>tex&#95;image&#95;id</a></td>
+		<td> bigint  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_data_tex_texture_type'>tex&#95;texture&#95;type</a></td>
+		<td> varchar&#40;256&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_data_tex_wrap_mode'>tex&#95;wrap&#95;mode</a></td>
+		<td> varchar&#40;256&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_data_tex_border_color'>tex&#95;border&#95;color</a></td>
+		<td> varchar&#40;256&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_data_gt_prefer_worldfile'>gt&#95;prefer&#95;worldfile</a></td>
+		<td> numeric  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_data_gt_orientation'>gt&#95;orientation</a></td>
+		<td> varchar&#40;256&#41;  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.surface_data_gt_reference_point'>gt&#95;reference&#95;point</a></td>
+		<td> geometry  </td>
+	</tr>
+<tr><th colspan='3'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>surface&#95;data&#95;pk</td>
+		<td> ON id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>surface&#95;data&#95;inx</td>
+		<td> ON gmlid&#44; gmlid&#95;codespace</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>surface&#95;data&#95;tex&#95;image&#95;fkx</td>
+		<td> ON tex&#95;image&#95;id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>surface&#95;data&#95;objclass&#95;fkx</td>
+		<td> ON objectclass&#95;id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>surface&#95;data&#95;spx</td>
+		<td> ON gt&#95;reference&#95;point</td>
+	</tr>
+<tr><th colspan='3'>Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>surface_data_objclass_fk</td>
+		<td > (objectclass&#95;id) &#8594; <a href='#citydb&#46;objectclass'  onclick="window.scrollTo(792, 368);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.objectclass').classList.add('palpable'); return false;">objectclass</a>(id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>surface_data_tex_image_fk</td>
+		<td > (tex&#95;image&#95;id) &#8594; <a href='#citydb&#46;tex&#95;image'  onclick="window.scrollTo(2280, 1600);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.tex_image').classList.add('palpable'); return false;">tex&#95;image</a>(id) </td>
+	</tr>
+<tr><th colspan='3'>Referring Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>app_to_surf_data_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;appear&#95;to&#95;surface&#95;data'  onclick="window.scrollTo(1288, 1312);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.appear_to_surface_data').classList.add('palpable'); return false;">appear&#95;to&#95;surface&#95;data</a>(surface&#95;data&#95;id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>texparam_surface_data_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;textureparam'  onclick="window.scrollTo(3112, 1120);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.textureparam').classList.add('palpable'); return false;">textureparam</a>(surface&#95;data&#95;id) </td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='citydb.surface_geometry'  onclick="window.scrollTo(2584, 960);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.surface_geometry').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Table surface_geometry</h5></a>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:40%'>Field Name</th><th>Data Type</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#ref'/></svg></td>
+		<td><a name='citydb.surface_geometry_id'>id</a></td>
+		<td> bigint  DEFAULT nextval('surface_geometry_seq'::regclass) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.surface_geometry_gmlid'>gmlid</a></td>
+		<td> varchar&#40;256&#41;  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.surface_geometry_gmlid_codespace'>gmlid&#95;codespace</a></td>
+		<td> varchar&#40;1000&#41;  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.surface_geometry_parent_id'>parent&#95;id</a></td>
+		<td> bigint  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.surface_geometry_root_id'>root&#95;id</a></td>
+		<td> bigint  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_geometry_is_solid'>is&#95;solid</a></td>
+		<td> numeric  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_geometry_is_composite'>is&#95;composite</a></td>
+		<td> numeric  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_geometry_is_triangulated'>is&#95;triangulated</a></td>
+		<td> numeric  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_geometry_is_xlink'>is&#95;xlink</a></td>
+		<td> numeric  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_geometry_is_reverse'>is&#95;reverse</a></td>
+		<td> numeric  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.surface_geometry_solid_geometry'>solid&#95;geometry</a></td>
+		<td> geometry  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.surface_geometry_geometry'>geometry</a></td>
+		<td> geometry  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.surface_geometry_implicit_geometry'>implicit&#95;geometry</a></td>
+		<td> geometry  </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td>
+		<td><a name='citydb.surface_geometry_cityobject_id'>cityobject&#95;id</a></td>
+		<td> bigint  </td>
+	</tr>
+<tr><th colspan='3'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>surface&#95;geometry&#95;pk</td>
+		<td> ON id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>surface&#95;geom&#95;inx</td>
+		<td> ON gmlid&#44; gmlid&#95;codespace</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>surface&#95;geom&#95;parent&#95;fkx</td>
+		<td> ON parent&#95;id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>surface&#95;geom&#95;root&#95;fkx</td>
+		<td> ON root&#95;id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>surface&#95;geom&#95;cityobj&#95;fkx</td>
+		<td> ON cityobject&#95;id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>surface&#95;geom&#95;solid&#95;spx</td>
+		<td> ON solid&#95;geometry</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>surface&#95;geom&#95;spx</td>
+		<td> ON geometry</td>
+	</tr>
+<tr><th colspan='3'>Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>surface_geom_parent_fk</td>
+		<td > (parent&#95;id) &#8594; <a href='#citydb&#46;surface&#95;geometry'  onclick="window.scrollTo(2584, 960);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.surface_geometry').classList.add('palpable'); return false;">surface&#95;geometry</a>(id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>surface_geom_root_fk</td>
+		<td > (root&#95;id) &#8594; <a href='#citydb&#46;surface&#95;geometry'  onclick="window.scrollTo(2584, 960);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.surface_geometry').classList.add('palpable'); return false;">surface&#95;geometry</a>(id) </td>
+	</tr>
+<tr><th colspan='3'>Referring Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>implicit_geom_brep_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;implicit&#95;geometry'  onclick="window.scrollTo(1944, 1024);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.implicit_geometry').classList.add('palpable'); return false;">implicit&#95;geometry</a>(relative&#95;brep&#95;id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>property_surface_geometry_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;property'  onclick="window.scrollTo(1800, 144);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.property').classList.add('palpable'); return false;">property</a>(val&#95;surface&#95;geometry) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>surface_geom_parent_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;surface&#95;geometry'  onclick="window.scrollTo(2584, 960);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.surface_geometry').classList.add('palpable'); return false;">surface&#95;geometry</a>(parent&#95;id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>surface_geom_root_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;surface&#95;geometry'  onclick="window.scrollTo(2584, 960);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.surface_geometry').classList.add('palpable'); return false;">surface&#95;geometry</a>(root&#95;id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>texparam_geom_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;textureparam'  onclick="window.scrollTo(3112, 1120);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.textureparam').classList.add('palpable'); return false;">textureparam</a>(surface&#95;geometry&#95;id) </td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='citydb.tex_image'  onclick="window.scrollTo(2280, 1600);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.tex_image').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Table tex_image</h5></a>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:40%'>Field Name</th><th>Data Type</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#ref'/></svg></td>
+		<td><a name='citydb.tex_image_id'>id</a></td>
+		<td> bigint  DEFAULT nextval('tex_image_seq'::regclass) </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.tex_image_tex_image_uri'>tex&#95;image&#95;uri</a></td>
+		<td> varchar&#40;4000&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.tex_image_tex_image_data'>tex&#95;image&#95;data</a></td>
+		<td> bytea  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.tex_image_tex_mime_type'>tex&#95;mime&#95;type</a></td>
+		<td> varchar&#40;256&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.tex_image_tex_mime_type_codespace'>tex&#95;mime&#95;type&#95;codespace</a></td>
+		<td> varchar&#40;4000&#41;  </td>
+	</tr>
+<tr><th colspan='3'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>tex&#95;image&#95;pk</td>
+		<td> ON id</td>
+	</tr>
+<tr><th colspan='3'>Referring Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#ref'/></svg></td><td>surface_data_tex_image_fk</td>
+		<td > (id) &#8592; <a href='#citydb&#46;surface&#95;data'  onclick="window.scrollTo(1672, 1408);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.surface_data').classList.add('palpable'); return false;">surface&#95;data</a>(tex&#95;image&#95;id) </td>
+	</tr>
+</tbody>
+</table></div></div>
+
+<br><br>
+<div class='card'><div class='card-body'><a name='citydb.textureparam'  onclick="window.scrollTo(3112, 1120);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.textureparam').classList.add('palpable'); return false;" style='cursor:pointer;'><h5 class='card-title'>Table textureparam</h5></a>
+<table class='table table-sm small' style='table-layout: fixed; word-wrap: break-word;'>
+<thead>
+<tr><th style='width:5%'>Idx</th><th style='width:40%'>Field Name</th><th>Data Type</th></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.textureparam_surface_geometry_id'>surface&#95;geometry&#95;id</a></td>
+		<td> bigint  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.textureparam_is_texture_parametrization'>is&#95;texture&#95;parametrization</a></td>
+		<td> numeric  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.textureparam_world_to_texture'>world&#95;to&#95;texture</a></td>
+		<td> varchar&#40;1000&#41;  </td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><a name='citydb.textureparam_texture_coordinates'>texture&#95;coordinates</a></td>
+		<td> geometry  </td>
+	</tr>
+	<tr>
+		<td>*<svg width='14' height='14'><use xlink:href='#pk'/></svg><svg width='14' height='14'><use xlink:href='#fk'/></svg></td>
+		<td><a name='citydb.textureparam_surface_data_id'>surface&#95;data&#95;id</a></td>
+		<td> bigint  </td>
+	</tr>
+<tr><th colspan='3'>Indexes</th></tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#pk'/></svg></td><td>textureparam&#95;pk</td>
+		<td> ON surface&#95;geometry&#95;id&#44; surface&#95;data&#95;id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>texparam&#95;geom&#95;fkx</td>
+		<td> ON surface&#95;geometry&#95;id</td>
+	</tr>
+	<tr>		<td><svg width='14' height='14'><use xlink:href='#idx'/></svg></td><td>texparam&#95;surface&#95;data&#95;fkx</td>
+		<td> ON surface&#95;data&#95;id</td>
+	</tr>
+<tr><th colspan='3'>Foreign Keys</th></tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>texparam_surface_data_fk</td>
+		<td > (surface&#95;data&#95;id) &#8594; <a href='#citydb&#46;surface&#95;data'  onclick="window.scrollTo(1672, 1408);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.surface_data').classList.add('palpable'); return false;">surface&#95;data</a>(id) </td>
+	</tr>
+	<tr>
+		<td><svg width='14' height='14'><use xlink:href='#fk'/></svg></td><td>texparam_geom_fk</td>
+		<td > (surface&#95;geometry&#95;id) &#8594; <a href='#citydb&#46;surface&#95;geometry'  onclick="window.scrollTo(2584, 960);var nodes = document.getElementsByClassName('palpable');for (var i = 0; i < nodes.length; i++) { nodes[i].classList.remove('palpable');}; document.getElementById('depict_citydb.surface_geometry').classList.add('palpable'); return false;">surface&#95;geometry</a>(id) </td>
+	</tr>
+</tbody>
+</table></div></div>
 
 </div>
 <br><br></body></html>
