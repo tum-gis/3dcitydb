@@ -2860,7 +2860,7 @@
 		<entity schema="citydb" name="aggregation_info" color="BEBEF4" x="2320" y="80" />
 		<entity schema="citydb" name="appear_to_surface_data" color="F7F2EC" x="1536" y="1104" />
 		<entity schema="citydb" name="appearance" color="F7F2EC" x="1072" y="1056" />
-		<entity schema="citydb" name="codelist" color="F7F2EC" x="48" y="672" />
+		<entity schema="citydb" name="codelist" color="F7F2EC" x="48" y="704" />
 		<entity schema="citydb" name="codelist_entry" color="F7F2EC" x="336" y="880" />
 		<entity schema="citydb" name="database_srs" color="BED3F4" x="224" y="1264" />
 		<entity schema="citydb" name="feature" color="F7F2EC" x="1072" y="208" />
@@ -2935,9 +2935,9 @@
 		<group name="feature - property - codelist" color="F7F2EC" >
 			<comment><![CDATA[New tables defined by CityDB v5]]></comment>
 			<entity schema="citydb" name="codelist_entry" />
+			<entity schema="citydb" name="codelist" />
 			<entity schema="citydb" name="feature" />
 			<entity schema="citydb" name="property" />
-			<entity schema="citydb" name="codelist" />
 		</group>
 	</layout>
 	<layout name="~Layout with Sample Tools" id="Layout-1b89" show_column_type="y" show_relation="columns" >

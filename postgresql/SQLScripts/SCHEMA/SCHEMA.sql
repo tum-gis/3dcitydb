@@ -279,13 +279,29 @@ CREATE TABLE citydb.property
 
 -- add constraints_ FOR TABLES INHERITED FROM 3DCITYDB v4 (not dropped tables)
 
-ALTER TABLE citydb.aggregation_info ADD CONSTRAINT aggregation_info_fk1 FOREIGN KEY ( child_id ) REFERENCES citydb.objectclass( id ) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE citydb.aggregation_info 
+	ADD CONSTRAINT aggregation_info_fk1 
+		FOREIGN KEY ( child_id ) 
+		REFERENCES citydb.objectclass( id ) 
+	ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE citydb.aggregation_info ADD CONSTRAINT aggregation_info_fk2 FOREIGN KEY ( parent_id ) REFERENCES citydb.objectclass( id ) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE citydb.aggregation_info 
+	ADD CONSTRAINT aggregation_info_fk2 
+		FOREIGN KEY ( parent_id ) 
+		REFERENCES citydb.objectclass( id ) 
+	ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE citydb.schema_to_objectclass ADD CONSTRAINT schema_to_objectclass_fk2 FOREIGN KEY ( objectclass_id ) REFERENCES citydb.objectclass( id ) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE citydb.schema_to_objectclass 
+    ADD CONSTRAINT schema_to_objectclass_fk2 
+        FOREIGN KEY ( objectclass_id ) 
+        REFERENCES citydb.objectclass( id ) 
+    ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE citydb.schema_to_objectclass ADD CONSTRAINT schema_to_objectclass_fk1 FOREIGN KEY ( schema_id ) REFERENCES citydb."schema"( id ) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE citydb.schema_to_objectclass 
+    ADD CONSTRAINT schema_to_objectclass_fk1 
+        FOREIGN KEY ( schema_id ) 
+        REFERENCES citydb."schema"( id ) 
+    ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE citydb."schema" ADD CONSTRAINT schema_ade_fk FOREIGN KEY ( ade_id ) REFERENCES citydb.ade( id ) ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -410,6 +426,12 @@ ALTER TABLE IF EXISTS citydb.property
 ALTER TABLE IF EXISTS citydb.property
     ADD CONSTRAINT property_unique_feature_id_namespace_name_index 
     	UNIQUE (feature_id, namespace, name, index_number);
+
+ALTER TABLE IF EXISTS citydb.property
+    ADD CONSTRAINT property_val_grid_coverage_fk 
+    	FOREIGN KEY (val_grid_coverage)
+    	REFERENCES citydb.grid_coverage (id)
+    ON UPDATE CASCADE;
 
 -- COMMENTS
 -- create comments_ FOR TABLES INHERITED FROM 3DCITYDB v4 (not dropped tables)
